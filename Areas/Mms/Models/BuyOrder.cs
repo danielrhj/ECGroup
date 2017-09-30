@@ -15,6 +15,7 @@ namespace ECGroup.Models
     [Module("EC")]
     public class BuyOrderService : ServiceBase<BuyOrder>
     {
+        //test github
         public static string strSP = "DG_BuyOrder_SP";
         internal IList<BuyOrder> GetList(ParamQuery pQuery)
         {
