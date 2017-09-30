@@ -1,0 +1,136 @@
+﻿
+        /*欄目*/
+        .content
+        {
+            text-align: left;
+            margin-left:10px;
+        }
+        
+        .content_bar
+        {
+            width:99%;
+            background-image: url(images/bg01.png);
+            background-position: 100% 0px;
+            background-repeat: no-repeat;
+            height: 30px;
+        }
+        .content_bar p
+        {
+            background-image: url(images/bg01.png);
+            background-position: 0% 0px;
+            background-repeat: no-repeat;
+            float:left;
+            height: 30px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            color: #29458C;
+            line-height: 30px;
+         }
+        
+        .content_list
+        {
+            width:99%;
+            background-image: url(images/bg02.png);
+            background-position:right top;
+            background-repeat: repeat-y;
+        }
+        
+        .content_list_inner
+        {
+            width:99%;
+            background-image: url(images/bg04.png);
+            background-position: left top;
+            background-repeat: repeat-y;
+            padding: 5px;
+            line-height: 150%;
+            color: #666666;
+        }
+        .content_list_footer
+        {
+            width:99%;
+            height: 2px;
+            background-image: url(images/bg03.png);
+            background-position: 100% -0px;
+            background-repeat: no-repeat;
+            overflow: hidden;
+            margin-bottom:10px;
+        }
+        
+        /*控件列表*/
+        .ctrl_list
+        {
+            margin: 0 10px 0 0px;
+            width: 98%;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+        }
+        .ctrl_list_label
+        {
+            font-size: 12px;
+            font-weight: lighter;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #EDEDED;/**/
+            border-bottom: solid 1 #FFFFFF;
+            text-align:right;
+            width:80px;
+        }
+        .button_list
+        {
+            margin: 5px 10px 5px 10px;
+            text-align: left;
+        }
+        /*gridview*/
+         .datagrid
+        {
+            margin: 0 0px 0 0px;
+            width: 98%;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+        }
+        .datagrid th
+        {
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            text-align: center;
+        }
+        .datagrid td
+        {
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .column_chk
+        {
+            width:20px;
+            text-align:center;
+            }
+        .datagrid 
+        /*pager*/
+       .pager_txt
+        {
+            width:30px;
+            text-align:left;
+            }
+
+        
+        .msg
+        {
+            padding:10px;
+            text-align:left;
+        }
+        /* header */
+
+        /*main left*/
+ 
+        /*main right*/
+        
+        /* footer */

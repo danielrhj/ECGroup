@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "销售订单出库进度查詢";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+
+@section scripts{
+        <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+        <script src="~/Areas/Mms/ViewModels/mms.SaleOrder.js"></script>   
+        <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script> 
+   
+        <script type="text/javascript">
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+            var formatterURL = function (value,row) {                
+                var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.POID+'\',\''+value+'\',\'SaleOrder\')">'+value+'</a>';                
+                return KK;
+            };   
+            
+            var formatterRemainQty= function (value,row) {               
+                return row.OrderQty-row.ShipQty;
+            };
+
+            var formatterReceiving=function(value,row){                
+                var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.ShipID+'\',\''+value+'\',\'Ship\')" >'+value+'</a>';                
+                return KK;                  
+            };
+
+            var formatterAlert=function(value,row){     
+                if(value=='出货异常'){
+                    var KK='<label style="color:red">'+value+'</label>';
+                    return KK;
+                }
+                else 
+                    return value;
+            }
+            var viewModel = mms.SaleOrder.Pending;
+            ko.bindingViewModel(new viewModel(data));
+        </script>
+}
+       <div class="z-toolbar">
+            <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>  
+           <a id="a_export" href="#" plain="true"  class="easyui-linkbutton" icon="icon-page_excel" data-bind="click:downloadClick"">导出</a>
+        </div>
+ 
+        <div id="condition" class="container_12" style="position:relative;">           
+             <table style="width:950px">
+                <tr>
+                <td >PO:</td><td><input type="text" data-bind="value:form.PO" class="z-txt" style="margin-left:10px" /></td>
+                <td  style="margin-left:5px">客户:</td><td><input type="text" style="width:91px" data-bind="value:form.Customer" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/customer/getCustomerAbbr'"/></td>
+                <td >状态:</td><td><input type="text" class="z-txt easyui-combobox" style="width:90px" data-bind="datasource:dataSource.PendingStatusList ,comboboxValue:form.PendingStatus" data-options="showblank:true" class="z-txt easyui-combobox"  style="margin-left:1px" /></td>
+
+                <td >PO日期:</td><td><input type="text" data-bind="value:form.BeginDate" class="z-txt easyui-daterange" style="width:150px" /></td>  
+
+                <td>
+                    <a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick">查询</a>
+                    <a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a>
+                </td>                
+                </tr>
+
+    
+             </table> 
+        </div>
+
+       <table  id="gridlist"  data-bind="datagrid:grid">
+            <thead>  
+                <tr> 
+                    <th field="POID"   hidden="true"   >發票ID</th>  
+                    <th field="PO"  sortable="true" align="left"    width="90"  formatter="formatterURL" >PO</th>  
+                    <th field="PODate"            sortable="true" align="center"   formatter="com.formatDate"  width="90" >PO日期</th>
+                    <th field="POStatus"  sortable="true" align="left"    width="70" >PO狀態</th>         
+                    <th field="Customer"            sortable="true" align="left"    width="80"   >客户 </th>  
+                    <th field="CustPN"            sortable="true" align="left"    width="110"   >客户料号 </th>  
+                    <th field="CDesc"            sortable="true" align="left"    width="80"   >品名 </th>
+                    <th field="CSpec"            sortable="true" align="left"    width="150"   >规格 </th>
+                    <th field="OrderQty"            sortable="true" align="right"   formatter="com.formatMoney2"   width="70" >PO数量</th> 
+                    <th field="Currency"            sortable="true" align="left"    width="50"   >币别 </th>
+                    <th field="UnitPrice"            sortable="true" align="right"   formatter="com.formatMoney2"   width="70" >PO单价</th>
+                    <th field="ShipQty"            sortable="true" align="right"   formatter="com.formatMoney2"   width="70" >已出数量</th> 
+                    <th field="RemainQty"            sortable="true" align="right"  formatter="formatterRemainQty"  width="60"   >PO余量 </th>  
+                    <th field="ShipNo"            sortable="true" align="center"  width="90" formatter="formatterReceiving" >出货单号</th>   
+                    <th field="ShipDate"            sortable="true" align="center" formatter="com.formatDate" width="80" >出货日期</th>             
+                    <th field="ShipStatus"  sortable="true" align="center"    width="90" >出货单狀態</th>
+                    <th field="PendingStatus"  sortable="true" align="left"    width="100" formatter="formatterAlert"  >出货狀態</th>
+                   @*
+                    POID,PO,PODate,POStatus,Customer,CustPN,CDesc,CSpec,OrderQty,Currency,UnitPrice,ShipQty,RemainQty,ShipNo,ShipDate,ShipStatus,PendingStatus
+                    PO,PO日期,PO狀態,客户,客户料号,品名,规格,PO数量,币别,PO单价,已出数量,PO余量,出货单号,出货日期,出货单狀態,出货狀態
+                    *@
+                </tr>                            
+            </thead>      
+        </table> 
+ 

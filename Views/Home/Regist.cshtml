@@ -1,0 +1,139 @@
+﻿@model Model.RegistInfo
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>用戶註冊</title>
+    <link href="../../Content/themes/default/Global.css" rel="stylesheet" />
+    <link href="../../Content/themes/default/Main.css" rel="stylesheet" />
+    <script src="../../Scripts/jquery-1.4.4.min.js"></script>
+    <script src="../../Scripts/Plugins/Cookie/jquery.cookie.js"></script>
+    <link href="@Url.Content("../../Scripts/Plugins/ColorBox/colorbox.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("../../Scripts/Plugins/ColorBox/jquery.colorbox.js")" type="text/javascript"></script>
+
+    <style type="text/css">
+        .label
+        {
+            text-align: right;
+            width: 80px;
+        }
+        .ctrl1
+        {
+            text-align: left;
+            width: 150px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body style="overflow: hidden; position: absolute;">
+    <div>
+        <div class="content_bar">
+            <p>
+                <img id="Show_Hide_Img_1"  src='@Url.Content("~/Content/themes/default/images/show.gif")' />用戶註冊
+            </p>
+        </div>
+        
+        @using (Html.BeginForm())
+        { 
+            <table>
+                <tr>
+                    <td class="label">
+                        <span>*</span>@Html.LabelFor(model=>model.UserAccount)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.UserAccount)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model=>model.UserAccount)<font color="red">*請使用工號註冊*</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <span>*</span>@Html.LabelFor(model=>model.Password)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.Password)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model=>model.Password)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <span>*</span>@Html.LabelFor(model=>model.APassword)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.APassword)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model=>model.APassword)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <span>*</span>@Html.LabelFor(model=>model.UserName)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.UserName)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model=>model.UserName)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <span>*</span>@Html.LabelFor(model=>model.UnionCode)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.UnionCode)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model=>model.UnionCode)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        <span>*</span>@Html.LabelFor(model=>model.Email)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.Email)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model=>model.Email)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        @Html.LabelFor(model=>model.Tel)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.Tel)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(model=>model.Tel)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">
+                        @Html.LabelFor(model=>model.AreaName)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model=>model.AreaName)
+                    </td>
+                </tr>
+
+                <tr>
+                     <td>
+                         <input id="Button" type="submit" value="註冊" style="text-align:center;"/>
+                                    @Html.ValidationSummary(true)
+                     </td>
+                </tr>
+            </table>
+        }
+    </div>
+</body>
+</html>

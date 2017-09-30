@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "制造商料号信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.PartNo.js"></script>    
+    <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script>
+    <script type="text/javascript">
+        using(["numberspinner"], easyuifix.datagrid_editor_extend);
+        using(['validatebox','combobox']);
+
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var formatPartAttr = utils.fnValueToText(data.dataSource.TypeCodeList0);
+        com.formatSupplierCode = utils.fnValueToText(data.dataSource.SupplierCodeList);
+        var formatterProxy = function (value,row) {           
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\''+row.PNID+'\',\''+row.SuppPN+'\',\''+row.CDesc+'\',\'Proxy\')" >'+value+'</a> ';
+            return KK;           
+        };
+
+        var formatterCustPN = function (value,row) {           
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\''+row.PNID+'\',\''+row.SuppPN+'\',\''+row.CDesc+'\',\'CustPN\')" >'+value+'</a>';
+            return KK;           
+        };
+
+        var formatterAttach = function (value,row) {           
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\''+row.PNID+'\',\''+row.SuppPN+'\',\''+row.CDesc+'\',\'Attach\')" >'+value+'</a>';
+            return KK;           
+        };
+
+        var viewModel = mms.PartNo;
+        ko.bindingViewModel(new viewModel(data));
+
+        //--
+
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"             title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"            title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')" >编辑</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"            title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"  >保存</a>
+@*    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_white_excel"  title="Excel導入" data-bind="click:canShow('icon-page_white_excel')?null:openUpload,linkbuttonDisable:canShow('icon-page_white_excel')"  >導入</a>*@
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
+    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-node_tree" data-bind="click:typeClick" title="管理料号">管理料号类别</a>
+</div>
+
+<div id="condition"  class="container_12"  style="position:relative;">   
+    <table style="width:1100px;margin-left:5px"><tr><td>制造商料号:</td><td><input type="text" data-bind="value:form.SuppPN" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/partno/getSuppPNList'"  /></td>
+        <td  style="margin-left:5px">品名/规格:</td><td><input type="text" data-bind="value:form.CDesc" class="z-txt" /></td>
+        <td>客户料号:</td><td><input type="text"  data-bind="value:form.CustPN" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/partno/getCustPNList'" /></td>
+        <td>代理商(片語)</td><td><input type="text"  data-bind="value:form.Supplier" class="z-txt" /></td>
+        <td>類別</td><td><input type="text"   data-bind="datasource:dataSource.TypeCodeList1 ,comboboxValue:form.TypeCode" data-options="showblank:true" class="z-txt easyui-combobox" style="width:80px" /></td>
+        <td><a id="a_search" href="#" class="button button-blue"  data-bind="click:searchClick">查询</a> </td>               
+        <td><a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a></td>
+        @*SuppPN,CDesc,CustPN,VendorName*@
+     </tr></table>  
+</div>
+
+
+<table  id="gridlist"  data-bind="datagrid:grid">
+    <thead>          
+        <th field="SuppPN"		sortable="true"	align="left"	width="250"  editor="{type:'validatebox',options:{required:true}}">制造商料号</th> 
+        <th field="CDesc"		sortable="true"	align="left"	width="150"  editor="{type:'validatebox',options:{required:true}}" >品名</th> 
+        <th field="CSpec"		sortable="true"	align="left"	width="250"  editor="{type:'validatebox',options:{required:true}}">规格</th> 
+        <th field="Brand"		sortable="true"	align="center"	width="80"  editor="text">品牌</th> 
+        <th field="TypeCode"		sortable="true"	align="center"	width="50" formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.TypeCodeList0,required: true}}">类别</th>                
+        <th field="LeadTime"		sortable="true"	align="center"	width="80"  editor="{type:'numberbox',options:{required: false,min:0,max:99}}">LeadTime(D)</th> 
+                   
+        <th field="ProxyCount"		sortable="true"	align="center"	width="80" formatter="formatterProxy">关联代理商</th>  
+        <th field="CustPNCount"		sortable="true"	align="center"	width="80" formatter="formatterCustPN">关联客户料号</th>  
+        <th field="Attach"		sortable="true"	align="center"	width="80" formatter="formatterAttach">上传附件</th>        
+
+        @*PNID, SuppPN, CDesc, CSpec,Brand, TypeCode, HotSale, LeadTime*@
+    </thead>
+      
+</table> 
+
+<script type="text/html" id="type-template">
+    <style type="text/css">
+        .datagrid-wrap{border-width:0 0 1px 0;}
+        .datagrid-toolbar{background-color:#E0ECFF !important}
+    </style>
+    <table data-bind="datagrid:grid" >
+        <thead>
+            <th field="AutoID"      hidden="true" editor="text">AutoID</th>
+            <th field="TypeCode"    sortable="true" align="left"  title="自动生成"  width="100" editor="text">TypeCode</th>
+            <th field="TypeName"     sortable="true" align="left"    width="100" editor="{type:'validatebox',options:{required:true}}"  >TypeName   </th>  
+           
+        </thead>
+       
+    </table>
+    
+    <div style="text-align:center;margin:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" data-bind="click:confirmClick" href="javascript:void(0)"  >确定</a>  
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" data-bind="click:cancelClick" href="javascript:void(0)">取消</a> 
+    </div>
+</script> 

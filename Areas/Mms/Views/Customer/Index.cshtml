@@ -1,0 +1,70 @@
+﻿ 
+@{
+    ViewBag.Title = "客户信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.customer.js"></script>  
+    <script type="text/javascript">
+        using(['validatebox','combobox']);
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var viewModel = mms.customer;
+        ko.bindingViewModel(new viewModel(data));        
+
+        var formatterURL = function (value,row) {
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.CustID+'\')" >'+value+'</a>';
+            return KK;
+        }
+
+
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"             title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')"    >新增</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"            title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')"   >编辑</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" >删除</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"            title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"   >保存</a>
+@*    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_white_excel"  title="Excel導入" data-bind="click:canShow('icon-page_white_excel')?null:openUpload,linkbuttonDisable:canShow('icon-page_white_excel')"  >導入</a>*@
+
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
+</div>
+
+<div id="condition"  class="container_12"  style="position:relative;">
+    <table style="width:500px;margin-left:20px">
+        <tr>
+            <td style="width:70px;">客户名称</td><td><input type="text" data-bind="value:form.CustomerInfo" class="z-txt "  style="width:80px;"  /></td>             
+            <td ><a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick" style="margin:0 1px;">查询</a> 
+                <a id="a_reset"  href="#" class="button button-blue" data-bind="click:clearClick">清空</a>
+            </td>
+        </tr>           
+    </table>   
+</div>
+
+<table  id="gridlist"  data-bind="datagrid:grid">
+    <thead>
+        <tr>
+            <th field="CustID" hidden="true" >CustID</th>
+            <th field="ck" checkbox="true"  editor="{type: 'checkbox',options: {on: true,off: false}}" singleSelect="false"></th> 
+            <th field="CustCode" sortable="true" align="left" width="80" formatter="formatterURL">编码</th>
+            <th field="CustAbbr" sortable="true" align="left" width="80" >简称</th>
+            <th field="CustName" sortable="true" align="left" width="250">全稱</th>
+            <th field="CustAdd" sortable="true" align="left" width="200" >地址</th>
+            <th field="Contact" sortable="true" align="left" width="100" >联系人</th>
+            <th field="Tel" sortable="true" align="left" width="100" >Tel</th>
+            <th field="CellNo" sortable="true" align="left" width="100">手机</th>
+            <th field="Email" sortable="true" align="left" width="100" >Email</th>
+            <th field="SWIFICode" sortable="true" align="left" width="80">SWIFICode</th>
+            <th field="AccountNo" sortable="true" align="left" width="85">银行账号</th>
+            <th field="AccountName" sortable="true" align="left" width="80">开户名</th>
+            <th field="BankName" sortable="true" align="left" width="80">银行名称</th>
+            <th field="Currency" sortable="true" align="left" width="60">Currency</th>
+            <th field="PayTerms" sortable="true" align="left" width="80">结算条件</th>
+        </tr>  
+        @*CustID,CustAbbr,CustCode,CustName,CustAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName*@
+    </thead>
+</table>

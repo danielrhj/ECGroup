@@ -1,0 +1,131 @@
+﻿@model ECGroup.Models.SYS_UserInfo
+@{   
+    ViewBag.Title = "修改用戶信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+
+@section scripts{
+    <script src="@Url.Content("~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js")" type="text/javascript"></script>
+  
+    <script  type="text/javascript">
+              
+        $(function () {
+            $("#chkIsValid").attr("checked", $("#hidIsValid").val().toString() == "True" ? true : false);
+            var timestamp = new Date().getTime();
+
+            var imgPath = $("#imgSign").attr('src');
+            $("#imgSign").attr('src', imgPath + "?" + timestamp);
+
+            $("#btn_upload").click(function () {
+                var strUploadID = "AjaxFileUploader";
+                $.ajaxFileUpload({
+                    url: "/Sys/User/UploadSignMap"
+                                  , secureuri: false
+                                  , fileElementId: strUploadID
+                                  , dataType: 'json'
+                                  , data: { 'UploadID': strUploadID }
+                                  , beforeSend: function () { $("#loading").show(); }
+                                  , complete: function () { $("#loading").hide(); }
+                                  , success: function (d, status) {
+                                      if (d.NewFileName != undefined && d.NewFileName != '') {
+                                          $("[name=SignatureLine]").val(d.NewFileName);
+
+                                          var intK = $("#imgSign").attr('src').lastIndexOf('/');
+                                          var imgPath = $("#imgSign").attr('src').substring(0,intK+1)+ d.NewFileName;
+                                          
+                                          var timestamp = new Date().getTime();
+                                          $("#imgSign").attr('src', imgPath + "?" + timestamp);//注意要加這個時間戳,否則圖片不會更新
+                                          com.message('success', '簽名上傳成功。');
+                                      }
+                                      else { com.message('success', '簽名上傳失敗,'+d.error); }
+                                  }
+                                , error: function (data, status, e) { alert(e);}
+                });               
+            });
+
+            if ($("[name=Role]").val() != 'SuperAdmin')
+            {
+                $("[name=Role]").attr('disabled', true);
+            }
+        });
+
+       
+        function savereg(){           
+            var post = {
+                UserName: $("[name=UserName]").val(), Tel: $("[name=Tel]").val(),Email: $("[name=Email]").val(), Role: $("[name=Role]").val(),
+                Is_valid: $("#chkIsValid")[0].checked ? "1" : "0", SignatureLine: $("[name=SignatureLine]").val(), Department: $("[name=Department]").val()
+            };            
+
+            if (post.UserName.length == 0 || post.Tel.length == 0 || post.Email.length == 0 || post.Role.length == 0 || post.SignatureLine.length == 0)
+            { com.message("error", '必填欄位不能為空!'); }
+            else
+            {
+                //alert('');
+                com.ajax({
+                    url: '/api/sys/user/getSaveUser',
+                    data: ko.toJSON(post),
+                    success: function (d) {
+                        if (d.success)
+                        { com.message("success", "保存成功"); }
+                        else
+                            com.message("error", "保存失败");
+                    },
+                    error:function(e)
+                    { com.message("error", e); }
+                });
+            }
+        }
+
+    </script>
+}
+
+       <div id="condition" title="用戶資料修改" iconCls="icon-edit" style="width:500px;padding-left:50px;padding-top:10px">
+            <form id="EditUserInfo" method="post">
+			<table >
+				<tr >
+					<td>賬號:</td>
+					<td ><input type="text" value="@Model.UserAccount" disabled="disabled" class="easyui-textbox" name="UserAccount" style="width:100px;"/></td>
+                    <td style="padding-left:5px">用戶名:</td>
+					<td><input type="text" value="@Model.UserName" data-options="required:true"  class="easyui-textbox" name="UserName" style="width:100px;"/></td>
+                    <td rowspan="6" style="vertical-align:middle;background-color:aliceblue;width:120px;"><span><img id="imgSign" alt="沒有上傳圖片" src="~/FJLBS/SignatureMap/@Model.SignatureLine" style="height:100px;width:99%;" /></span></td>
+				</tr>
+                <tr>
+					<td >部門:</td><td colspan="3"><input type="text"  value="@Model.Department"  class="easyui-textbox" name="Department" style="width:97%;"/></td>
+                </tr>
+                <tr>	
+					<td>聯繫電話:</td>
+					<td><input type="text"  value="@Model.Tel" data-options="required:true" class="easyui-textbox" name="Tel" style="width:100px;"/></td>
+                    <td  style="padding-left:5px">角色:</td>
+					<td><input type="text"  value="@Model.Role"  class="easyui-textbox" name="Role" style="width:100px;"/></td>		
+
+				</tr>				               
+                <tr>                  
+                    <td>簽名檔</td>
+                    <td colspan="3"><input type="text"  value="@Model.SignatureLine"  class="easyui-textbox" name="SignatureLine" style="width:97%;" disabled="disabled"/></td>     
+                    
+                </tr>  
+                <tr>
+                    <td>上傳簽名圖片：</td>
+                    <td colspan="4"  >
+                        <input type="file" id="AjaxFileUploader" name="AjaxFileUploader" style="width:260px" />
+                    </td>
+
+                </tr>
+                   <tr>                      
+					<td>Email:</td>
+					<td colspan="3"><input type="text"   value="@Model.Email"   class="easyui-textbox" name="Email" style="width:200px;"/>
+                    <input type="checkbox" class="easyui-checkbox" id="chkIsValid" name="is_valid"/>有效
+                         <input id="hidIsValid" type="hidden" value="@Model.is_valid"/>
+					</td>
+                   </tr>         
+			</table>
+		</form>
+       
+        <div id="dlg-buttons" style="padding-left:100px">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="savereg()">Save</a>		
+        <a class="easyui-linkbutton" iconCls="icon-upload" id="btn_upload">上傳</a> 
+        </div> 
+
+</div>
+	
+

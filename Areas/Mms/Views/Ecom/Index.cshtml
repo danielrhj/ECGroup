@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "电商营业收入";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+
+@section scripts{
+        <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+        <script src="~/Areas/Mms/ViewModels/mms.Ecom.js"></script>   
+   
+        <script type="text/javascript">
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+            var formatterURL = function (value,row) {                
+                var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.EcomID+'\',\''+value+'\')">'+value+'</a>';                
+                return KK;            }
+
+            var formatterPrice = function (value,row) {
+                if(row.EcomID==-1)
+                {return '';}
+                else{   
+                    return com.formatMoney2(value);
+                }
+            };
+
+            var formatGP = function (value,row) {
+                var net=0;
+                if(row.EcomID==-1){
+                    return com.formatMoney2(value);
+                }
+                else{
+                    if(row.SettleCNCY==row.SaleCNCY)
+                        net=row.SaleNet-row.SaleTotal*row.OffSet*0.01-row.AdsCost-row.ManCost-row.OtherCost-row.MainCost-row.LogCost-row.OverHead-row.FixedCost;
+                    else
+                        net=(row.SaleNet/row.ExRate)-(row.SaleTotal/row.ExRate)*row.OffSet*0.01-row.AdsCost-row.ManCost-row.OtherCost-row.MainCost-row.LogCost-row.OverHead-row.FixedCost;
+                }
+                return com.formatMoney2(net);
+            }
+            
+            var formatGPRate = function (value,row) {
+                var netRate=0;
+                if(row.EcomID==-1){
+                    return com.formatMoney2(value);
+                }
+                else{
+                    if(row.SettleCNCY==row.SaleCNCY)
+                        netRate=(row.SaleNet-row.SaleTotal*row.OffSet*0.01-row.AdsCost-row.ManCost-row.OtherCost-row.MainCost-row.LogCost-row.OverHead-row.FixedCost)/row.SaleTotal;
+                    else
+                        netRate=((row.SaleNet/row.ExRate)-(row.SaleTotal/row.ExRate)*row.OffSet*0.01-row.AdsCost-row.ManCost-row.OtherCost-row.MainCost-row.LogCost-row.OverHead-row.FixedCost)/(row.SaleTotal/row.ExRate);
+                }
+                return com.formatMoney2(netRate*100);
+            }
+
+            var formatterUpload=function (value,row) {    
+                var linkA='',title='';
+                title=row.FilesName?'Open':'Upload';            
+                linkA='<a href="#" style="color:blue" onclick="exportEInvoice(\''+row.ReceiveInvoiceNo + '\',\'upload\')" >'+title+'</a>';           
+
+                return linkA;
+            }
+
+            var formatterEInv=function (value,row) {    
+                var linkA='<a href="/FJLBS/ARInvoice/'+value+'\" target="_blank" style="color:blue">'+value+'</a>';          
+                return linkA;
+            } 
+            var viewModel = mms.Ecom.Search;
+            ko.bindingViewModel(new viewModel(data));
+        </script>
+}
+       <div class="z-toolbar">
+            <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>  
+            <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"  title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+
+           <a id="a_delete"   href="#" plain="true" class="easyui-linkbutton" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" title="刪除">刪除</a>
+           <a id="a_export" href="#" class="easyui-splitbutton" icon="icon-download" data-options="menu:'#dropdown'">导出</a>
+        </div>
+
+        <div id="dropdown" style="width:100px; display:none;">  
+            <div data-options="iconCls:'icon-ext-xls'"      suffix="xls"    data-bind="click:downloadClick">Excel2003   </div>  
+            <div data-options="iconCls:'icon-page_excel'"   suffix="xlsx"   data-bind="click:downloadClick">Excel2007   </div>  
+            <div data-options="iconCls:'icon-ext-doc'"      suffix="doc"    data-bind="click:downloadClick">Word2003    </div>  
+        </div> 
+ 
+        <div id="condition" class="container_12" style="position:relative;">           
+             <table style="width:600px;margin-left:10px">
+                <tr>
+                <td>单号:</td><td><input type="text" data-bind="value:form.SaleNo" class="z-txt" style="width:90px" /></td>                        
+                <td>月份(yyyyMM):</td><td><input type="text" data-bind="value:form.SaleMonth1" class="z-txt" style="width:90px" />~<input type="text" data-bind="value:form.SaleMonth2" class="z-txt" style="width:90px" /></td>   
+                <td>
+                    <a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick">查询</a>
+                    <a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a>
+                </td>                                
+                </tr>    
+             </table> 
+        </div>
+
+       <table  id="gridlist"  data-bind="datagrid:grid">
+            <thead>  
+                <tr>  
+                    <th field="ck" checkbox="true"  editor="{type: 'checkbox',options: {on: true,off: false}}"></th> 
+                    <th field="EcomID"   hidden="true"   >AutoID</th>  
+                    <th field="SaleNo"  sortable="true" align="left"    width="80"  formatter="formatterURL" >SaleNo</th>  
+                    <th field="SaleMonth"            sortable="true" align="center"   width="70" >月份</th>
+                    <th field="ExRate"            sortable="true" align="right"    width="60"   >汇率 </th>  
+                    <th field="SaleTotal"            sortable="true" align="right"    width="70"   >总营业额 </th>  
+                    <th field="SaleNet"            sortable="true" align="right"    width="60" >净营业额</th>   
+                    <th field="SaleCNCY"            sortable="true" align="center"    width="60" >营收原币</th>   
+                    <th field="AdsCost"            sortable="true" align="right"    width="70"   >广告费 </th>  
+                    <th field="ManCost"       sortable="true" align="right"    width="70" formatter="com.formatMoney2"  >人力成本</th>
+                    <th field="OverHead"            sortable="true" align="right"    width="70" formatter="com.formatMoney2"   >间接费用</th>  
+                    <th field="FixedCost"       sortable="true" align="right"    width="70"  >固定投入</th>
+                    <th field="OtherCost"  sortable="true" align="right"    width="60" >其他费用</th>   
+                    <th field="OffSet"            sortable="true" align="right"   formatter="formatterPrice"   width="60" >提点(%)</th>     
+                    <th field="SettleCNCY"            sortable="true" align="center"  width="50" >结算币别</th>    
+                    <th field="MainCost"            sortable="true" align="right"    width="70" formatter="com.formatMoney2"   >商品成本</th>   
+                    <th field="LogCost"            sortable="true" align="right"   formatter="com.formatMoney2"  width="90" >物流成本</th>                      
+                    <th field="GrossProfit"            sortable="true" align="right"   formatter="formatGP"  width="90" >毛利</th>                       
+                    <th field="GPRate"            sortable="true" align="right"   formatter="formatGPRate"  width="60" >毛利率(%)</th> 
+                    <th field="Remark"            sortable="true" align="center"    width="60" >备注</th>  
+                    
+                    @*SELECT AutoID,SaleNo,SaleMonth,ExRate,SaleTotal, SaleNet,SaleCNCY, AdsCost, ManCost,OverHead,FixedCost, OtherCost, OffSet,SettleCNCY,Remark, Plat,InputBy,InputDT*@              
+                </tr>                            
+            </thead>      
+        </table> 
+ 

@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "关联客户料号";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts{    
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.PartNo.js"></script>
+    <script type="text/javascript">
+        //using(["numberspinner"], easyuifix.datagrid_editor_extend);
+        using(['validatebox','combobox','numberspinner']);
+
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var formatPartAttr = utils.fnValueToText(data.dataSource.SupplierCodeList);
+        var viewModel = mms.Relate;
+        ko.bindingViewModel(new viewModel(data));        
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"             title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"            title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')"  >编辑</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" >删除</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"            title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"   >保存</a>
+</div>
+
+ <table data-bind="datagrid:grid" style="width:780px" >
+        <thead>
+            <th field="AutoID"   hidden="true">AutoID</th>
+            <th field="PNID"  hidden="true">PNID</th>    
+            <th field="SuppAbbr"    hidden="true">代理商简称</th>  
+            <th field="SuppPN"    sortable="true" align="left"    width="250" >制造商料号</th> 
+            <th field="CDesc"    sortable="true" align="left"    width="150" >名称</th>        
+            <th field="SupplierCode"    sortable="true" align="left" width="100" formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.SupplierCodeList,required: true}}">代理商编码</th>    
+            <th field="OrderUnit"		sortable="true"	align="center"	width="80"  editor="{type:'validatebox',options:{required:true}}">OrderUnit</th>        
+            <th field="MOQ"		sortable="true"	align="center"	width="50"  editor="{type:'numberbox',options:{required: false,min:1}}">MOQ</th>  
+            <th field="LeadTime"		sortable="true"	align="center"	width="80" editor="{type:'numberbox',options:{required: false,min:1,max:99}}">LeadTime</th>  
+           @*AutoID,PNID,SuppAbbr,SupplierCode,OrderUnit,MOQ,LeadTime*@
+        </thead>
+    </table>

@@ -1,0 +1,122 @@
+﻿
+        /*layout*/
+
+        .header
+        {
+            width: 786px;
+            height: 88px;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+        }        
+       
+        .main
+        {
+            width: 786px;
+            height: 430px;
+            overflow: hidden;
+            margin: 0 auto;
+            position: relative;
+            clear: both;
+        }
+        .main_left
+        {
+            width: 300px;
+            height: 430px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            float: left;
+        }
+        .main_right
+        {
+            margin-left:10px;
+            width: 476px;
+            height: 430px;
+            overflow: hidden;
+            float: right;
+        } 
+        
+        .footer
+        {
+            width: 786px;
+            height: 63px;
+            overflow: hidden;
+            background-image:url('images/bg05.png');
+            margin: 10px auto 0;
+            color: #848585;
+            position: relative;
+            top: 0px;
+            left: 0px;
+        }
+        /* header */
+        .header_tool
+        {
+            text-align:right;
+            height:24px;
+            }
+            .header_tool  span
+         {
+             margin-left:10px;
+             margin-right:10px;
+             }
+             .header_logo
+             {
+                 background-image:url("images/logo.jpg");
+                 height:60px;
+                 }
+        
+        /* main  left*/
+     
+        
+        /*main right*/
+ .btncomm
+        {
+            width:80px;
+            background:White;
+            border-bottom: #7AAEE7 1px solid; 
+     border-left: #7AAEE7 1px solid; 
+     border-right: #7AAEE7 1px solid; 
+     border-top: #7AAEE7 1px solid; /* #147AB8  #6699cc*/
+     color:#147AB8; 
+     font-size: 14px; 
+     height: 25px;
+     padding-top:2px;
+         }
+.textbox
+         {width:120px;
+             }
+        
+.logon_table
+        {
+            clear: both;
+            padding-right: 0px;
+            padding-left: 0px;
+            padding-bottom: 3px;
+            overflow: hidden;
+            padding-top: 3px;
+            font-size:16px;
+            line-height:25px;     
+        }
+ .logon_table a
+{color:#e17634;}
+
+.logon_table span
+{} 
+ .msg
+             {
+                 font-size:12px;
+                 }   
+        /* footer */
+.footer_logo
+{float:left;}
+
+.footer_nav
+{
+                margin-top:10px;
+                margin-left:70px;
+                float:left;
+                text-align:center;
+                }
+        
+  

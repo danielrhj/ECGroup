@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+
+@section scripts{        
+        <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+        <script src="~/Areas/Mms/ViewModels/mms.PartNo.js"></script>
+        <script type="text/javascript">
+
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));  
+
+            var viewModel = mms.EPN;
+            ko.bindingViewModel(new viewModel(data));
+            using(['validatebox','combotree','numberspinner','combobox'],easyuifix.datagrid_editor_extend);
+            //using(['datagrid','messager','validatebox','numberbox']);
+            var formatterParent = function (value, row) { return row.ParentName };
+            var formatterPic = function (value, row) {  //按主料号上传图片
+                if (row.ParentCode == '0') {
+                    var kk = '<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\'' + row.PNID + '\',\'' + row.PN + '\',\'' + row.CDesc + '\',\'EPNAttach\')" >' + value + '</a>';
+                    return kk;
+                }
+            };
+
+            var formatterQty = function (value, row) {  
+                if (row.ParentCode != '0') {                    
+                    return value;
+                }
+            };
+            
+        </script>
+}
+        <div class="z-toolbar">
+            <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:refreshClick">刷新</a>
+            <a id="a_add"    href="#" plain="true" class="easyui-linkbutton" icon="icon-add" title="新增" data-bind="click:addClick">新增</a>
+            <a id="a_edit"   href="#" plain="true" class="easyui-linkbutton" icon="icon-edit" data-bind="click:editClick" title="编辑">编辑</a>
+            <a id="a_del"    href="#" plain="true" class="easyui-linkbutton" icon="icon-cross" title="删除" data-bind="click:deleteClick">删除</a>
+            <a id="a_save"  href="#" plain="true" class="easyui-linkbutton" icon="icon-save" data-bind="click:saveClick" title="保存">保存</a>
+        </div>
+        
+        <table id="gridlist" data-bind="treegrid:grid">
+             <thead>  
+                <tr>  
+                    <th field="_id"  hidden="true"></th>  
+                    <th field="PN"    align="left"        width="200"  editor="{type:'validatebox',options:{required: true }}">料号</th>  
+                    <th field="CDesc"    align="left"        width="120" editor="{type:'validatebox',options:{required: true }}">名称  </th>  
+                    <th field="ParentCode"  align="left"        width="120"  editor="combotree" formatter="formatterParent">主料号   </th>
+                    @*<th field="IconClass"   align="left"        width="180" editor="{type:'lookup'}">图标     </th>*@ 
+                    <th field="Qty"         align="right"        width="80"  formatter="formatterQty" editor="{type:'numberbox',options:{precision:0,min:1}}">组成数量   </th>   
+                    <th field="Price"         align="right"        width="80" editor="{type:'numberbox',options:{required: true,precision:2,min:0.01}}">单价   </th>    
+                    <th field="Currency"         align="center"        width="80" editor="{type:'combobox',options:{data:data.dataSource.CNCYList,required: true}}">币别</th>                        
+                    <th field="OrderBy"     align="right"       width="50"  editor="text">排序</th> 
+                    <th field="PicCount"   align="center"       width="60"  formatter="formatterPic">上传图片</th> 
+                </tr>  
+                 @* PNID, PN, CSpec, CDesc, PNID_pid, Qty, OrderBy, PicID, Creator,*@                          
+            </thead>      
+        </table> 

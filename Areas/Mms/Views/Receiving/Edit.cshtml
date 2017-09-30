@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "采购订单明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.Receiving.js"></script>
+  @*  <script src="~/Content/js/jquery-extend/jquery.cookie.js"></script>*@
+
+<script type="text/javascript">
+    using(["numberspinner"], easyuifix.datagrid_editor_extend); 
+    using(['datagrid','messager','validatebox','numberbox','combobox']);
+    var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    
+    var formatterPrice = function (value,row) {
+        if(row.SNO==-1)
+        {return '';}
+        else{   
+            return com.formatMoney(value);
+        }
+    }
+
+    var viewModel=mms.Receiving.Edit;
+    ko.bindingViewModel(new viewModel(data));
+    
+</script>
+}
+
+<div class="z-toolbar">
+    <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a id="a_save" href="#" plain="true" class="easyui-linkbutton" icon="icon-save" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')" title="保存">保存</a>    
+    <a id="a_creat" href="#" plain="true"  class="easyui-linkbutton"  icon="icon-feed_edit" data-bind="click:canShow('icon-feed_edit')?null:ReceivingFileClick,linkbuttonDisable:canShow('icon-feed_edit')">上传附件</a>
+    <div class="datagrid-btn-separator"></div>
+    <a id="a_first" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_first" data-bind="click:firstEnable()?firstClick:null,linkbuttonEnable:firstEnable" title="第一条"></a> 
+    <a id="a_previous" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_previous" data-bind="click:previousEnable()?previousClick:null,linkbuttonEnable:previousEnable" title="上一条"></a> 
+    <a id="a_next" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_next" data-bind="click:nextEnable()?nextClick:null,linkbuttonEnable:nextEnable" title="下一条"></a> 
+    <a id="a_last" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_last" data-bind="click:lastEnable()?lastClick:null,linkbuttonEnable:lastEnable" title="最后一条"></a> 
+
+</div>
+
+<div id="master" class="container_12" >
+    <div style="display:none;"><label data-bind="text:pageData.form.RcvID" /></div>
+    <table style="width:800px;margin-left:5px">
+        <tr>
+            <td>入庫单号</td><td><input type="text" data-bind="value:pageData.form.RcvNo,readOnly:true" title="系统自动生成"  class="z-txt " /></td>            
+            <td>入庫日期</td><td><input type="text" data-bind="dateboxValue:pageData.form.RcvDate ,readOnly:readonly" class="z-txt easyui-datebox"  style="width:100px;" /></td>      
+            <td>供应商代码</td><td><input type="text" data-bind="value:pageData.form.SuppCode ,readOnly:true" class="z-txt" style="width:60px" />
+                <a id="a_find" href="#" plain="true" class="easyui-linkbutton" icon="icon-zoom" data-bind="click:searchSupplierClick" title="查询供应商"></a> 
+                          </td>
+            <td>供应商简称</td><td><input type="text" data-bind="value:pageData.form.SuppAbbr ,readOnly:true" class="z-txt " style="width:110px" /></td>
+             
+        </tr>
+        <tr>
+            <td>联系人</td><td><input type="text" id="txtContact" data-bind="value:pageData.form.Contact ,readOnly:readonly" class="z-txt " /></td>            
+            <td>Tel</td><td colspan="3"><input type="text"  id="txtTel" data-bind="value:pageData.form.Tel ,readOnly:readonly" class="z-txt"  style="width:310px" /></td>
+             <td>收货状态</td><td><input type="text" data-bind="datasource:dataSource.ReceivingStatusList,comboboxValue:pageData.form.RcvStatus,readOnly:readonly,event:{onChange:UpdateBO($data,event)}" class="z-txt easyui-combobox "  style="width:75px" />
+                    <input type="text" data-bind="datasource:dataSource.PriceTypeList,comboboxValue:pageData.form.PriceType" class="z-txt easyui-combobox "  style="width:58px" />
+                   </td> 
+        </tr>
+
+        <tr>       
+            <td>录入人</td><td ><input type="text" data-bind="value:pageData.form.InputBy,readOnly:true" class="z-txt" style="width:50px;"/>
+                <input type="text" data-bind="value:pageData.form.InputDT,readOnly:true" class="z-txt" style="width:60px;color:blue;"/></td>
+            <td>送貨單#</td><td><input type="text" data-bind="value:pageData.form.DO,readOnly:readonly"  class="z-txt "  style="width:100px;" /></td>
+            <td>Remarks</td><td><input type="text" data-bind="value:pageData.form.Remarks" class="z-txt"  style="width:114px;" /></td>
+              <td>總金額</td><td><input type="text"  data-bind="numberboxValue:pageData.form.Amount,readOnly:true"   class="z-txt easyui-numberbox" data-options="precision:2"  style="width:67px" />
+                    <input type="text" data-bind="datasource:dataSource.CNCYList,comboboxValue:pageData.form.Currency" class="z-txt easyui-combobox "  data-options="showblank:true" style="width:58px"/>
+                        </td>
+            @*BuyID,BuyNo,BuyDate,SuppCode,SuppAbbr,Contact,Tel,Amount,Currency,PriceType,CFMFlag,BuyStatus,InputBy,InputDT*@
+        </tr>      
+    </table>    
+</div>
+
+    <div title="tab1" style="height:650px;width:auto;overflow:hidden;">
+        <div id="gridtb">
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>           
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
+        </div>  
+
+       <table id="gridlist" data-bind="datagrid:grid" style="height:620px;width:auto">
+            <thead>
+                <tr> 
+                    <th field="SNO" hidden="true" ></th>
+                    <th field="RcvID" hidden="true" editor="text" ></th>
+                    <th field="BuyNo" sortable="true"	align="left"	width="90" editor="text" >采购单号</th>
+                    <th field="SuppPN"		sortable="true"	align="left" width="150" editor="{type:'validatebox',options:{required:true}}" >制造商料号</th>
+                    <th field="CDesc"		sortable="true"	align="left" width="200" editor="{type:'validatebox',options:{required:true}}" >品名</th>
+                    <th field="CSpec"		sortable="true"	align="left" width="200" editor="text" >规格</th>
+                    <th field="Brand"		sortable="true"	align="left"	width="100" editor="text" >Brand</th>                   
+                    <th field="Qty"		sortable="true"	align="right" formatter="com.formatMoney2" width="90"  editor="{type:'numberbox',options:{precision:2,required:true}}" >Qty</th>
+                    <th field="RcvPrice"		sortable="true"	align="right" formatter="formatterPrice" editor="{type:'numberbox',options:{precision:4,required:true}}"	width="60" >单价</th> 
+                    <th field="Unit"		sortable="true"	align="left" width="60"  editor="text"	editor="{type:'validatebox',options:{required:true}}" >Unit</th>
+                    <th field="Amount"		sortable="true"	align="right"	width="120" formatter="com.formatMoney2" >金額</th>
+                  
+                </tr>
+               @*SNO, RcvID, SuppPN, CDesc, CSpec, Brand, RcvPrice, Qty, Unit, Amount, *@
+            </thead>
+        </table>      
+
+    </div>

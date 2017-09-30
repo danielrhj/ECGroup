@@ -1,0 +1,93 @@
+﻿@{
+    ViewBag.Title = "库存查詢";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+
+@section scripts{
+        <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+        <script src="~/Areas/Mms/ViewModels/mms.Profit.js"></script>   
+        <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script> 
+   
+        <script type="text/javascript">
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+            var formatterURL = function (value,row) {                
+                var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.BuyID+'\',\''+value+'\',\'BuyOrder\')">'+value+'</a>';                
+                return KK;
+            };   
+            
+            var formatterBalance= function (value,row) {               
+                if(value>0)
+                {
+                    return '<label style="color:blue">'+com.formatMoney2(value)+'</label>';
+                }
+                else{return 0;}
+            };
+
+            var formatterBalanceAmount=function(value,row){     
+                if(value>0)
+                {
+                    return '<label style="color:blue">'+com.formatMoney2(value)+'</label>';
+                }
+                else{return 0;}
+            }
+
+            var viewModel = mms.Profit.Stock;
+            ko.bindingViewModel(new viewModel(data));
+        </script>
+}
+       <div class="z-toolbar">
+            <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>  
+           <a id="a_export" href="#" plain="true"  class="easyui-linkbutton" icon="icon-page_excel" suffix="xlsx"  data-bind="click:downloadClick"">导出</a>
+        </div>
+ 
+        <div id="condition" class="container_12" style="position:relative;">           
+             <table style="width:800px;margin-left:10px">
+                <tr>
+                <td>制造商料号:</td><td><input type="text" data-bind="value:form.SuppPN" class="z-txt"  style="width:100px" /></td>                
+                <td >品名</td><td><input type="text" data-bind="value:form.CDesc" class="z-txt" style="width:100px" /></td>
+                <td >采购日期:</td><td><input type="text" data-bind="value:form.BeginDate" class="z-txt easyui-daterange" style="width:150px" /></td>  
+
+                <td rowspan="2" style="vertical-align:middle" >
+                    <a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick">查询</a>
+                    <a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a>
+                </td>                
+                </tr>
+                <tr>
+                <td>客户料号:</td><td><input type="text" data-bind="value:form.CustPN" class="z-txt" style="width:100px" /></td>
+                <td style="margin-left:5px">代理商:</td><td><input type="text" style="width:100px" data-bind="value:form.Supplier" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/Supplier/getSupplierAbbr'"/></td>
+                <td >采购单号:</td><td><input type="text" data-bind="value:form.BuyNo" class="z-txt" style="width:150px"  /></td>
+
+
+                </tr>
+    
+             </table> 
+        </div>
+
+       <table  id="gridlist"  data-bind="datagrid:grid">
+            <thead>  
+                <tr> 
+                    <th field="BuyID"   hidden="true"   >發票ID</th>  
+                    <th field="RcvNo"  sortable="true" align="left"    width="90"  >入库单号</th>  
+                    <th field="Supplier"            sortable="true" align="left"    width="80"   >代理商 </th>  
+                    <th field="BuyNo"  sortable="true" align="left"    width="90"  formatter="formatterURL" >采购单号</th>  
+                    <th field="BuyDate"            sortable="true" align="center"   formatter="com.formatDate"  width="80" >采购日期</th>
+                    <th field="SuppPN"  sortable="true" align="left"    width="210" >制造商料号</th>         
+                    <th field="CustPN"            sortable="true" align="left"    width="110"   >客户料号 </th>  
+                    <th field="CDesc"            sortable="true" align="left"    width="80"   >品名 </th>
+                    <th field="CSpec"            sortable="true" align="left"    width="110"   >规格 </th>
+                    <th field="Unit"            sortable="true" align="center"  width="70">Unit</th>   
+                    <th field="BuyQty" sortable="true" align="right"   formatter="com.formatMoney2"   width="80" >采购数量</th>
+                    <th field="ShipQty"            sortable="true" align="right"   formatter="com.formatMoney2" width="70" >已出数量</th> 
+                    <th field="Balance"            sortable="true" align="right"  formatter="formatterBalance" width="80"  >库存量 </th> 
+                    <th field="Currency" sortable="true" align="left"    width="50"   >币别 </th>
+                    <th field="Amount"            sortable="true" align="right"   formatter="formatterBalanceAmount"   width="70" >库存金额</th> 
+                    
+                   @*BuyNo,BuyDate,Supplier,SuppPN,CustPN,CDesc,CSpec,Unit,BuyQty,ShipQty,Balance,Amount*@
+                </tr>                            
+            </thead>      
+        </table> 
+ 

@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.theme = "default";
+    ViewBag.EasyuiVersion = "1.3.2";
+    ViewBag.locale = "zh_CN";
+}
+
+
+@section head {
+     <style type="text/css">
+        .grid_3{margin-top:8px;margin-bottom:8px;width: 78px;height: 82px; padding-top:8px;}
+        .center{ background-color:#eff6fe !important;}
+        .container_16 {  background:url(/Images/mms/EC流程图.jpg) center no-repeat !important; height:410px;margin: 1px auto; width: 750px;position: relative;text-align: center;}
+       .container_16 a:hover { background: url(/Images/mms/HotBtnBack.jpg) center no-repeat;color: black;text-decoration: none;cursor: pointer;}
+        .panel-tool { display: none;}
+        ul { padding-top: 2px;}
+        ul li{padding-left:18px;line-height:18px;background:url('/Content/css/icon/icon/arrow_right_16.png') no-repeat;}
+        ul li a{ cursor: pointer;}
+    </style>
+}
+
+@section scripts{
+    <script type="text/javascript" >
+        $(function () {
+
+            $('a').each(function () {
+                var that = $(this), data = parent.$("body", parent.document).data("menulist");
+                $.each(data || [], function () {
+                    if (this.URL == that.attr('url')) {
+                        that.attr('title', this.MenuName);
+                        that.attr('icon', this.IconClass);
+                    }
+                });
+            }).click(function () {
+                var that = $(this);
+                com.openTab(that.attr('title'), that.attr('url'), that.attr('icon'));
+            });
+
+            using('layout', function () {
+                var box = $("#layoutbox");
+                box.width($(window).width() - 4).height($(window).height() - 4).layout();
+                $(window).resize(function () { box.width($(window).width() - 4).height($(window).height() - 4).layout('resize'); });
+            });
+        });
+    </script>
+}
+
+    <div id="layoutbox">
+        <div region="center" class="center"  >
+            <div class="container_16">
+                <a class="grid_3" url="/mms/BuyOrder/Pending" style="margin-left:263px;width: 78px;"><img src="~/Images/mms/1-1入库进度查询.jpg" alt="入库进度查询"  /><div>入库进度查询</div></a>                
+
+                <div class="clear"></div>
+
+                <a class="grid_3" url="/mms/RFQ" style="margin-left:-5px;margin-top:1px;"><img src="~/Images/mms/2-1供应商报价.jpg" alt="供应商报价" /><div>供应商报价</div></a>
+                <a class="grid_3" url="/mms/BuyOrder" style="margin-left:-8px;height: 82px;margin-top:1px; "><img src="~/Images/mms/2-2采购订单.jpg" alt="采购订单" /><div>采购订单</div></a>
+                <a class="grid_3" url="/mms/Receiving"  style="margin-left:-12px;height: 82px;margin-top:1px;padding-top:8px;" ><img src="~/Images/mms/2-3入库单.jpg" alt="入库单"/><div >入库单</div></a>
+                <a class="grid_3" url="/mms/APList" style="margin-left:-8px;margin-top:1px;padding-top:8px;"><img src="~/Images/mms/2-4AP对账单.jpg" alt="AP对账单" /><div>AP对账单</div></a>
+
+                <div class="clear"></div>
+                <a class="grid_3" url="/mms/SaleQuote" style="margin-left:-5px;margin-top:1px;"><img src="~/Images/mms/3-1客户报价.jpg" alt="客户报价" /><div>客户报价</div></a>
+                <a class="grid_3" url="/mms/SaleOrder" style="margin-left:-8px;margin-top:1px;"><img src="~/Images/mms/3-2销售订单.jpg" alt="销售订单" /><div>销售订单</div></a>
+                <a class="grid_3" url="/mms/Shiping" style="margin-left:-12px;margin-top:1px;"><img src="~/Images/mms/3-3出库单.jpg" alt="出库单" /><div>出库单</div></a>
+
+                <a class="grid_3" url="/mms/Profit/Stocking" style="margin-left:112px;margin-top:1px;padding-top:8px;"><img src="~/Images/mms/3-4库存.jpg" alt="库存" /><div>库存</div></a>
+                <a class="grid_3" url="/mms/Profit" style="margin-left:-10px;margin-top:1px;padding-top:8px;"><img src="~/Images/mms/3-5利润分析表.jpg" alt="利润分析" /><div>利润分析</div></a>                
+        
+                <div class="clear"></div>
+                <a class="grid_3" url="/mms/SaleOrder/Pending" style="margin-left:265px;margin-top:3px;margin-bottom:8px;width: 78px;height: 82px; padding-top:8px;"><img src="~/Images/mms/4-1出库进度查询.jpg" alt="出库进度查询" /><div>出库进度查询</div></a>
+                <a class="grid_3" url="/mms/ARList" style="margin-left:15px;;margin-top:3px;"><img src="~/Images/mms/4-2AR对账单.jpg" alt="AR对账单" /><div>AR对账单</div></a>
+                
+            </div>
+        </div>
+        
+        <div region="east" split="true"  style="width:180px;overflow: hidden;">
+            <div id="right" class="easyui-layout" fit="true">
+                    <div region="north" title="报表中心" style="height:200px" border="false" split="true" data-options="collapse:false">
+                        <ul>   
+                            <li><a url="/mms/BuyOrder/Pending" title="采购订单入库查询">采购订单入库查询</a></li>
+                            <li><a url="/mms/SaleOrder/Pending" title="销售订单出库查询">销售订单出库查询</a></li>
+                            <li><a url="/mms/Profit/Stocking" title="库存查询">库存查询</a></li> 
+                            <li><a url="/mms/APList" title="AP对账单">AP对账单</a></li> 
+                            <li><a url="/mms/ARList" title="AR对账单">AP对账单</a></li> 
+                            <li><a url="/mms/Profit" title="利润报表">利润报表</a></li>
+                            <li><a url="/mms/Ecom/Edit/0" title="电商">电商利润报表</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div region="center" title="单据管理中心" border="false" split="true">
+                        <ul>
+                            <li><a url="/mms/RFQ" title="代理商报价">供应商报价</a></li>
+                            <li><a url="/mms/BuyOrder" title="采购订单">采购订单</a></li>
+                            <li><a url="/mms/Receiving" title="入库单">入库单</a></li>
+                            <li><a url="/mms/SaleQuote" title="客户报价">客户报价</a></li>                            
+                            <li><a url="/mms/SaleOrder" title="销售订单">销售订单</a></li>                        
+                            <li><a url="/mms/Shiping" title="出库单">出库单</a></li>                            
+                            <li><a url="/mms/Ecom" title="电商">电商</a></li>
+                        </ul>
+                    </div>
+            </div>
+        </div>  
+    </div> 

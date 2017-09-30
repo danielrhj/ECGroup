@@ -1,0 +1,106 @@
+﻿html,body{ overflow:hidden;}
+        /*layout*/
+        #iframe_Container
+        {
+            width:100%;
+            }
+        
+        #iframe_Header
+        {
+            width:100%;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+            vertical-align:text-bottom;
+	background-image: url('images/TopBG.png');
+	
+        }
+        #iframe_Header_Banner
+        {
+            text-align:right;
+            height:100%;
+            background-position:left;
+            background-repeat:no-repeat;
+	background-image: url('images/Logo.gif');
+	background-position: left top;
+	vertical-align:middle;
+            }
+        
+        #iframe_Main
+        {
+            width:100%;
+            overflow: hidden;
+            margin: 0 auto;
+            position: relative;
+            clear: both;
+        }
+        #iframe_MainLeft
+        {
+            width: 180px;
+            height:90%;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            float: left;
+        }
+        #iframe_MainLeft_Menu
+        {
+            padding-top:10px;
+            height:100%;
+            position: relative;
+            overflow:auto;
+            float: left;
+	background-position: left bottom;
+	background-image: url('Images/MenuBG.png');
+	background-color:#9bdbf6;
+	background-repeat: no-repeat;
+        }
+        #iframe_MainLeft_Splitter
+        {
+            width: 7px;
+            height:100%;
+            float: right;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+	        background-repeat:no-repeat;
+	        background-position:center;
+	background-color:#4ee8fd;
+        }
+        #iframe_MainRight
+        {
+            height:100%;
+            overflow: auto;
+            float: right;
+            text-align:left;
+        }
+
+        #iframe_Footer
+        {
+            width:100%;
+            overflow: hidden;
+            margin:auto 0;
+            color: #848585;
+            position: relative;
+            top: 0px;
+            left: 0px;
+            text-align:center;
+	background-image: url('images/FooterBG.png');
+        }
+
+        /* header */
+
+        /*main left*/
+ .iframe_MainLeft_Splitter_Close
+{
+	background-image: url('Images/SplitterRight1.gif');
+}
+
+.iframe_MainLeft_Splitter_Open
+{
+	background-image: url('Images/SplitterLeft1.gif');
+}
+
+        /*main right*/
+        
+        /* footer */

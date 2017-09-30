@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "公司明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+
+<script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+<script src="~/Areas/Mms/ViewModels/mms.company.js"></script>
+    <script type="text/javascript">
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); 
+        //using(['messager','combobox']);
+        var viewModel = mms.companyEdit;             
+        ko.bindingViewModel(new viewModel(data));   
+
+    </script>
+}
+
+<div class="z-toolbar">
+    <a id="a_save" href="#" plain="true" class="easyui-linkbutton" icon="icon-save" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')" title="保存">保存</a>
+    <div class="datagrid-btn-separator"></div>
+    <a id="a_first" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_first" data-bind="click:firstEnable()?firstClick:null,linkbuttonEnable:firstEnable" title="第一条"></a> 
+    <a id="a_previous" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_previous" data-bind="click:previousEnable()?previousClick:null,linkbuttonEnable:previousEnable" title="上一条"></a> 
+    <a id="a_next" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_next" data-bind="click:nextEnable()?nextClick:null,linkbuttonEnable:nextEnable" title="下一条"></a> 
+    <a id="a_last" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_last" data-bind="click:lastEnable()?lastClick:null,linkbuttonEnable:lastEnable" title="最后一条"></a> 
+
+</div>
+
+<div id="master" class="container_12" style="width:auto;padding-left:0px;padding-top:0px;padding-bottom:10px;background-color:#E0ECFF;" title="公司信息">
+    <div class="grid_12" style="padding-left:200px;height:30px;font-size:x-large">公司信息</div>
+    <div class="clear"></div>
+    <div class="grid_6 val" style="width:auto;padding-left:0px;padding-top:10px;padding-bottom:20px;">
+        <table >
+        <tr>
+            <td style="width:100px">公司简称</td><td><input type="text" data-bind="value:pageData.form.OwnerID,readOnly:readonly" class="easyui-textbox" /> </td>
+            <td  style="width:60px;"></td><td></td>
+        </tr>       
+        <tr><td >公司全稱</td><td colspan="3"><input type="text" id="txtFullName" data-bind="value:pageData.form.CName" class="easyui-textbox" style="width:431px;"/></td></tr>
+        <tr><td >公司地址</td><td colspan="3"><textarea data-bind="value:pageData.form.CAdd" class="easyui-textbox " style="width:429px;height:30px"></textarea></td></tr>
+
+        <tr><td>联系人</td><td><input type="text" data-bind="value:pageData.form.Contact" class="easyui-textbox" /></td>
+            <td style="width:50px;">Email</td><td><input type="text" data-bind="value:pageData.form.Email" class="easyui-textbox" style="width:213px;" /></td></tr>
+        <tr><td>Tel</td><td><input type="text" data-bind="value:pageData.form.Tel" class="easyui-textbox"  /></td>
+            <td style="width:50px;">Fax</td><td><input id="txtLegalType" type="text" data-bind="value:pageData.form.Fax"  class="easyui-textbox" style="width:213px;"  /></td></tr>
+               
+        <tr> <td>银行账号</td><td><input type="text" data-bind="value:pageData.form.AccountNo" class="easyui-textbox" id="txtCostCode"  /></td>
+            <td style="width:50px;">Currency</td><td><input type="text" data-bind="value:pageData.form.Currency" class="easyui-textbox" style="width:213px;"  /></td>
+        </tr>
+        <tr><td >银行名称</td><td colspan="3"><textarea id="txtBankName" data-bind="value:pageData.form.BankName" class="easyui-textbox" style="width:429px;"></textarea></td></tr>
+       
+        <tr>
+            <td >Remarks</td><td colspan="3"><input type="text" data-bind="value:pageData.form.Remarks" class="easyui-textbox" style="width:431px;" /></td>
+        </tr>  
+        
+
+        @*Contact, Tel, Fax, , Remarks, AccountNo, BankName, Currency*@       
+    </table>  
+   </div>
+</div>

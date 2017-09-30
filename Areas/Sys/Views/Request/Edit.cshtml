@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "需求提報明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section head{
+    <style type="text/css">
+        .datagrid-pager table{display:none;}
+        .lbl{white-space:nowrap}
+    </style>    
+}
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Sys/ViewModels/Request.js"></script>  
+    <script src="~/Content/js/jquery-plugin/fineuploader-3.7.1/jquery.fineuploader-3.7.1.min.js"></script>
+        <script type="text/javascript">
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+            //'messager',
+            using(['combobox','datebox']);
+            var viewModel=Sys.RequestEdit;
+            ko.bindingViewModel(new viewModel(data));
+
+            using(['messager'],function(){ 
+                setTimeout(initUploader,4000);  
+            });            
+           
+            var formatterURL = function (value,row) {
+                var KK='<a href="/FJLBS/Request/'+row.FileID+'\" target="_blank" style="color:blue">'+value+'</a>';   
+                return KK;
+            }
+
+            var formatterDel = function (value,row) {
+                var KK='<a href="#" plain="true" style="color:blue" onclick="delFile(\''+row.AutoID+'\',\''+row.FileID+'\')" >刪除</a>';            
+                return KK;
+            }
+
+            
+            //if(data.dataSource.pageData.form.AutoID=="0"){
+            //    com.message('warning',"请先保存再上传文件!");
+            //}
+            if(data.setting.role != "superadmin"){
+                $("#dtCloseDate").attr('disabled', true);
+                $("#dtAcceptDate").attr('disabled', true);
+                $("#cbRejectFlag").attr('disabled', true);
+            }           
+
+            var initUploader = function(){    
+                if(data.dataSource.pageData.form.AutoID=="0"){
+                    com.message('warning',"请先保存再上传文件!");return false;
+                }
+                $('#uploader1').find(".l-btn-text").fineUploader({
+                    request: {endpoint: '/api/sys/request/postfile/?autoID='+data.dataSource.pageData.form.AutoID},  
+                text:{uploadButton:'上传'},
+                autoUpload:true,
+                multiple:true,
+                validation: {
+                    allowedExtensions: ['pdf', 'jpg', 'tif','tiff','png','gif','jpeg','bmp','xls','xlsx'], //限制上传格式
+                    sizeLimit: 3*1024* 1024              //限制上传大小3M
+                },
+                callbacks : {
+                    onSubmit : function(id, fileName) {   
+                    },
+                    params: { 
+                        RequestID: data.dataSource.pageData.form.AutoID 
+                    } 
+                }
+                }).on('upload',function(id, name){                   
+                    $.messager.progress({ title: '请稍等', msg: '正在上传...', interval: 0 });
+            }).on('complete',function(event, id, name, response){
+                    $.messager.progress('close');
+                    if (response.success) 
+            {
+                        com.message('success',response.message);
+                        //viewModel.refreshClick();
+                        $("#gridlist").datagrid('reload');
+            }
+            }).on('progress',function(target,id, name, loaded, total){
+                    $.messager.progress('bar').progressbar('setValue', Math.ceil(loaded * 100 / total));
+                    if (loaded>=total)
+            {
+                        $.messager.progress('close');
+                        $.messager.progress({ title: '请稍等', msg: '上传完成，正在导入处理...',interval: 300,text:''});
+            }
+            }).on('error',function(target,id, name, reason, maybeXhrOrXdr){
+                    com.message('error',reason);
+            });
+                $("#uploader1").css("overflow","hidden");
+                $(".qq-upload-button").css("overflow","");
+                $(".qq-drop-processing,.qq-upload-list").hide();
+            };
+           
+</script>
+}
+<div class="z-toolbar">
+    <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a id="a_save" href="#" plain="true" class="easyui-linkbutton" icon="icon-save" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')" title="保存">保存</a>
+    <a id="a_audit" href="#" plain="true" class="easyui-linkbutton" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:auditClick,linkbuttonDisable:canShow('icon-edit')" title="審核">審核</a>
+    <a id="uploader1" class="easyui-linkbutton" icon="icon-upload" plain="true" title="上传" >上传</a>
+</div>
+
+<div id="master" class="container_12" style="width:auto;padding-left:0px;padding-top:0px;padding-bottom:0px;background-color: #E0ECFF;" >
+    <div class="grid_12" style="padding-left:150px;height:50px;font-size:x-large;vertical-align:middle">需求提報明細</div>
+    <div class="clear"></div>
+    
+    <div class="grid_6 val" style="width:auto;padding-top:1px;padding-bottom:0px;">
+        <table >
+        <tr>
+            <td style="width:70px">需求主題：</td><td colspan="3"><input type="text" data-bind="value:pageData.form.Subject" class="z-txt" style="width:462px;"/> </td>
+            <td>附件明細</td>
+        </tr>
+        <tr>
+            <td>模塊類別：</td><td><input type="text" data-bind="datasource:dataSource.CatList, comboboxValue:pageData.form.CatID" class="easyui-combobox"  /></td>
+            <td style="text-align:right">優先級：</td><td><input type="text" data-bind="datasource:dataSource.TaskGradeList,comboboxValue:pageData.form.TaskGrade" class="z-txt easyui-combobox" style="width:160px;"/></td>
+            <td rowspan="6" style="vertical-align:top;width:440px;">
+                <table id="gridlist" data-bind="datagrid:grid" >
+                    <thead>
+                        <tr> 
+                            <th field="AutoID"	hidden="hidden">AutoID</th>
+                            <th field="FileName"		sortable="true"	align="center"	width="200" formatter="formatterURL" >文件</th>                 
+                            <th field="CreateDate"	sortable="true"	align="center"	width="100" formatter="com.formatDateTime" >上傳日期</th>                       
+                            <th field="FileID"		sortable="true"	align="center"	width="100" formatter="formatterDel" >操作</th>                  
+                        </tr>
+                    </thead>
+                </table>  
+            </td>
+
+        </tr>
+        <tr>
+            <td>需求人員：</td><td><input type="text" data-bind="value:pageData.form.Creator,readOnly:true" class="easyui-textbox" /> </td>
+            <td style="text-align:right">需求時間：</td><td><input type="text" data-bind="dateboxValue:pageData.form.CreateDate,readOnly:true" class="z-txt easyui-datebox " style="width:160px;" /> </td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top;">需求內容：</td><td colspan="3"><textarea data-bind="value:pageData.form.Request" class="z-txt"  style="width:462px;height:200px"></textarea></td>
+        </tr>
+        <tr>
+            <td style="width:70px">資訊人員：</td><td><input type="text" data-bind="value:pageData.form.ITPerson,readOnly:fnIsSuperAdmin" class="easyui-textbox" /> </td>
+            <td style="text-align:left">IT開始處理時間：</td><td><input  id="dtAcceptDate" type="text" data-bind="dateboxValue:pageData.form.AcceptDate" class="z-txt easyui-datebox " style="width:160px;" /> </td>
+        </tr>
+        <tr>
+            <td style="vertical-align:top;">資訊注解：</td><td colspan="3"><textarea data-bind="value:pageData.form.ITComments,readOnly:fnIsSuperAdmin" class="z-txt"  style="width:462px;height:200px"></textarea></td>
+        </tr>   
+        <tr>
+            <td>是否駁回：</td><td><input  id="cbRejectFlag"  type="text"  data-bind="datasource:dataSource.RejectList,comboboxValue:pageData.form.RejectFlag"  class="z-txt easyui-combobox" style="width:160px;"/></td>
+            <td style="text-align:right">結案時間：</td><td><input id="dtCloseDate" type="text" data-bind="dateboxValue:pageData.form.CloseDate" class="z-txt easyui-datebox " style="width:160px;" /> </td>
+
+        </tr>      
+    </table>        
+        
+    </div>
+</div>
+
+<script type="text/html" id="audit-template">
+    <style type="text/css">
+        .datagrid-wrap{border-width:0 0 1px 0;}
+        .datagrid-toolbar{background-color:#E0ECFF !important}
+    </style>
+    <table style="width:400px;margin:40px 0px 1px 10px;" >
+        <tr>
+            <td style="vertical-align:middle;">簽核備註：</td><td  colspan="2"><textarea data-bind="value:form.ITComments" class="easyui-textbox" cols="38" rows="6"></textarea></td>   
+        </tr>  
+    </table> 
+    <div style="text-align:center;margin:30px 0px 0px 20px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" data-bind="click:approveClick" href="javascript:void(0)"  >同意</a>  
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" data-bind="click:rejectClick" href="javascript:void(0)">駁回</a> 
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-anchor'" data-bind="click:closeClick" href="javascript:void(0)">結案</a> 
+    </div>
+</script> 

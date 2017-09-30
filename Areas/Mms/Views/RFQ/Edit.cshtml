@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "供货商报价明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.RFQ.js"></script>
+  @*  <script src="~/Content/js/jquery-extend/jquery.cookie.js"></script>*@
+
+<script type="text/javascript">
+    using(["numberspinner"], easyuifix.datagrid_editor_extend); 
+    using(['datagrid','messager','validatebox','numberbox','combobox']);
+    var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); 
+
+    var viewModel=mms.RFQ.Edit;
+    ko.bindingViewModel(new viewModel(data));
+    
+</script>
+}
+
+<div class="z-toolbar">
+    <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a id="a_save" href="#" plain="true" class="easyui-linkbutton" icon="icon-save" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')" title="保存">保存</a>
+    <a id="a_creat" href="#" plain="true"  class="easyui-linkbutton"  icon="icon-feed_edit" data-bind="click:canShow('icon-feed_edit')?null:RFQFileClick,linkbuttonDisable:canShow('icon-feed_edit')">上传附件</a>
+    <div class="datagrid-btn-separator"></div>
+    <a id="a_first" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_first" data-bind="click:firstEnable()?firstClick:null,linkbuttonEnable:firstEnable" title="第一条"></a> 
+    <a id="a_previous" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_previous" data-bind="click:previousEnable()?previousClick:null,linkbuttonEnable:previousEnable" title="上一条"></a> 
+    <a id="a_next" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_next" data-bind="click:nextEnable()?nextClick:null,linkbuttonEnable:nextEnable" title="下一条"></a> 
+    <a id="a_last" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_last" data-bind="click:lastEnable()?lastClick:null,linkbuttonEnable:lastEnable" title="最后一条"></a> 
+
+</div>
+
+<div id="master" class="container_12" >
+    <div style="display:none;"><label data-bind="text:pageData.form.RFQID" /></div>
+    <table style="width:760px;margin-left:5px">
+        <tr>
+            <td>报价单号</td><td><input type="text" data-bind="value:pageData.form.RFQNo,readOnly:true" title="系统自动生成" class="z-txt "  style="width:113px" /></td>
+            <td>报价日期</td><td><input type="text" data-bind="dateboxValue:pageData.form.RFQDate ,readOnly:true" class="z-txt easyui-datebox"  style="width:100px" /></td>      
+            <td>代理商代码</td><td style="width:130px"><input type="text" data-bind="value:pageData.form.SuppCode ,readOnly:true" class="z-txt" style="width:60px" />
+                <a id="a_find" href="#" plain="true" class="easyui-linkbutton" icon="icon-zoom" data-bind="click:searchSupplierClick" title="查询"></a> 
+                          </td>
+            <td>代理商简称</td><td><input type="text" data-bind="value:pageData.form.SuppAbbr ,readOnly:true" class="z-txt "  style="width:100px;" /></td>      
+        </tr>
+        <tr>
+            <td>联系人</td><td><input type="text" id="txtContact" data-bind="value:pageData.form.Contact ,readOnly:true" class="z-txt "  style="width:113px" /></td>            
+            <td>Tel</td><td colspan="3" style="width:190px"><input type="text"  id="txtTel" data-bind="value:pageData.form.Tel ,readOnly:true" class="z-txt"  style="width:286px" /></td>
+            <td>录入人</td><td ><input type="text" data-bind="value:pageData.form.InputBy,readOnly:true" class="z-txt" style="width:100px;"/>
+               </td> 
+        </tr>
+
+        <tr>            
+            <td>报价单状态</td><td><input type="text" data-bind="datasource:dataSource.RFQStatusList,comboboxValue:pageData.form.Status" class="z-txt easyui-combobox "  data-options="showblank:true" style="width:50px"/>
+                    <input type="text" data-bind="value:pageData.form.ApproveDT,readOnly:true" class="z-txt" style="width:60px;color:blue;"/></td>            
+            <td>币别</td><td>
+                <input type="text" data-bind="datasource:dataSource.CNCYList,comboboxValue:pageData.form.Currency" class="z-txt easyui-combobox "  data-options="showblank:true" style="width:100px"/></td>            
+
+            <td>Remarks</td><td><input type="text" data-bind="value:pageData.form.Remarks" class="z-txt"  style="width:106px;" /></td>
+            <td>录入日期</td><td> <input type="text" data-bind="value:pageData.form.InputDT,readOnly:true" class="z-txt" style="width:100px;color:blue;"/></td>
+            @*RFQID, RFQNo, RFQDate,  SuppCode, SuppAbbr, Contact, Tel,  Currency, Remarks,InputBy, InputDT, Status, ApproveDT*@
+        </tr>      
+    </table>    
+</div>
+
+    <div title="tab1" style="height:650px;width:auto;overflow:hidden;">
+        <div id="gridtb">
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+            @*<a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:grid0.onClickRow,linkbuttonDisable:canShow('icon-edit')">编辑</a>*@
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
+        </div>  
+
+       <table id="gridlist" data-bind="datagrid:grid" style="height:620px;width:auto">
+            <thead>
+                <tr> 
+                    <th field="SNO" hidden="true" ></th>
+                    <th field="RFQID" hidden="true" editor="text" ></th>
+                    <th field="SuppPN"		sortable="true"	align="left" width="150" editor="{type:'validatebox',options:{required:true}}" >制造商料号</th>
+                    <th field="CDesc"		sortable="true"	align="left" width="100" editor="{type:'validatebox',options:{required:true}}" >品名</th>          
+                    <th field="Brand"		sortable="true"	align="left"	width="100" editor="text" >Brand</th>   
+                    <th field="Qty"		sortable="true"	align="right" formatter="com.formatMoney2" width="80"  editor="{type:'numberbox',options:{precision:2,required:true}}" >Qty</th>
+                    <th field="RFQPriceT"		sortable="true"	align="right" formatter="com.formatMoney" editor="{type:'numberbox',options:{precision:4,min:0,required:true}}"	width="60" >含税价</th> 
+                    <th field="RFQPrice"		sortable="true"	align="right" formatter="com.formatMoney" editor="{type:'numberbox',options:{precision:4,min:0,required:true}}"	width="60" >不含税价</th> 
+                    <th field="TaxRate"		sortable="true"	align="right" formatter="com.formatMoney" editor="{type:'numberbox',options:{precision:0,min:0,required:true}}"	width="60" >税率</th> 
+                    <th field="MinQty"		sortable="true"	align="right" formatter="com.formatMoney2" width="60"  editor="{type:'numberbox',options:{precision:0,min:0,required:true}}" >MinQty</th>
+                    <th field="MOQ"		sortable="true"	align="right" formatter="com.formatMoney2" width="60"  editor="{type:'numberbox',options:{precision:0,min:0,required:true}}" >MOQ</th>
+                    <th field="MinQtyUnit"		sortable="true"	align="left" width="60"  editor="text"	editor="{type:'validatebox',options:{required:true}}" >MinQtyUnit</th>
+                     <th field="MinUnit"		sortable="true"	align="left" width="60"  editor="text"	editor="{type:'validatebox',options:{required:true}}" >MinUnit</th>   
+                    <th field="LeadTime"		sortable="true"	align="right" width="60"  editor="text" >LeadTime</th>
+                    <th field="Remarks"		sortable="true"	align="right" width="60"  editor="text" >Remarks</th>
+                </tr>
+               @*SNO, RFQID,  SuppPN,  CDesc, Brand, RFQPriceT, RFQPrice, LeadTime,MinQty, MinUnit, MinQtyUnit, MOQ, Remarks, TaxRate  *@
+            </thead>
+        </table>      
+
+    </div>

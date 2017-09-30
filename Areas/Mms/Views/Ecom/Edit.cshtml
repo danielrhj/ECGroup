@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "电商营收明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.Ecom.js"></script>
+
+<script type="text/javascript">
+    using(["numberspinner"], easyuifix.datagrid_editor_extend); 
+    using(['datagrid','messager','validatebox','numberbox','combobox']);
+    var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));       
+    var formatPartAttr = utils.fnValueToText(data.dataSource.EcomPNList);
+
+    var formatterPrice = function (value,row) {
+        if(row.SNO==-1)
+        {
+            if(value>0)
+            {return '<label style="color:blue;">'+com.formatMoney2(value)+'</label>';}
+            else{return '';}
+        }
+        else{   
+            return com.formatMoney2(value);
+        }
+    }
+
+    var formatterlogSum = function (value, row) { 
+        if(row.SNO==-1)
+        {return value;}
+        else{return com.formatMoney2(row.Qty*row.LogCost); }
+    };
+
+    var formatterComSum = function (value, row) { 
+        if(row.SNO==-1)
+        {return value;}
+        else{return com.formatMoney2(row.Qty*(row.Price+row.PKGCost+row.OtherCost)); }
+    };
+    var viewModel=mms.Ecom.Edit;
+    ko.bindingViewModel(new viewModel(data));
+
+</script>
+}
+
+<div class="z-toolbar">
+    <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:refreshClick">刷新</a>
+    <a id="a_save" href="#" plain="true" class="easyui-linkbutton" icon="icon-save" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')" title="保存">保存</a>
+    <a id="a_creat1" href="#" plain="true"  class="easyui-linkbutton"  icon="icon-upload" data-bind="click:canShow('icon-upload')?null:EcomFileClick,linkbuttonDisable:canShow('icon-upload')">上传附件</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel"  title="Excel導出" data-bind="click:excelClick,linkbuttonDisable:false"  >导出</a>
+    <div class="datagrid-btn-separator"></div>
+    <a id="a_first" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_first" data-bind="click:firstEnable()?firstClick:null,linkbuttonEnable:firstEnable" title="第一条"></a> 
+    <a id="a_previous" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_previous" data-bind="click:previousEnable()?previousClick:null,linkbuttonEnable:previousEnable" title="上一条"></a> 
+    <a id="a_next" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_next" data-bind="click:nextEnable()?nextClick:null,linkbuttonEnable:nextEnable" title="下一条"></a> 
+    <a id="a_last" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_last" data-bind="click:lastEnable()?lastClick:null,linkbuttonEnable:lastEnable" title="最后一条"></a> 
+
+</div>
+
+<div id="master" class="container_12" >
+    <div style="display:none;"><label data-bind="text:pageData.form.EcomID" /></div>
+    <table style="width:800px;margin-left:5px">
+        <tr>
+            <td>营收单号</td><td><input type="text" data-bind="value:pageData.form.SaleNo,readOnly:true" class="z-txt "  style="width:90px" /></td>
+            <td>营收月份</td><td><input type="text" data-bind="value:pageData.form.SaleMonth ,readOnly:readonly" class="z-txt "  style="width:60px" /></td>      
+            <td>总营收</td><td><input type="text" data-bind="numberboxValue:pageData.form.SaleTotal ,readOnly:readonly" class="z-txt easyui-numberbox" data-options="precision:0"  style="width:60px" /></td>
+            <td>净营收</td><td><input type="text" data-bind="numberboxValue:pageData.form.SaleNet ,readOnly:readonly" class="z-txt easyui-numberbox" data-options="precision:0"  style="width:60px"  /></td>      
+            <td>营收币别</td><td><input type="text" data-bind="datasource:dataSource.CNCYList,comboboxValue:pageData.form.SaleCNCY,readOnly:readonly" class="z-txt easyui-combobox"  data-options="showblank:true" style="width:60px" /></td>      
+        </tr>
+        <tr>
+            <td>提点(%)</td><td><input type="text" data-bind="numberboxValue:pageData.form.OffSet ,readOnly:readonly" class="z-txt easyui-numberbox" data-options="precision:1"   style="width:90px" /></td>   
+            <td>汇率</td><td><input type="text" data-bind="numberboxValue:pageData.form.ExRate ,readOnly:readonly"  class="z-txt easyui-numberbox" data-options="precision:3"   style="width:60px" /></td>            
+            <td>广告费</td><td><input type="text"  data-bind="numberboxValue:pageData.form.AdsCost ,readOnly:readonly" class="z-txt easyui-numberbox" data-options="precision:2"  style="width:60px" /></td>            
+            <td>人力成本</td><td><input type="text"  data-bind="numberboxValue:pageData.form.ManCost,readOnly:readonly"   class="z-txt easyui-numberbox" data-options="precision:2"  style="width:60px" /></td>
+            <td>本币</td><td><input type="text" data-bind="datasource:dataSource.CNCYList,comboboxValue:pageData.form.SettleCNCY" class="z-txt easyui-combobox "  data-options="showblank:true" style="width:60px"/></td>
+            
+        </tr>
+
+        <tr>            
+            <td>间接费用</td><td><input type="text"  data-bind="numberboxValue:pageData.form.OverHead ,readOnly:readonly" class="z-txt easyui-numberbox" data-options="precision:2"  style="width:90px" /></td>
+            <td>固定投入</td><td><input type="text"  data-bind="numberboxValue:pageData.form.FixedCost ,readOnly:readonly" class="z-txt easyui-numberbox" data-options="precision:2"  style="width:60px" /></td>
+            <td>Remark</td><td><input type="text" data-bind="value:pageData.form.Remark" class="z-txt"  style="width:60px;" /></td>
+            <td></td><td ></td>
+            <td></td><td ></td>
+            
+            @*EcomID,SaleNo,SaleMonth,ExRate,SaleTotal, SaleNet,SaleCNCY, AdsCost, ManCost, OtherCost, Currency, OffSet,SettleCNCY,Remark, Plat,InputBy,InputDT*@
+        </tr>  
+      
+    </table>    
+</div>
+
+    <div title="tab1" style="height:650px;width:auto;overflow:hidden;">
+        <div id="gridtb">
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:onClickRow,linkbuttonDisable:canShow('icon-edit')">编辑</a>
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
+        </div>  
+
+       <table id="gridlist" data-bind="datagrid:grid" style="height:620px;width:auto">
+            <thead>
+                <tr> 
+                    <th field="SNO"  hidden="true"  ></th>
+                    <th field="EcomID" hidden="true" ></th>
+                    <th field="PNID"	sortable="true"	align="left" width="100"  formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.EcomPNList,required: true,onSelect:getPrice}}">料号</th>
+                    <th field="PN"	hidden="true" >料号</th>
+                    <th field="Qty"		sortable="true"	align="right" formatter="formatterPrice" width="70"  editor="{type:'numberbox',options:{precision:0,required:true}}" >Qty</th>
+                    <th field="Price"		sortable="true"	align="right" formatter="formatterPrice" editor="{type:'numberbox',options:{precision:2,required:true}}"	width="80" >单价</th> 
+                    <th field="LogCost"		sortable="true"	align="right" formatter="formatterPrice" editor="{type:'numberbox',options:{precision:2,required:true}}"	width="80" >物流成本</th> 
+                    <th field="PKGCost"		sortable="true"	align="right" formatter="formatterPrice" editor="{type:'numberbox',options:{precision:2,required:true}}"	width="80" >包装成本</th> 
+                    <th field="OtherCost"		sortable="true"	align="right" formatter="formatterPrice" editor="{type:'numberbox',options:{precision:2,required:true}}"	width="80" >其他成本</th> 
+                    <th field="Currency"		sortable="true"	align="center" width="60" editor="{type:'combobox',options:{data:data.dataSource.CNCYList,required: true}}" >币别</th>                   
+                    <th field="SingleSum"		sortable="true"	align="right"	width="80" formatter="formatterPrice" >单个成本</th>
+                    <th field="LogSum"		sortable="true"	align="right"	width="80" formatter="formatterlogSum" >物流成本</th>
+                    <th field="ComSum"		sortable="true"	align="right"	width="80" formatter="formatterComSum" >商品成本</th>
+                    <th field="TotalSum"		sortable="true"	align="right" width="80" formatter="formatterPrice" >总成本</th>
+                    <th field="Remark"		sortable="true"	align="left"	width="60"  editor="text">Remark</th> 
+                </tr>
+               @*SNO,EcomID,PNID,PN,Qty,Price,LogCost,PKGCost,OtherCost,Currency,Remark*@
+            </thead>
+        </table>      
+    </div>

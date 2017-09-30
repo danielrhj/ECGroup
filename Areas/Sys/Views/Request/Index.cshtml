@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "需求提報";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Sys/ViewModels/Request.js"></script>      
+
+        <script type="text/javascript">
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+            using(["numberspinner","autocomplete"], easyuifix.datagrid_editor_extend);
+            var viewModel = Sys.Request;
+            ko.bindingViewModel(new viewModel(data)); 
+
+            var formatterURL = function (value,row) {
+                var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.AutoID+'\')" >'+value+'</a>';
+                return KK;
+            }
+            var formatterUserInfo = function (value,row) {
+                if(value){
+                    var KK='<a href="#" plain="true" style="color:blue" onclick="openUserInfo(\''+value+'\')" >'+value+'</a>';
+                    return KK;
+                }
+                else
+                { return "";}
+            }
+           
+</script>
+}
+
+<div class="z-toolbar">
+    <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"  title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')"    >新增</a>
+    <a id="a_edit"   href="#" plain="true" class="easyui-linkbutton" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')" title="编辑">编辑</a>
+    <a id="a_delete"   href="#" plain="true" class="easyui-linkbutton" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" title="刪除">刪除</a>
+    <a id="a_export" href="#" class="easyui-splitbutton" data-options="menu:'#dropdown',iconCls:'icon-download'">导出</a>
+</div>
+        
+<div id="dropdown" style="width:100px; display:none;">  
+    <div data-options="iconCls:'icon-ext-xls'"      suffix="xls"    data-bind="click:downloadClick">Excel2003   </div>  
+    <div data-options="iconCls:'icon-page_excel'"   suffix="xlsx"   data-bind="click:downloadClick">Excel2007   </div>  
+    <div data-options="iconCls:'icon-ext-doc'"      suffix="doc"    data-bind="click:downloadClick">Word2003    </div>  
+</div> 
+
+<div id="condition" class="container_12" style="position:relative;">
+    <table style="width:550px;margin-left:10px">
+        <tr>
+            <td >創建人:</td><td><input type="text" data-bind="value:form.Creator" class="z-txt" style="width:100px" /></td>
+            <td>創建時間</td><td><input type="text" data-bind="value:form.BeginDate" class="z-txt easyui-daterange" style="width:165px" /></td> 
+            <td>
+                <a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick">查询</a>
+                <a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a>
+            </td>
+        </tr>     
+    </table>            
+</div>
+
+
+       <table id="gridlist" data-bind="datagrid:grid" style="height:220px;">
+            <thead>
+                <tr> 
+                    <th field="AutoID"   hidden="true"  >AutoID</th>
+                    <th field="ck" checkbox="true"  editor="{type: 'checkbox',options: {on: true,off: false}}" singleSelect="true"></th> 
+                    <th field="STATUS"		sortable="true"	align="center"	width="80">狀態</th>
+                    <th field="CatID"		sortable="true"	align="left"	width="100"  >模塊類別</th>
+                    <th field="Subject"		sortable="true"	align="left"	width="150" formatter="formatterURL">主題</th>
+                    <th field="ITPerson"		sortable="true"	align="left"	width="80" formatter="formatterUserInfo">IT負責人</th>
+                    <th field="ITComments"		sortable="true"	align="left"	width="200"  >IT注解</th>                    
+                    <th field="CloseDate"		sortable="true"	align="right"	width="80"   formatter="com.formatDate" >IT處理時間</th>                    
+                    <th field="TaskGrade"		sortable="true"	align="center"	width="80" >優先級</th>
+                    <th field="RejectFlag"		sortable="true"	align="center"	width="80"  >是否駁回</th>
+                    <th field="Creator"		sortable="true"	align="left"	width="100"  formatter="formatterUserInfo">需求提報人</th>
+                    <th field="CreateDate"		sortable="true"	align="left"	width="100"   formatter="com.formatDate" >需求提報時間</th>
+                </tr>
+            </thead>
+        </table>      
+
+<script type="text/html" id="UserInfo-template">
+    <style type="text/css">
+        .datagrid-wrap{border-width:0 0 1px 0;}
+        .datagrid-toolbar{background-color:#E0ECFF !important}
+    </style>
+    <table data-bind="datagrid:grid" >
+        <thead>
+            <th field="ItemNo"        sortable="true" align="left"    width="50" >ItemNo</th>
+            <th field="Content"    sortable="true" align="left"    width="220" >Content</th>           
+        </thead>
+       @*/*Role,UserCode,UserName,ActionDate,Action,Meno*/*@
+    </table>
+</script> 

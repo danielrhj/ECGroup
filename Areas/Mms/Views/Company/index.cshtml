@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "公司資料";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.Company.js"></script>
+    <script type="text/javascript">
+        using('validatebox');
+        using('combobox');
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var viewModel = mms.Company;
+        ko.bindingViewModel(new viewModel(data));        
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"             title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"            title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')"  >编辑</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" >删除</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"            title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"   >保存</a>
+    <a id="a_export" href="#" plain="true" class="easyui-linkbutton" icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
+
+</div>
+
+<div id="condition" class="container_12" style="position:relative">
+    <table style="width:290px"><tr><td style="margin-left:20px">公司代码</td><td><input type="text" data-bind="value:form.companyCode" class="z-txt easyui-autocomplete" style="width:105px" data-options="url:'/api/mms/company/getcompanyCode'" /></td>
+        <td><a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick" >查询</a></td>
+        <td><a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a></td>
+           </tr></table>   
+</div>
+
+<table id="gridlist" data-bind="datagrid:grid">
+    <thead>
+        <tr>@*AutoID, OwnerID, CName, CAdd, Contact, Tel, Fax, Email, Remarks, AccountNo, BankName, Currency*@
+            <th field="AutoID"   hidden="true" >AutoID</th>
+            <th field="OwnerID" sortable="true" align="left" width="80" editor="{type:'validatebox',options:{required:true}}">简称</th>
+            <th field="CName" sortable="true" align="left" width="150" editor="{type:'validatebox',options:{required:true}}">全称</th>    
+            <th field="CAdd" sortable="true" align="left" width="250" editor="{type:'validatebox',options:{required:true}}">地址</th> 
+            <th field="Contact" sortable="true" align="left" width="80" editor="{type:'validatebox',options:{required:true}}">Contact</th>    
+            <th field="Tel" sortable="true" align="left" width="80" editor="{type:'validatebox',options:{required:true}}">地址</th>     
+            <th field="Fax" sortable="true" align="left" width="80" editor="{type:'validatebox',options:{required:true}}">Tel</th>     
+            <th field="Email" sortable="true" align="left" width="80" editor="{type:'validatebox',options:{required:true}}">Email</th>      
+            <th field="Remarks" sortable="true" align="left" width="80" editor="{type:'validatebox',options:{required:true}}">Remark</th>    
+            <th field="AccountNo" sortable="true" align="left" width="150" editor="{type:'validatebox',options:{required:true}}">AccountNo</th>      
+            <th field="BankName" sortable="true" align="left" width="150" editor="{type:'validatebox',options:{required:true}}">BankName</th>       
+            <th field="Currency" sortable="true" align="left" width="60" editor="{type:'validatebox',options:{required:true}}">币别</th>      
+
+        </tr>
+    </thead>
+</table>

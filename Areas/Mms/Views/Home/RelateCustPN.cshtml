@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "关联客户料号";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.PartNo.js"></script>
+    <script type="text/javascript">
+        using(['validatebox','combobox','autocomplete']);
+        //using();
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var formatPartAttr = utils.fnValueToText(data.dataSource.CustCodeList);
+        var viewModel = mms.Relate;
+        ko.bindingViewModel(new viewModel(data));        
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"             title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"            title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')"  >编辑</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" >删除</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"            title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"   >保存</a>
+</div>
+
+<table id="gridlist" data-bind="datagrid:grid">
+    <thead>
+        <tr>            
+            <th field="AutoID" hidden="true" >AutoID</th>
+            <th field="PNID" hidden="true" >PNID</th>
+            <th field="ck" checkbox="true"></th> 
+            <th field="SuppPN" sortable="true" align="left" width="200">制造商料号</th>
+            <th field="CDesc" sortable="true" align="left" width="100">名称</th>
+            <th field="CustCode" sortable="true" align="left" width="100" formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.CustCodeList,required: true}}">客户代码</th>    
+            <th field="CustPN" sortable="true" align="left" width="200" editor="{type:'autocomplete',options:{required:true,url:'/api/mms/partno/getCustPNList'}}">客户料号</th>    
+            <th field="CustAbbr" sortable="true" align="left" width="100" hidden="true">客户简称</th>    
+
+        </tr>
+        @*select AutoID,PNID,SuppPN,CustPN,CustCode,CustAbbr,CDesc from DG_PartNoCustomerPN*@
+    </thead>
+</table>

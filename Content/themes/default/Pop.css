@@ -1,0 +1,206 @@
+﻿
+        table
+        {
+            border-collapse: collapse;
+        }
+        
+        th
+        {
+            font-size: 12px;
+            font-weight: bold;
+            text-align: left;
+            text-decoration: none;
+            color: #000000;
+            padding: 2 5 2 5;
+            white-space: nowrap;
+        }
+        
+        td
+        {
+            font-size: 12px;
+            text-decoration: none;
+            padding: 2 5 2 5;
+            white-space: nowrap;
+        }
+
+        /*main*/
+        .ctrl_list
+        {
+            margin: 0 10px 0 10px;
+            width: 98%;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+        }
+        .ctrl_list_label
+        {
+            font-size: 12px;
+            font-weight: lighter;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: White; /*#EDEDED;*/
+            border-bottom: solid 1 #FFFFFF;
+            width:20%;
+        }
+        .ctrl_list_input
+        {
+            font-size: 12px;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #FFFFFF;
+            border-bottom: solid 1 #EEEEEE;
+            border-right: solid 1 #EEEEEE;
+            width:30%;
+        }
+                
+        .ctrl_list_input input
+        {
+            width:95%;
+            }
+            .ctrl_remarks
+            {
+            width:100%;}
+                        .ctrl_remarks textarea
+            {
+            width:98%;}
+        
+        .btn_list
+        {
+            margin: 5px 10px 5px 10px;
+            text-align: left;
+        }
+        
+        .datagrid
+        {
+            margin: 0 10px 0 10px;
+            width: 98%;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+        }
+        .datagrid th
+        {
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            text-align: center;
+        }
+        .datagrid td
+        {
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        
+        .datagrid .checkbox
+        {
+            width:10px;
+            text-align:center;
+            }
+        
+        .td_bar
+        {
+            background-image: url(images/bg01.png);
+            background-position: 100% 0px;
+            background-repeat: no-repeat;
+            height: 30px;
+        }
+        
+        .td_bar p
+        {
+            background-image: url(images/bg01.png);
+            background-position: 0% 0px;
+            background-repeat: no-repeat;
+            height: 30px;
+            width: 180px;
+            padding-left: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            color: #29458C;
+            line-height: 30px;
+        }
+        
+        .td_list
+        {
+            background-image: url(images/bg02.png);
+            background-position: right top;
+            background-repeat: repeat-y;
+        }
+        
+        .td_list_inner
+        {
+            background-image: url(images/bg04.png);
+            background-position: left top;
+            background-repeat: repeat-y;
+            line-height: 150%;
+            color: #666666;
+            text-align: center;
+        }
+        .td_footer
+        {
+            background-image: url(images/bg03.png);
+            background-position: 100% -0px;
+            background-repeat: repeat-x;
+            height: 2px;
+            text-align: left;
+            overflow: hidden;
+        }
+        
+        .td_space
+        {
+            height: 10px;
+        }
+        
+        .right_content
+        {
+            text-align: left;
+            display: block;
+        }
+        
+        .right_content_bar
+        {
+            background-image: url(images/bg01.png);
+            background-position: 100% 0px;
+            background-repeat: no-repeat;
+            height: 30px;
+        }
+        .right_content_bar p
+        {
+            background-image: url(images/bg01.png);
+            background-position: 0% 0px;
+            background-repeat: no-repeat;
+            height: 30px;
+            width: 180px;
+            padding-left: 20px;
+            font-weight: bold;
+            font-size: 13px;
+            color: #29458C;
+            line-height: 30px;
+        }
+        
+        .right_content_list
+        {
+            background-image: url(images/bg02.png);
+            background-position: right top;
+            background-repeat: repeat-y;
+        }
+        
+        .right_content_list_inner
+        {
+            background-image: url(images/bg04.png);
+            background-position: left top;
+            background-repeat: repeat-y;
+            line-height: 150%;
+            color: #666666;
+        }
+        .right_content_list_footer
+        {
+            background-image: url(images/bg03.png);
+            background-position: 100% -0px;
+            background-repeat: no-repeat;
+            height: 2px;
+            text-align: left;
+            overflow: hidden;
+        }

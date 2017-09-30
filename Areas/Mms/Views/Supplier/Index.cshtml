@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewBag.Title = "供應商代碼信息";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+
+    <script src="~/Areas/Mms/ViewModels/mms.Supplier.js"></script>    
+    <script type="text/javascript">
+        using(['validatebox','combobox']);
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+        var formatteropenURL = function (value,row) {           
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.SuppID+'\')" >'+value+'</a>';
+            return KK;           
+        }
+
+        var viewModel = mms.Supplier;
+        ko.bindingViewModel(new viewModel(data));
+
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"             title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"            title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')" >编辑</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
+</div>
+
+<div id="condition"  class="container_12"  style="position:relative;">   
+    <table style="width:500px;margin-left:10px;"><tr>
+        <td style="width:100px;">供應商名稱(片語)</td><td><input type="text"  data-bind="value:form.SupplierInfo" class="z-txt" /></td>
+        <td><a id="a_search" href="#" class="button button-blue"  data-bind="click:searchClick">查询</a>             
+        <a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a></td>
+
+     </tr></table>  
+</div>
+
+
+<table  id="gridlist"  data-bind="datagrid:grid">
+    <thead>  
+        <th field="SuppID" hidden="hidden" >No</th>
+        <th field="ck" checkbox="true"  editor="{type: 'checkbox',options: {on: true,off: false}}" singleSelect="false"></th> 
+        <th field="SuppCode" sortable="true" align="left" width="80" formatter="formatteropenURL">编码</th>
+        <th field="SuppAbbr" sortable="true" align="left" width="80" >简称</th>
+        <th field="SuppName" sortable="true" align="left" width="250">全稱</th>
+        <th field="CustAdd" sortable="true" align="left" width="200" >地址</th>
+        <th field="Contact" sortable="true" align="left" width="100" >联系人</th>
+        <th field="Tel" sortable="true" align="left" width="100" >Tel</th>
+        <th field="CellNo" sortable="true" align="left" width="100">手机</th>
+        <th field="Email" sortable="true" align="left" width="100" >Email</th>
+        <th field="SWIFICode" sortable="true" align="left" width="80">SWIFICode</th>
+        <th field="AccountNo" sortable="true" align="left" width="85">银行账号</th>
+        <th field="AccountName" sortable="true" align="left" width="80">开户名</th>
+        <th field="BankName" sortable="true" align="left" width="80">银行名称</th>
+        <th field="Currency" sortable="true" align="left" width="60">Currency</th>
+        <th field="PayTerms" sortable="true" align="left" width="80">结算条件</th>
+        
+        @*SuppID,SuppAbbr,SuppCode,SuppName,SuppAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName*@   
+    </thead>
+      
+</table> 
+
+
+<script type="text/html" id="contact-template">
+    <style type="text/css">
+        .datagrid-wrap{border-width:0 0 1px 0;}
+        .datagrid-toolbar{background-color:#E0ECFF !important}
+    </style>
+    <table data-bind="datagrid:grid" style="width:780" >
+        <thead>
+            <th field="AutoID"        sortable="true" align="left" hidden="true">AutoID</th>
+            <th field="VendorCode"    sortable="true" align="left"    width="90" editor="text">VendorCode</th>
+            <th field="Contact"    sortable="true" align="left"    width="90" editor="text">Contact</th>
+            <th field="Tel"		sortable="true"	align="left"	width="200"  editor="{type:'validatebox',options:{required:true}}">Tel</th>        
+            <th field="Mail"		sortable="true"	align="left"	width="200"  editor="{type:'validatebox',options:{required:true}}">Mail</th>             
+            <th field="ProjectName"		sortable="true"	align="left"	width="80"  editor="text">ProjectName</th>        
+            <th field="Remark"		sortable="true"	align="left"	width="100"  editor="text">Remark</th>             
+            <th field="CreateDate" sortable="true" align="left"  editor="text,readonly:true" formatter="com.formatDateTime"  >CreateDate</th>  
+           
+        </thead>
+    </table>
+    
+    <div style="text-align:center;margin:5px;">
+        <a class="easyui-linkbutton" icon="icon-ok" data-bind="click:confirmClick" href="javascript:void(0)" >保存</a>  
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" data-bind="click:cancelClick" href="javascript:void(0)">取消</a> 
+    </div>
+</script> 

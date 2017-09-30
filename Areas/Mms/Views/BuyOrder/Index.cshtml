@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "采购订单查詢";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+
+
+@section scripts{
+        <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+        <script src="~/Areas/Mms/ViewModels/mms.BuyOrder.js"></script>   
+        <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script> 
+   
+        <script type="text/javascript">
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+            var formatterURL = function (value,row) {
+                
+                var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.BuyID+'\',\''+value+'\',\'BuyOrder\')">'+value+'</a>';                
+                return KK;
+            }           
+
+            var formatBuyPrice=function (value,row) {
+                if(row.BuyNo.length==0){return '';}
+                else
+                {return com.formatMoney(value) ;}
+            }
+            var formatRcvQty = function (value,row) {
+                if(row.BuyNo.length==0){return '';}
+                if(value<row.Qty&&row.Qty>0)
+                {return '<label style="color:blue">'+value+'</label>' ;}
+                else{return '<label style="color:green">'+value+'</label>' ;}
+            }
+            var formatterReceiving=function(value,row){  
+                if(row.BuyNo.length==0){return '';}
+                if(value=='已入库'){
+                    return '<label style="color:green">'+value+'</label>' ;
+                }
+                else(value=='已部分入库')
+                {return '<label style="color:blue">'+value+'</label>' ;}
+                
+            }
+            var viewModel = mms.BuyOrder.Search;
+            ko.bindingViewModel(new viewModel(data));
+        </script>
+}
+       <div class="z-toolbar">
+            <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>  
+            <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"  title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+            <a id="a_batchRcv"   href="#" plain="true" class="easyui-linkbutton" icon="icon-lorry_add" data-bind="click:canShow('icon-lorry_add')?null:batchRcvClick,linkbuttonDisable:canShow('icon-lorry_add')" title="批量收货">批量收货</a>
+           <a id="a_delete"   href="#" plain="true" class="easyui-linkbutton" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" title="刪除">刪除</a>
+           <a id="a_export" href="#" plain="true" class="easyui-linkbutton" icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
+        </div>       
+ 
+        <div id="condition" class="container_12" style="position:relative;">           
+             <table style="width:950px">
+                <tr>
+                <td >采购单號:</td><td><input type="text" data-bind="value:form.BuyNo" class="z-txt" style="margin-left:10px" /></td>
+                <td  style="margin-left:5px">代理商:</td><td><input type="text" style="width:91px" data-bind="value:form.SuppAbbr" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/supplier/getSupplierAbbr'"/></td>
+                <td >采购单状态:</td><td><input type="text" class="z-txt easyui-combobox" style="width:90px" data-bind="datasource:dataSource.BuyOrderStatusList ,comboboxValue:form.BuyStatus" data-options="showblank:true" class="z-txt easyui-combobox"  style="margin-left:1px" /></td>
+
+                    <td >創建時間:</td><td><input type="text" data-bind="value:form.BeginDate" class="z-txt easyui-daterange" style="width:150px" /></td>  
+
+                <td>
+                    <a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick">查询</a>
+                    <a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a>
+                </td>                
+                </tr>
+
+    
+             </table> 
+        </div>
+
+       <table  id="gridlist"  data-bind="datagrid:grid">
+            <thead>  
+                <tr>  
+                    <th field="ck" checkbox="true"  editor="{type: 'checkbox',options: {on: true,off: false}}"></th> 
+                    <th field="BuyID"   hidden="true"   >發票ID</th>  
+                    <th field="BuyNo"  sortable="true" align="left"    width="90"  formatter="formatterURL" >采购单號</th>  
+                    <th field="BuyDate"            sortable="true" align="center"   formatter="com.formatDate"  width="90" >采购日期</th> 
+                    <th field="SuppAbbr"            sortable="true" align="left"    width="110"   >供应商 </th>  
+                    <th field="SuppPN"            sortable="true" align="left"    width="90"   >MPN </th>  
+                    <th field="CDesc"            sortable="true" align="left"    width="100"   >品名 </th>
+                    <th field="BuyPrice"            sortable="true" align="right"   formatter="formatBuyPrice"   width="80" >采购价</th>    
+                    <th field="Currency"            sortable="true" align="center"  width="50" >幣別</th>   
+                    <th field="Qty"            sortable="true" align="center"  width="70" >采购数</th> 
+                    <th field="Amount"            sortable="true" align="right"   formatter="com.formatMoney2"   width="80" >總金額</th>  
+                    <th field="RcvQty"            sortable="true" align="center"  width="70"  formatter="formatRcvQty"  >入库数</th> 
+                    <th field="PriceType"            sortable="true" align="center"    width="60" >含税</th> 
+                    <th field="BuyStatus"  sortable="true" align="left"    width="70" >狀態</th>                    
+                    <th field="text"  sortable="true" align="center" formatter="formatterReceiving"    width="90" >入库状态</th>                   
+                    <th field="Remarks"       sortable="true" align="center"    width="60"  >备注</th>   
+
+                    @*ck,BuyID, BuyNo, BuyDate, SuppAbbr, SuppPN, CDesc,BuyPrice,Currency,Qty,Amount,RcvQty, PriceType,BuyStatus,text,Remarks
+                    采购单號,采购日期,供应商,MPN,品名,采购价,幣別,采购数,總金額,入库数,含税,狀態,入库状态,备注
+                    *@              
+                </tr>                            
+            </thead>      
+        </table> 
+ 

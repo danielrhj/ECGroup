@@ -1,0 +1,56 @@
+﻿
+/*********************************************系統默認樣式***************************************/
+html,body
+{
+	
+	margin: 0px;
+	SCROLLBAR-FACE-COLOR: #B8AD7F;
+	SCROLLBAR-HIGHLIGHT-COLOR: #E8DFCE;
+	SCROLLBAR-ARROW-COLOR: #335000;
+	SCROLLBAR-TRACK-COLOR: #E8DFCE;
+	height:100%;
+	/*FONT-FAMILY: 'Lucida Grande','Lucida Sans Unicode','宋体','新宋体',Tahoma,arial,verdana,sans-serif; */
+	font-family: Tahoma;
+	font-size: 12px;
+	color: #6A8494;
+    
+}
+
+A
+{
+	cursor:pointer;
+	height: 1px;
+	text-decoration: none;
+}
+a:visited 
+{
+	font-size: 12px;
+	color: Black;
+	text-decoration: none;
+}
+a:link
+{
+	font-size: 12px;
+	color: #6A8494;
+	text-decoration: none;
+}
+a:hover
+{
+	font-size: 12px;
+	color: #B8AD7F;
+	text-decoration: none;
+}
+
+table,td,th
+{
+	font-size: 12px;
+	color:#6A8494;
+	
+}
+
+
+
+
+
+
+

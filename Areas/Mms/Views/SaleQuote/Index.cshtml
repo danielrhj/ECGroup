@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "客户报价单查詢";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+@section scripts{
+        <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+        <script src="~/Areas/Mms/ViewModels/mms.SaleQuote.js"></script>   
+        <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script> 
+   
+        <script type="text/javascript">
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+
+            var formatterURL = function (value,row) {
+                if(isNaN(value)){
+                    var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.QuoteID+'\',\''+value+'\')">'+value+'</a>';                
+                    return KK;}
+                else{return '';}
+            }
+
+            var formatterPrice= function (value,row) {
+                if(isNaN(row.QuoteNo))
+                    return '';
+                else
+                {   return com.formatMoney(value);}
+            };
+            var formatterUpload=function (value,row) {    
+                var linkA='',title='';
+                title=row.FilesName?'Open':'Upload';            
+                linkA='<a href="#" style="color:blue" onclick="exportEInvoice(\''+row.ReceiveInvoiceNo + '\',\'upload\')" >'+title+'</a>';           
+
+                return linkA;
+            }
+
+            var formatterEInv=function (value,row) {    
+                var linkA='<a href="/FJLBS/ARInvoice/'+value+'\" target="_blank" style="color:blue">'+value+'</a>';          
+                return linkA;
+            } 
+            var viewModel = mms.SaleQuote.Search;
+            ko.bindingViewModel(new viewModel(data));
+        </script>
+}
+       <div class="z-toolbar">
+            <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>  
+            <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-add"  title="新增" data-bind="click:canShow('icon-add')?null:addClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+
+           <a id="a_delete"   href="#" plain="true" class="easyui-linkbutton" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" title="刪除">刪除</a>
+           <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
+        </div>        
+ 
+        <div id="condition" class="container_12" style="position:relative;">           
+             <table style="width:800px;margin-left:5px">
+                <tr>                
+                <td  style="margin-left:5px">客户:</td><td><input type="text" style="width:90px" data-bind="value:form.CustAbbr" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/customer/getCustomerAbbr'"  style="width:90px" /></td>
+                <td >客户料號:</td><td><input type="text" data-bind="value:form.CustPN" style="width:150px"  class="z-txt easyui-autocomplete" data-options="url:'/api/mms/partno/getCustPNList'"    /></td>
+                    <td >报价单状态:</td><td><input type="text" class="z-txt easyui-combobox" style="width:90px" data-bind="datasource:dataSource.SaleQuoteStatusList ,comboboxValue:form.QuoteStatus" data-options="showblank:true" /></td>
+                <td rowspan="2" style="vertical-align:middle;">
+                    <a id="a_search" href="#" class="button button-blue" data-bind="click:searchClick">查询</a>
+                    <a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a>
+                </td>                
+                </tr>
+                 <tr>
+                    <td>报价单號:</td><td><input type="text" data-bind="value:form.QuoteNo" class="z-txt" style="width:90px" /></td>
+                    <td >制造商料號:</td><td><input type="text" data-bind="value:form.SuppPN" style="width:150px" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/partno/getSuppPNList'"    /></td>
+                    <td >报价時間:</td><td><input type="text" data-bind="value:form.BeginDate" class="z-txt easyui-daterange" style="width:150px" /></td>  
+                 </tr>
+    
+             </table> 
+        </div>
+
+       <table  id="gridlist"  data-bind="treegrid:grid">
+            <thead>  
+                <tr>                      
+                    <th field="QuoteID"   hidden="true"   >發票ID</th> 
+                    <th field="QuoteNo"  sortable="true" align="left"    width="115"  formatter="formatterURL" >报价单號</th>   
+                    <th field="QuoteDate"            sortable="true" align="left"  width="150" >报价日期</th> 
+                    <th field="SuppPN"            sortable="true" align="left"    width="200"   >制造商料号 </th> 
+                    <th field="CDesc"            sortable="true" align="left"  width="100" >品名</th>  
+                    <th field="Qty"            sortable="true" align="right"  width="50" >数量</th>  
+                    <th field="ReplyPrice"            sortable="true" align="right"  width="60" formatter="formatterPrice" >单价</th>  
+                    <th field="Currency"            sortable="true" align="center"  width="50" >幣別</th>   
+                    <th field="Unit"            sortable="true" align="left"  width="50" >Unit</th>  
+                    <th field="SPQ"		sortable="true"	align="right" width="60"  >SPQ</th>
+                    <th field="MOQ"		sortable="true"	align="right" width="60" >MOQ</th>
+                    <th field="LeadTime"		sortable="true"	align="right" width="60"  editor="text" >LeadTime</th>
+                    <th field="VATFlag"            sortable="true" align="center"    width="60" >含税</th>  
+                    <th field="TaxRate"            sortable="true" align="right"    width="60" >税率</th> 
+                    <th field="Remarks"       sortable="true" align="left"    width="60"  >备注</th>   
+                    <th field="CustAbbr"            sortable="true" align="left"    width="50"   >客户 </th>   
+                    <th field="QuoteStatus"  sortable="true" align="left"    width="70" >报价单狀態</th> 
+
+                    @*QuoteID,QuoteNo,QuoteDate,SuppPN,CDesc,Qty,ReplyPrice,Currency,Unit,SPQ,MOQ,LeadTime,VATFlag,TaxRate,Remarks,CustAbbr,QuoteStatus,,,*@              
+                </tr>                            
+            </thead>      
+        </table> 
+ 

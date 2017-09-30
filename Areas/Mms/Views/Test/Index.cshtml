@@ -1,0 +1,334 @@
+﻿@{
+    ViewBag.Title = "JS學習測試";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {       
+            var countries = [{country:'France',code:'01'},
+                        {country: 'Germany',code:'02'},
+                        {country: 'Spain', code:'03'}];
+            var selectedCountries = [];
+		
+            //var myObj={names:["Robbie X","Robbie Y","Richard Y","Gerald Z"]};
+
+
+            //addMethod(myObj,"find",function(name){
+            //    var ret=[];
+            //    for(var i=0;i<this.names.length;i++){
+            //        if(this.names[i].indexOf(name)==0){
+            //            ret.push(this.names[i]);
+            //        }
+            //    }
+            //    return ret;
+            //});
+
+            //addMethod(myObj,"find",function(){
+            //    return this.names;
+            //});
+
+            //addMethod(myObj,"find",function(name1,name2){
+            //    var ret=[];
+            //    for(var i=0;i<this.names.length;i++){
+            //        if(this.names[i]==name1+' '+name2){
+            //            ret.push(this.names[i]);
+            //        }
+            //    }
+            //    return ret;
+            //});
+
+           // animateIt('box1',1);animateIt('box2',1);
+            //var A0=myObj.find();
+            //var A1=myObj.find('Robbie');
+            //var A2=myObj.find('Richard','Y');
+
+            
+            Element.prototype.remove=function(){
+                if(this.parentNode){
+                    this.parentNode.remove(this);            
+                };
+            };
+            
+            var initUploader = function(){
+                $('#uploader1').find(".l-btn-text").fineUploader({
+                    request: {endpoint: '/api/mms/test/postfile'},
+                    text:{uploadButton:'上传'},
+                    autoUpload:true 
+                }).on('upload',function(id, name){
+                    $.messager.progress({ title: '请稍等', msg: '正在上传...', interval: 0 });
+                }).on('complete',function(event, id, name, response){
+                    $.messager.progress('close');
+                    if (response.success) 
+                    {
+                        com.message('success',response.message);
+                        //vmInstance.searchClick();
+                    }
+                }).on('progress',function(target,id, name, loaded, total){
+                    $.messager.progress('bar').progressbar('setValue', Math.ceil(loaded * 100 / total));
+                    if (loaded>=total)
+                    {
+                        $.messager.progress('close');
+                        $.messager.progress({ title: '请稍等', msg: '上传完成，正在导入处理...',interval: 300,text:''});
+                    }
+                }).on('error',function(target,id, name, reason, maybeXhrOrXdr){
+                    com.message('error',reason);
+                });
+                $("#uploader1").css("overflow","hidden");
+                $(".qq-upload-button").css("overflow","");
+                $(".qq-drop-processing,.qq-upload-list").hide();
+            };
+
+        });    
+        
+        Function.prototype.memoized=function(key){
+                this._values=this._values||{};
+                return this._values[key]!==undefined?this._values[key]:this._values[key]=this.apply(this,arguments);
+        };    
+            
+        Function.prototype.memoize=function(){
+            var fn=this;
+            return function(){
+                return fn.memoized.apply(fn,arguments);
+            };
+        }; 
+
+        function bind(context,name){
+            return function(){            
+                return context[name].apply(context,arguments);
+            };
+        };
+
+        
+
+        function animateIt(elem){
+            var el$=$('#'+elem)[0]; //document.getElementById
+            var tickMin=10,tickMax=200,tick=0;
+            var timer=setInterval(function(){
+                //增加边界
+                //for(tick=1;tick<=tickMax;tick++){
+                //    el$.style.marginLeft=el$.style.marginTop=tick+"px";
+                //}
+
+                if(tick<tickMax){
+                    el$.style.marginLeft=el$.style.marginTop=tick+"px";
+                    tick++;
+                }
+                else{tickMax=0;}
+                
+                if(tick>tickMax){
+                    tick--;
+                    el$.style.marginLeft=el$.style.marginTop=tick+"px";
+                }
+                else{tickMax=200;}
+
+                
+                //for(tick=tickMax;tick>=tickMin;tick--){
+                //    el$.style.marginLeft=el$.style.marginTop=tick+"px";
+                //}
+            },10);           
+        };
+
+        function min(array){
+            return Math.min.apply(Math,array);
+        };
+
+        function max(array){
+            return Math.max.apply(Math,array);
+        };
+
+        function multiMax(multi){
+            return multi*Math.max.apply(Math,Array.prototype.slice.call(arguments,1));
+        };
+
+        function addMethod(object,name,fn){
+            var old=object[name];
+            object[name]=function(){
+                if(fn.length==arguments.length){
+                    return fn.apply(this,arguments);
+                }
+                else if(typeof old=='function'){
+                    return old.apply(this,arguments);
+                }
+            };
+
+        };
+
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var viewModel=function(data){
+            var self=this;
+            this.form=ko.mapping.fromJS(data.form);
+            this.log=function(){
+                try {
+                    if (window["console"]) {
+                        console.log(min([-20,0,2,36,82]));
+                    }
+                    else {
+                        alert('console.log不可用！');
+                        var kk=self.form.msg().split(',');
+                        alert(Array.prototype.join.call(kk, "***"));
+                        alert(kk.join("###"));
+                    }
+                }
+                catch (e) {
+                    alert(Array.prototype.join.call(arguments, " "));
+                }
+            };
+
+            this.animate=function(){
+                animateIt('box1');//animateIt('box2',1);
+                
+            };
+
+            this.testWS=function(){
+                var post={AccountNo:'NCL-GB0118',Payee:'SHFTT'};
+
+                //方法一：
+                //$.getJSON('http://10.134.33.156/eSign_new/Service1.asmx/GetByBLNoNew?AccountNo='+post.AccountNo+'&Payee='+post.Payee+'&jsonpCallback=?',
+                //    function(data){  
+                //        var kk=data;
+                //    });
+
+                //方法二：注意GET不能少，post不要ko.toJSON
+                //$.ajax({  
+                //    type : "GET",  
+                //    async:false, 
+                //    data:post,
+                //    url : 'http://10.134.33.156/eSign_new/Service1.asmx/GetByBLNoNew',  
+                //    dataType : "jsonp",//数据类型为jsonp  
+                //    jsonp: "jsonpCallback",//服务端用于接收callback调用的function名的参数  
+                //    success : function(data){  
+                //        var kk=data;
+                //    },  
+                //    error:function(e){  
+                //        com.message('error', e.responseText);       
+                //    }  
+                //});   
+
+                //方法三：GET可省略，post不要ko.toJSON
+                com.ajax({  
+                    async:false, 
+                    data:post,
+                    url : 'http://10.134.33.156/eSign_new/Service1.asmx/GetByBLNoNew',  
+                    dataType : "jsonp",//数据类型为jsonp  
+                    jsonp: "myCallBack",//服务端用于接收callback调用的function名的参数  
+                    success : function(data){  
+                        var kk=data.Table;
+                        
+                    },  
+                    error:function(e){  
+                        com.message('error', e.responseText);       
+                    }  
+                });                  
+                
+            };
+
+            this.restoreStyle=function(){
+                //var mytimer=window.tim
+                clearInterval(null);
+            };
+
+            this.fjClick=function(){
+                var strOrigin=$('#box1').val();
+                var post={key:strOrigin};
+
+                com.ajax({
+                    url: '/api/mms/test/EditFJ/',
+                    data: ko.toJSON(post),
+                    success: function (d) {
+                        if (d)
+                            alert(d.msg);
+                            $('#box2').val(d.msg);  
+                    },
+                    error: function (e) {
+                        com.message('error', e.responseText);
+                    }
+                });
+            };
+
+            this.clickPrime=function(){               
+                var num1=$('#box1').val();
+               
+                var isPrime=(function(num){
+                    var prime=num!=1;
+                    for(var i=2;i<num;i++){
+                        if(num%i==0){
+                            prime=false;break;
+                        }
+                    }
+                    return prime;
+                }).memoize();
+
+                $('#box2').val(num1+':'+isPrime(num1));
+            };
+
+            this.clickRemove=function(){
+                $('#box1').remove();
+            
+            };
+
+            this.clickRound=function(){
+                var num=$('#box1').val();
+                num=Number(num).toFixed(2);
+                $('#box2').val(com.formatMoney2(num));
+            };
+
+            this.testnum=function(){
+                var strOrigin=$('#box1').val();
+                var post={key:strOrigin};
+
+                com.ajax({
+                    url: '/api/mms/test/EditNum/',
+                    data: ko.toJSON(post),
+                    success: function (d) {
+                        if (d){                            
+                            $('#box2').val(d.msg);  
+                            self.form.msg(d.msg2);  
+                        }
+                    },
+                    error: function (e) {
+                        com.message('error', e.responseText);
+                    }
+                });
+            };
+           
+            //this.availableCountries = ko.observableArray(countries);
+            //this.chosenCountries = ko.observableArray(selectedCountries);
+        
+        //#事件操作，传入参数为本viewModel
+            this.whenchage = function(p){
+                alert('here:' +p);
+                alert(p.chosenCountries().length);
+        	
+            };
+
+        };
+        
+        ko.bindingViewModel(new viewModel(data));
+    </script>
+    }
+
+    (簡體):<input type="text"  id="box1" style="background-color:aliceblue" />
+<div id="condition" class="container_12" style="position:relative;">
+    
+(繁體):<input type="text"  id="box2" style="background-color:aquamarine;width:200px;"  class="z-txt" />
+    <div>Input</div><div><input type="text" data-bind="value:form.msg" class="z-txt" style="font-size:smaller;background-color:aquamarine;width:500px;" /></div>
+        <a id="a_refresh" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="測試log" data-bind="click:animate">測試log</a>
+    <a id="a_restore" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_undo" title="測試log1" data-bind="click:restoreStyle">測試log1</a>
+    <a id="a_WS" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_undo" title="測試WS" data-bind="click:testWS">測試WS</a>
+    <a id="a_CodeString" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="測試繁簡轉換" data-bind="click:fjClick">繁簡轉換</a>
+    <a id="a_numChange" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_undo" title="測試WS" data-bind="click:testnum">測試數字轉大寫</a>
+    <a id="uploader1" class="easyui-linkbutton" icon="icon-upload" plain="true" title="上传">上传</a>
+</div>
+
+<div id="condition1" class="container_12" style="position:relative;">
+     <a id="a_memoized" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="測試memoize" data-bind="click:clickPrime">測試memoize</a>
+    <a id="a_remove" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="測試remove" data-bind="click:clickRemove">測試Remove</a>
+    <a id="a_decimal" href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="測試四舍五入" data-bind="click:clickRound">測試round</a>
+    <p>   
+</p>
+</div>
+
+
+
+

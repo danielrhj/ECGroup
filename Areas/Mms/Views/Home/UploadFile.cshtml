@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "附件上传";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts{    
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.UploadFile.js"></script> 
+    <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script>
+    <script type="text/javascript">
+        using(['validatebox','combobox','numberspinner']);
+
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        var formatPartAttr = utils.fnValueToText(data.dataSource.FileTypeList);
+
+        var formatterURL = function (value,row) {           
+            var KK='<a plain="true" style="color:blue" target="_blank" href="'+'@Url.Content("~/FJLBS/Doc/")'+row.FileID+'">'+value+'</a>';
+            return KK;
+        };
+        var viewModel = mms.Upload;
+        ko.bindingViewModel(new viewModel(data));        
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-arrow_refresh" title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"         title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')"  >编辑</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"        title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')" >删除</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"         title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"   >保存</a>
+    
+</div>
+
+
+<div id="condition"  class="container_12"  style="position:relative;">   
+    <div style="display:none"><label data-bind="text:form.BizID" style="color:blue" /></div>
+    <table style="width:700px;margin-left:5px">
+        <tr>
+            <td>关联ID</td><td><label data-bind="text:form.BizCode" style="color:blue" /></td>
+            <td  style="margin-left:5px">业务类别</td><td style="text-align:left"><label data-bind="text:form.BizTable"  style="color:blue" /></td>  
+        </tr>
+        <tr>
+            <td>文件类型</td><td><input type="text"   data-bind="datasource:dataSource.FileTypeList ,comboboxValue:form.BizType" data-options="showblank:true" class="z-txt easyui-combobox" style="width:100px" /></td>
+            <td>選擇文件:</td>  
+            <td><input type="file" name="AjaxFileUploader" id="AjaxFileUploader" style="width: 300px;font-size:larger;" />
+                <a class="easyui-linkbutton" plain="true"  data-options="iconCls:'icon-upload'" data-bind="click:clickUpload" id="btn_upload" >上傳</a></td>   
+        </tr>
+    </table>  
+</div>
+ <table data-bind="datagrid:grid" style="width:780px" >
+        <thead>
+            <th field="ck" checkbox="true"></th> 
+            <th field="AutoID"   hidden="true">AutoID</th>
+            <th field="BizID"  hidden="true">BizID</th>   
+            <th field="BizTable"  sortable="true" align="left" width="120">业务类别</th> 
+            <th field="FileID"  hidden="true">FileID</th> 
+            <th field="BizType" sortable="true" align="left"    width="120" formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.FileTypeList,required: true}}" >附件类型</th>  
+            <th field="FileName"    sortable="true" align="left"  width="200"  formatter="formatterURL" editor="{type:'validatebox',options:{required:true}}" >附件名称</th>           
+            <th field="CreateDate"		sortable="true"	align="center"	width="120"  formatter="com.formatDateTime">上传日期</th>  
+           @*AutoID,BizID,BizType,FileID,FileName,CreateDate*@
+        </thead>
+    </table>

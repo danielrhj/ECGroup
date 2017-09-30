@@ -1,0 +1,59 @@
+﻿<div region="north" class="head-north" split="true" border="false">
+
+    <span class="head head-left">
+        <a style="color: #FF0000; font-family: LiSu; font-size: 30px;">物流費用結算平台</a>
+        @*<a style="color: #FF0000; font-family: LiSu; font-size: 17px">Logistics cost billing platform</a>*@
+    </span>
+
+    <div class="head head-right">
+        <img src="../../Content/themes/default/IMG/Topbutton_1.png" alt="" width="30px" height="30px" />
+        <span>首頁</span>
+        @* <a href="javascript:void(0)" class="easyui-linkbutton swich_project" plain="true" title="切换项目" data-options="iconCls:'icon-flag_france'"></a>*@
+                <a href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm_user',iconCls:'icon-user'">当前用户:@ViewBag.UserName</a>
+                <div id="mm_user" style="width:150px;">  
+                    @*<div data-options="iconCls:'icon-rainbow'" class="myconfig">个人设置</div>  *@
+                    <div data-options="iconCls:'icon-edit'" class="changepwd">修改密码</div>  
+                    @*<div class="menu-sep"></div>*@  
+                    <div data-options="iconCls:'icon-user_go'" class="loginOut">安全退出</div>  
+                </div> 
+        <img src="../../Content/themes/default/IMG/CFAIT_Logo.png" alt="" width="150px" height="50px" />
+
+    </div>
+
+    <span class="head head-center" style="margin-left:50px">財會資訊Web開發課:<span style="margin-left:40px">1>王星星 579-25530 cfa-it-web@foxconn.com</span>
+        <span style="margin-left:40px">2>姜如海 560-77475 daniel.rh.jiang@mail.foxconn.com</span>
+    </span>
+</div>
+
+<div region="west" split="true" title="导航菜单" style="width:180px;" id="west">
+    <div id="wnav"></div>
+</div>
+
+<div region="center" id="mainPanle" style="background: #eee; overflow-y:hidden">
+    <div id="tabs" class="easyui-tabs" fit="true" border="false">
+        <div title="我的桌面" style="overflow:hidden;" id="home"></div>
+    </div>
+</div>
+
+<div region="south" split="true" class="head-south">
+    <div class="footer">Copyright © 2017 菱谷科技（深圳）有限公司</div>
+</div>
+
+<script type="text/html" id="password-template">
+    <div class="container_12" style="width:90%;margin:5%;">
+        <div class="grid_3 lbl">登陆名：</div>
+        <div class="grid_9 val"><input type="text" class="z-txt readonly " name="UserCode" disabled="disabled" /></div>
+        <div class="grid_3 lbl">原密码：</div>
+        <div class="grid_9 val"><input type="password" class="z-txt" /></div>
+        <div class="grid_3 lbl">新密码：</div>
+        <div class="grid_9 val"><input type="password" class="z-txt" /></div>
+        <div class="grid_3 lbl">确　认：</div>
+        <div class="grid_9 val"><input type="password" class="z-txt" /></div>
+        <div class="clear"></div>
+    </div>
+
+    <div style="text-align:center;" class="z-toolbar-dialog">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" id="pwd_confirm">确定</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" id="pwd_close">取消</a>
+    </div>
+</script>

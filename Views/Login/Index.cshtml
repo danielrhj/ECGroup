@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;    
+}
+<!doctype html>
+<html>
+    <head>
+        <title>@ViewBag.CnName-登录</title>
+        <link href="~/Content/css/page/login.css" rel="stylesheet" type="text/css" />
+        <script src="~/Content/js/jquery/jquery-1.8.1.min.js"></script>
+        <script src="~/Content/js/core/json2.js"></script>
+        <script src="~/Content/js/jquery-extend/jquery.cookie.js"></script>
+        <script src="~/Content/js/core/knockout-2.2.1.js"></script>
+        <script src="~/Content/js/viewModel/login.js"></script>
+        @*<script src="http://counter.sina.com.cn/ip"></script>*@
+        <script type="text/javascript">
+            function changecode() {
+                $('#imgVerifi').attr('src', '/Login/VerificationCode?t=' + new Date().getSeconds());
+            }
+        </script>
+    </head>
+    <body>
+        <div class="second_body">
+            <form data-bind="submit:loginClick">
+                <div class="logo" ><img src="/Content/images/login/logo.png" alt="" /></div>
+                <div class="title-zh" style="height:auto;">@ViewBag.CnName</div>
+                <div class="title-en" style="@ViewBag.EnNameStyle;">@ViewBag.EnName</div>
+                <div class="message" data-bind="html:message"></div>
+                <table border="0" style="width:300px;">
+                    <tr>
+                        <td style="padding-bottom: 5px;width:55px;">用户名：</td>
+                        <td colspan="2"><input type="text" id="txtUserCode" class="login" data-bind="value:form.usercode" /></td>
+                    </tr>
+                    <tr>
+                        <td class="lable" style="letter-spacing: 0.5em; vertical-align: middle">密码：</td>
+                        <td colspan="2"><input type="password" class="login" data-bind="value:form.password" /></td>
+                    </tr>
+                    <tr>
+                        <td class="lable" style=" vertical-align: middle;">验证码：</td>
+                        <td colspan="2" style="vertical-align: middle;"><input name="memVerifi" style="width: 65px;" type="text" class="login"  data-bind="value:form.verificode" />
+                             <img id="imgVerifi" title="更換验证码" src="/Login/VerificationCode" onclick="changecode()" /></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="2"><input type="checkbox" data-bind="checked:form.remember" /><span>系统记住我</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align:center">
+                            <input type="submit" value="登录" class="login_button" />
+                            <input type="button" value="重置" class="reset_botton" data-bind="click:resetClick" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>

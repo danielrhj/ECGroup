@@ -1,0 +1,523 @@
+﻿
+/*******************************************系统頁面样式**********************************/
+
+/*********************登录页面样式***********************/
+/*登录页面样式*/
+.Block_LoginCSS
+{
+	
+    background-image:url(images/Block1_1.png);
+    height:36px; 
+    color:white; 
+    padding-left:35px; 
+    font-size:12px;
+}
+
+.Block_LoginCSS_B
+{
+    background-image:url(images/Block1_2.png);
+}
+
+.Block_AboutLinkCSS
+{
+	
+    background-image:url(images/Block2_1.png);
+    height:36px; 
+    color:white; 
+    padding-left:35px; 
+    font-size:12px;
+}
+
+.Block_AboutLinkCSS_B
+{
+    background-image:url(images/Block1_2.png);
+}
+
+.Block_NewsCSS
+{
+	
+    background-image:url(images/Block3_1.png);
+    height:36px; 
+    color:white; 
+    padding-left:85px; 
+    font-size:12px;
+}
+
+.Block_NewsCSS_B
+{
+    background-image:url(images/Block3_2.png);
+}
+
+.Block_ResourceCSS
+{
+	
+    background-image:url(images/Block4_1.png);
+    height:36px; 
+    color:white; 
+    padding-left:85px; 
+    font-size:12px;
+}
+
+.Block_ResourceCSS_B
+{
+    background-image:url(images/Block3_2.png);
+}
+
+.Block_HelpCSS
+{
+	
+    background-image:url(images/Block5_1.png);
+    height:36px; 
+    color:white; 
+    padding-left:35px; 
+    font-size:12px;
+}
+
+.Block_HelpCSS_B
+{
+    background-image:url(images/Block1_2.png);
+}
+
+.Block_ContactCSS
+{
+	
+    background-image:url(images/Block6_1.png);
+    height:36px; 
+    color:white; 
+    padding-left:35px; 
+    font-size:12px;
+}
+
+.Block_ContactCSS_B
+{
+    background-image:url(images/Block1_2.png);
+}
+
+/********************************************************/
+
+/*系统首页上面背景*/
+.TopBG
+{
+	background-image: url(images/TopBG.png);
+}
+
+/**************首页上方文字样式***********/
+a:visited.TopText
+{
+	font-size: 12px;
+	color: #165c75;
+	text-decoration: none;
+}
+a:link.TopText
+{
+	font-size: 12px;
+	color: #0697ca;
+	text-decoration: none;
+}
+a:hover.TopText
+{
+	font-size: 12px;
+	color:#056182;
+	text-decoration: underline;
+}
+
+.tableText 
+{
+	font-size: 12px;
+	color:#1B4A02;
+	background-color:White;
+}
+
+/**********系统名称样式***********/
+.sysTitle
+{
+	background-image: url(images/sys_title_in.png);
+	Height:50px ;
+	Width:300px;
+
+}
+
+.Line1
+{
+	height:1px; 
+	background-color:#ebf6fa;
+}
+
+/*状态栏背景*/
+.StatusBarBG
+{
+	background-image: url(images/BottomBG.png);
+}
+
+/*狀態欄文字*/
+.StatusText
+{
+	font-size: 12px;
+	color: #000;
+}
+
+/***********模组路径样式************/
+.ModulePath
+{
+	font-size:12px;
+	color:Black;	
+}
+
+/*验证样式*/
+.CheckText
+{
+	color:Black;
+	font-size:12px;	
+}
+
+/***********************主頁分隔栏样式**************************/
+.DivisionBar
+{
+	
+	width:0px;
+}
+.DivisionBarControl
+{
+	
+	background-color:#0697ca;
+}
+
+
+.SplitterClose
+{
+	background-image: url(Images/splitter_horCol.gif);
+}
+
+.SplitterCloseHover
+{
+	background-image: url(Images/splitter_horColHover.gif);
+}
+
+.SplitterOpen
+{
+	background-image: url(Images/splitter_horExp.gif);
+}
+
+.SplitterOpenHover
+{
+	background-image: url(Images/splitter_horExpHover.gif);
+}
+/**************************************************************/
+
+
+.ModulePath
+{
+	font-size:12px;
+	color:#1B4A02;	
+}
+
+
+/*菜单栏背景*/
+.MenuBG
+{
+	background-position: left bottom;
+	background-image: url(Images/MenuBG.png);
+	background-color:#bde0ec;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+
+}
+
+
+.table
+{
+	background-color:#B8AD7F
+	
+}
+
+.tableHeaderBG
+{
+	background-image: url(Images/TableHeaderBG.jpg);
+	height:22px;
+	color:#335000;
+	font-weight:normal;
+	vertical-align:middle;
+}
+
+.tableHeaderLeftBG
+{
+	background-image: url(Images/TabelHeaderLeft.jpg);
+	width:4px;
+}
+
+.tableHeaderRightBG
+{
+	background-image: url(Images/TabelHeaderRight.jpg);
+	width:4px;
+}
+
+.tableText 
+{
+	font-size: 12px;
+	color:Black;
+	background-color:White;
+}
+
+.txt
+{
+    border: solid 1px #84A1BD;
+    margin-left: 3px;
+    padding-left: 3px;
+    font-size: 12px;
+    height: 18px;
+    vertical-align: middle;
+}
+
+.width130
+{
+    width: 130px;
+    height:16px;
+}
+
+.width100
+{
+    width: 100px;
+    height:16px;
+}
+
+.width80
+{
+    width: 80px;
+    height:18px;
+    background-color:#fff;
+    font-size: smaller;	
+    
+}
+
+.LabelCSS
+{
+  color:Red;
+  font-size: smaller;	
+
+}
+
+/******************************************************/
+
+/*必输栏位提示星号样式*/
+.Star
+{
+	color:Red;
+}
+
+/*****************Grid控件标题(设定背景及固定标题)***********************/
+.GridHeader 
+{ 
+   background-image : url(Images/TableHeaderBG.jpg);
+   color:Black;
+   height:22px;
+   font-size:12px;
+   font-weight:normal;
+   text-align:center;
+  /* position:relative ; 
+   table-layout:fixed;
+   top:expression(this.offsetParent.scrollTop);   
+   z-index: 10;
+ */
+} 
+.GridHeader th{text-overflow:ellipsis;overflow:hidden;white-space: nowrap;padding:0px;}
+
+
+/***********************************************************************/
+
+/**********查找时没有记录返回时的样式***********/
+.noRecord
+{
+	font-size:12px;
+	font-weight:normal;
+	text-align:center;
+	vertical-align:middle;
+}
+
+/*****BFWGrid控件-默认行样式******************/
+.BFWGridRowDefault
+{
+	background-color:#FFF;
+	color:Black;
+}
+
+/******BFWGrid控件-当选中一行时的样式*********/
+.BFWGridRowSelected
+{
+	color:Black;
+	font-weight:bold;
+}
+
+/**********彈出控件DIV樣式*************/
+.DivStyle
+{
+	border:solid 1px #B8AD7F;
+	background-color:White;
+}
+
+/**********BFWGrid控件樣式************/
+.BFWGridStyle
+{
+	border:0px;
+	background-color:White;
+	height:20px;
+	vertical-align:middle;
+}
+
+/**********用于模组维护的模组名称GridView边框颜色*********/
+.GridBorderColor
+{
+	border-color:#B8AD7F;
+}
+
+/*************模式弹出窗口(MessageBox)样式****************/
+/*弹出窗口的背景样式*/
+.MessageBoxBG
+{
+	display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index:1001;
+    -moz-opacity: 0.80;
+    opacity:.80;
+    filter: alpha(opacity=80);
+}
+
+/*弹出窗口的样式*/
+.MessageBoxBody
+{
+	display: none;
+	position: absolute;
+	background-color:#FFF;
+	border:solid 1px #B8AD7F;
+	font:12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	margin:-60px 0 0 -150px;  
+    padding: 0px;
+    z-index:1002;
+}
+
+/**弹出窗口标题样式**/
+.MessageBoxTitle
+{
+	background-image: url(Images/TableHeaderBG.jpg);
+	color:Black;
+	font:12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-weight:normal;
+	text-align:left;
+	vertical-align:middle;
+	border:solid 0px;
+	padding:0px;
+}
+
+/**弹出信息窗口内容样式**/
+.MessageBoxContent
+{
+	color:Black;
+	font:12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	text-align:left;
+	vertical-align:middle;
+	border:solid 0px;
+	padding:5px;
+}
+
+/**弹出信息窗口关闭按钮样式**/
+.MessageBoxCloseButton
+{
+	background-image: url(Images/Close.gif);
+	background-repeat: no-repeat;
+	width:45px;
+	cursor:pointer;
+}
+
+/**鼠标悬停时的关闭按钮样式**/
+.MessageBoxCloseButtonHover
+{
+	background-image: url(Images/Close1.gif);
+	background-repeat: no-repeat;
+	width:45px;
+	cursor:pointer;
+}
+
+/**弹出信息窗口图标**/
+.MessageBoxIcon
+{
+	background-image: url(Images/info.jpg);
+	background-repeat: no-repeat;
+	width:65px;
+	height:80px;
+}
+
+
+/**弹出确认窗口内容样式**/
+.ConfirmBoxContent
+{
+	color:Black;
+	font:12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	height:100px;
+	width:300px;
+	text-align:left;
+	vertical-align:middle;
+	border:solid 0px;
+	padding:5px;
+}
+
+/**弹出确认窗口图标**/
+.ConfirmBoxIcon
+{
+	background-image: url(Images/Question.jpg);
+	background-repeat: no-repeat;
+	width:65px;
+	height:80px;
+}
+/*********************************************************/
+
+/**公告标题的new标志**/
+.NewSign
+{
+	font-size:11px;
+	color:Red;
+}
+
+/*提交時狀態提示的DIV樣式*/
+.ProgressingBody
+{
+	display: none;
+	position: absolute;
+	background-color:#FFF;
+	border:solid 0px #B8AD7F;
+	font:12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	margin:-60px 0 0 -150px;  
+    padding: 0px;
+    z-index:1002;
+}
+
+/**********************************模式确认窗口样式*********************/
+/*模式确认窗口背景样式*/
+.ModalBackground
+{
+	background-color:White;
+	filter:alpha(opacity=80);
+	opacity:0.8;	
+}
+/*模式确认窗口背景样式(IE6)*/
+.ModalBackground_IE6
+{	
+	display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index:1001;
+	filter:alpha(opacity=80);
+	opacity:0.8;	
+}
+/*模式窗口Body样式*/
+.ModalBody
+{
+	position: absolute;
+	background-color:#FFF;
+	border:solid 1px #B8AD7F;
+	font:12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+    padding: 0px;z-index:1002;
+}

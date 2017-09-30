@@ -1,0 +1,97 @@
+﻿
+/*********************控件樣式******************************/
+
+/*按钮默认样式*/
+.ButtonStyle
+{
+	background-image: url(Images/ButtonBG.jpg);
+	border-style: none;
+	height:20px;
+	width:58px;
+	background-repeat: repeat;
+	color: #335000;
+	cursor:pointer;
+}
+
+
+/*鼠标悬停在按钮上的样式*/
+.ButtonOverStyle
+{
+	background-image: url(Images/ButtonBG.jpg);
+	border-style: none;
+	background-repeat: repeat;
+	height:20px;
+	width:58px;
+	color:Black;
+	cursor:pointer;	
+}
+
+/*文本框默认样式*/
+.TextBoxStyle
+{
+	background-color: #FFFFFF;
+	border: #E0D6BD 1px solid;
+	width:200px;
+}
+
+/*文本框获取焦点时的样式*/
+.TextBoxStyleOnFocus
+{
+	background-color: #E9F3DA;
+	border: #E0D6BD 1px solid;
+	width:200px;
+}
+
+/*SingleSelector控件Item样式*/
+.SingleSelector_Item
+{
+	background-color:White;
+	color:Black;
+}
+
+.SingleSelector_ItemHover
+{
+	background-color:#B8AD7F;
+	color:White;
+	cursor:pointer;
+}
+
+
+/*DataSelector控件分页导航背景色*/
+.DataSelector_PagerBG
+{
+	background-color:#B8AD7F;
+	border: #B8AD7F 1px solid;
+}
+.DataSelector_Item
+{
+	background-color:white;
+	color:Black;
+}
+
+.DataSelector_ItemHover
+{
+	background-color:#B8AD7F;
+	color:White;
+	cursor:pointer;
+}
+
+/**************ModalFrame控件关闭样式***********/
+a:visited.CloseText
+{
+	font-size: 12px;
+	color: Black;
+	text-decoration: none;
+}
+a:link.CloseText
+{
+	font-size: 12px;
+	color: Black;
+	text-decoration: none;
+}
+a:hover.CloseText
+{
+	font-size: 12px;
+	color:White;
+	text-decoration: underline;
+}

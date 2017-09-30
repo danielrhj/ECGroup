@@ -1,0 +1,100 @@
+﻿        /* css reset */
+        body
+        {
+            width:100%;
+            height:100%;
+            color: #000;
+            background: #fff;
+            font-size: 12px;
+            line-height: 166.6%;
+        }
+        body, input, select, button
+        {
+            font-family: verdana;
+        }
+        h1, h2, h3, select, input, button
+        {
+            font-size: 100%;
+        }
+        body, h1, h2, h3, ul, li, form, p, img
+        {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+        input, button, select, img
+        {
+            margin: 0;
+            line-height: normal;
+            cursor:pointer;
+        }
+        select
+        {
+            padding: 1px;
+        }
+        ul
+        {
+            list-style: none;
+        }
+        select, input, button, button img, label
+        {
+            vertical-align: middle;
+        }
+       header, footer, section, aside, nav, hgroup, figure, figcaption
+        {
+            display: block;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+        a
+        {
+            text-decoration: none;
+            color: #848585;
+        }
+        a:hover
+        {
+            color: #000;
+        }
+        
+              
+        .clear
+        {
+            clear: both;
+            font-size: 1px;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .space100
+        {
+            height: 100px;
+            overflow: hidden;
+            }
+        .space
+        {
+            height: 10px;
+            overflow: hidden;
+        }
+        
+        *html .space
+        {
+            height: 10px;
+            overflow: hidden;
+        }
+        
+        * + html .space
+        {
+            height: 10px;
+            overflow: hidden;
+        }
+         .loadingdiv
+{
+	        /*IE:   filter:alpha(opacity=60);opacity: 0.6;*/
+            background-color:#CCCCCC;
+            z-index:3;
+            width:100%;
+            height:100%;
+            position:absolute;
+            display:none;
+}

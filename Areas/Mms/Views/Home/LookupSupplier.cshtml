@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "LookupSupplier";
+     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section head{
+    <style type="text/css">
+        .z-toolbar{ border-width:0; margin:0;}
+        #form_div{ padding:0 !important;height: 100%;width: 100%;}
+        .lbl { text-align:right; line-height:25px;}
+        .datagrid .panel-body{ border-width:0 !important;}
+        body{ padding:0 !important;}
+    </style>    
+}
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.lookupSupplier.js"></script>
+    }
+
+<div id="layoutbox">
+    <div region="center" split="true"  >
+        <div id="right" class="easyui-layout" fit="true">
+                <div region="north" style="height:450px" border="false" split="false">
+                    <div id="master" class="container_12" style="width:610px;background-color:#E0ECFF !important">     
+                        <table style="margin-left:30px;">
+                            <tr>
+                            <td >编码:</td><td><input type="text" id="txtValue" class="z-txt" data-cp="like" style="width:60px;" /> </td>
+                            <td style="margin-left:10px;">简称:</td><td><input type="text" id="txtText" name="textField" class="z-txt" data-cp="like" style="width:100px"/></td>
+                            <td >
+                                <a id="btnSearch" href="#" plain="true" class="easyui-linkbutton" icon="icon-search" title="查询" data-bind="click:searchClick">查询</a>
+                            </td>  
+                            <td>
+                            <a id="btnClear" href="#" plain="true" class="easyui-linkbutton" icon="icon-clear" title="清空" data-bind="click:clearClick">清空</a></td>              
+                            </tr>
+    
+                        </table> 
+                    </div>
+                    <div id="list"></div>
+                </div>                    
+               <div region="center" border="false" split="false">
+                    <div class="z-toolbar" style="text-align: center; position:relative;">
+                       
+                        <button id="btnConfirm" class="sexybutton"><span><span><span class="ok">确定</span></span></span></button>&nbsp;
+                        <button id="btnCancel" class="sexybutton"><span><span><span class="cancel">取消</span></span></span></button>
+                    </div>
+              </div>
+        </div>
+    </div> 
+
+</div>

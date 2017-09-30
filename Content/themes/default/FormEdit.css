@@ -1,0 +1,118 @@
+﻿   
+        .form_head_msg
+        {
+            text-align: left;
+            color: Red;
+            margin: 5px 10px 5px 10px;
+        }
+        
+        .form_head2_title
+        {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #FFFFFF;
+            border-bottom: solid 1 #EEEEEE;
+            border-right: solid 1 #EEEEEE;
+        }
+        .form_item_chk
+        {
+            width: 20px;
+        }
+        .form_item_no
+        {
+            width: 30px;
+        }
+                .form_item_ctrl
+        {
+            width: 350px;
+            text-align:left;
+        }
+        
+        .form_item_sum
+        {
+            text-align:center;
+        }
+        .form_attach_no
+        {
+            width: 30px;
+        }
+        .form_attach_op
+        {  
+            text-align: center !important;
+            width: 60px !important;
+        }
+ 
+        .form_sign
+        {
+            width: 98%;
+            margin: 0 10px 0 10px;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        .form_sign_td
+        {
+            margin: 0 10px 0 10px;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .form_sign_label
+        {
+            width:80px;
+            margin: 0 10px 0 10px;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .form_sign_label2
+        {
+            width: 40px;
+            margin: 0 10px 0 10px;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .form_sign_label3
+        {
+            width: 100px;
+            margin: 0 10px 0 10px;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .form_sign_label4
+        {
+            width: 60px;
+            margin: 0 10px 0 10px;
+            border-color: #7AAEE7;
+            border-width: 1px;
+            border-style: Solid;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        
+        .form_sign_input
+        { 
+            width:95%;
+            text-align: left;
+        }
+        
+        .form_history
+        {
+            padding:10px;
+            width:800px;
+            text-align:left;
+        }
