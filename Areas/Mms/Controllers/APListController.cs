@@ -16,8 +16,7 @@ namespace ECGroup.Areas.Mms.Controllers
 {
     public class APListController : Controller
     {
-        //test github
-
+       
         public ActionResult Index()
         {
             var model = new
