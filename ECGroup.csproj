@@ -2025,6 +2025,7 @@
     <Content Include="Content\jnotify\jquery.jnotify.css" />
     <Content Include="Content\jnotify\jquery.jnotify.js" />
     <Content Include="Content\js\core\common.js" />
+    <Content Include="Content\js\core\datagrid-detailview.js" />
     <Content Include="Content\js\core\datagrid-scrollview.js" />
     <Content Include="Content\js\core\file.js" />
     <Content Include="Content\js\core\jquery.easyui.fix.js" />

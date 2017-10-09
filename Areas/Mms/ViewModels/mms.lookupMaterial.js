@@ -36,10 +36,12 @@
         {
             var cols = [[
                     { title: '制造商料号', field: 'SuppPN', sortable: true, align: 'left', width: 200 },
+                    { title: '客户料号', field: 'CustPN', sortable: true, align: 'left', width: 200 },
                     { title: '品名', field: 'CDesc', sortable: true, align: 'left', width: 100 },
                     { title: '規格', field: 'CSpec', sortable: true, align: 'left', width: 220 },
                     { title: '最新采购价', field: 'BuyPrice', sortable: true, align: 'right', width: 80 }
             ]];
+            $("#CustPNTitle").attr('style', 'display:block'); $("#divCustPNValue").attr('style', 'display:block');
         }
 
         if (param.LookupType == 'LookupSuppPNForReceiving') //入库单新增明细

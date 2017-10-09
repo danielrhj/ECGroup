@@ -285,7 +285,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 ps.Parameter("SuppPN", SuppPN);
                 ps.Parameter("CDesc", CDesc);
 
-                if (LookupType == "LookupCustPNForSaleQuote" || LookupType == "LookupCustPNForSaleOrder")
+                if (LookupType == "LookupSuppPNForRFQ"||LookupType == "LookupCustPNForSaleQuote" || LookupType == "LookupCustPNForSaleOrder")
                 { ps.Parameter("CustPN", CustPN); }
 
                 if (LookupType == "LookupSuppPNForReceiving")

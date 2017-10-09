@@ -18,14 +18,46 @@ mms.customer = function (data) {
     delete this.form.__ko_mapping__;
 
     this.grid = {
+        view: detailview,
         size: { w: 4, h: 94 },
         url: self.urls.query,
         queryParams: ko.observable(),
         pagination: true,pageSize:10,
-        singleSelect:false,
+        singleSelect:false,rownumbers:false,
         onLoadSuccess: function (data) {   
             localStorage.removeItem('keyPayee');
             localStorage.setItem('keyPayee', JSON.stringify(data.keyRows));
+        },
+        detailFormatter: function (index, row) {            
+            return "<div><table id='ddv-"+index+"'></table></div>";//注意2           
+        },
+        onExpandRow: function (index, row) {    //注意3              
+            $('#ddv-' + index).datagrid({
+                title: '&nbsp;' + row.CustAbbr + ' 客户料號明細',
+                url: self.urls.queryCustPN,
+                method:'GET',
+                queryParams: { CustCode: row.CustCode },
+                pagination: true, pagesize: 10, rownumbers: true,
+                height: 'auto',               
+                columns: [[
+                    { field: 'CustAbbr', title: '客戶', width: 80 },
+                    { field: 'CustPN', title: '料号', width: 250 },
+                    { field: 'CDesc', title: '名称', width: 100 },
+                    { field: 'CSpec', title: '规格', width: 250 },
+                    { field: 'TypeName', title: '分类', width: 50 }
+                ]],
+                onResize: function () {
+                    self.grid.datagrid('fixDetailRowHeight', index);
+                },
+                onLoadSuccess: function () {
+                    var kk = '';
+                    setTimeout(function () {
+                        self.grid.datagrid('fixDetailRowHeight', index);
+                    }, 0);
+                }
+            });
+            
+            self.grid.datagrid('fixDetailRowHeight', index);
         }
     };
 

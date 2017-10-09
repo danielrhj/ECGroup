@@ -17,15 +17,47 @@ mms.Supplier = function (data) {
     delete this.form.__ko_mapping__;
 
     this.grid = {
+        view: detailview,
         size: { w: 4, h: 94 },
         url: self.urls.query,
         queryParams: ko.observable(),
         pagination: true, pageSize: 10,
         singleSelect: false,
         onLoadSuccess: function (data) {   
-        localStorage.removeItem('keySuplier');
-        localStorage.setItem('keySuplier', JSON.stringify(data.keyRows));
-    }           
+            localStorage.removeItem('keySuplier');
+            localStorage.setItem('keySuplier', JSON.stringify(data.keyRows));
+        },
+        detailFormatter: function (index, row) {
+            return "<div><table id='ddv-" + index + "'></table></div>";//注意2           
+        },
+        onExpandRow: function (index, row) {    //注意3              
+            $('#ddv-' + index).datagrid({
+                title: '&nbsp;' + row.SuppAbbr + ' 料號明細',
+                url: self.urls.querySuppPN,
+                method: 'GET',
+                queryParams: { SuppCode: row.SuppCode },
+                pagination: true, pagesize: 10, rownumbers: true,
+                height: 'auto',
+                columns: [[
+                    { field: 'SuppAbbr', title: '供应商', width: 80 },
+                    { field: 'SuppPN', title: '料号', width: 250 },
+                    { field: 'CDesc', title: '名称', width: 100 },
+                    { field: 'CSpec', title: '规格', width: 250 },
+                    { field: 'TypeName', title: '分类', width: 50 }
+                ]],
+                onResize: function () {
+                    self.grid.datagrid('fixDetailRowHeight', index);
+                },
+                onLoadSuccess: function () {
+                    var kk = '';
+                    setTimeout(function () {
+                        self.grid.datagrid('fixDetailRowHeight', index);
+                    }, 0);
+                }
+            });
+
+            self.grid.datagrid('fixDetailRowHeight', index);
+        }
     };
 
     this.grid.queryParams(data.form); //這一句是確保在頁面首次加載查詢表格時使用默認條件，不寫這一句也會查詢，但會出現request找不到參數的錯誤

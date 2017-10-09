@@ -49,7 +49,7 @@ namespace ECGroup.Areas.Mms.Controllers
                     CustPN = "",
                     SuppPN = "",
                     Status = "",
-                    BeginDate = DateTime.Today.AddDays(-20).ToString("yyyy-MM-dd") + " 到 " + DateTime.Today.ToString("yyyy-MM-dd")                   
+                    BeginDate = DateTime.Today.AddDays(-180).ToString("yyyy-MM-dd") + " 到 " + DateTime.Today.ToString("yyyy-MM-dd")                   
 
                 },
                 dataSource = new

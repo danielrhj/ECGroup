@@ -183,7 +183,7 @@ mms.com.selectMaterial = function (vm, param) {
     var comapreArray = [];
 
     if (param.LookupType == 'LookupSuppPNForRFQ')
-    { comapreArray = ['SuppPN','Qty']; iframeWidth = 810; }
+    { comapreArray = ['SuppPN','Qty']; iframeWidth = 1000; }
     else if (param.LookupType == 'LookupSuppPNForBuyOrder')
     { comapreArray = ['SuppPN']; iframeWidth = 810; }
     else if (param.LookupType == 'LookupSuppPNForReceiving')

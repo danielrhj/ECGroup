@@ -34,7 +34,8 @@ namespace ECGroup.Areas.Mms.Controllers
                     add = "/api/mms/Supplier/GetH", 
                     edit = "/mms/Supplier/edit/",
                     remove = "/api/mms/Supplier/GetDelete/",
-                    excel = "/api/mms/Supplier/GetcreateExcel/"
+                    excel = "/api/mms/Supplier/GetcreateExcel/",
+                    querySuppPN = "/api/mms/Supplier/GetSuppPN/"
                 },
                 resx = new
                 {
@@ -146,6 +147,18 @@ namespace ECGroup.Areas.Mms.Controllers
             }
             return supplierList;
             
+        }
+
+        public dynamic GetSuppPN(RequestWrapper query)
+        {
+            ParamSP ps = new ParamSP().Name(SupplierService.strSP);
+            ParamSPData psd = ps.GetData();
+            psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
+            psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "10" : query["rows"].ToString());
+            ps.Parameter("ActionType", "getSuppPNListBySuppCode");
+            ps.Parameter("SuppCode", query["SuppCode"].ToString());
+            var ColleteeList = supplierService.GetDynamicListWithPaging(ps);
+            return ColleteeList;
         }
 
         public dynamic GetPageData(string id)

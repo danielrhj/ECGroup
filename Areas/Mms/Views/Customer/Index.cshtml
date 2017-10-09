@@ -4,10 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section head{
+    <link href="~/Content/js/jquery-easyui-1.3.2/themes/default/easyui.css" rel="stylesheet" />
+}
 
 @section scripts{
     <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
     <script src="~/Areas/Mms/ViewModels/mms.customer.js"></script>  
+    <script type="text/javascript" src="~/Content/js/jquery-easyui-1.3.2/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/core/datagrid-detailview.js"></script>
     <script type="text/javascript">
         using(['validatebox','combobox']);
         var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));

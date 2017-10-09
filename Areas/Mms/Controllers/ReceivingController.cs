@@ -49,7 +49,7 @@ namespace ECGroup.Areas.Mms.Controllers
                     DO = "",
                     SuppAbbr = "",
                     RcvStatus = "",
-                    BeginDate = DateTime.Today.AddDays(-20).ToString("yyyy-MM-dd") + " 到 " + DateTime.Today.ToString("yyyy-MM-dd")
+                    BeginDate = DateTime.Today.AddDays(-60).ToString("yyyy-MM-dd") + " 到 " + DateTime.Today.ToString("yyyy-MM-dd")
 
                 },
                 dataSource = new

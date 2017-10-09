@@ -35,7 +35,8 @@ namespace ECGroup.Areas.Mms.Controllers
                     add = "/api/mms/customer/GetH",
                     edit = "/mms/customer/Edit/",
                     remove = "/api/mms/customer/GetDelete/",
-                    excel = "/api/mms/customer/GetcreateExcel/"
+                    excel = "/api/mms/customer/GetcreateExcel/",
+                    queryCustPN = "/api/mms/customer/GetCustPN/"
                     
                 },
                 idField = "CustID",
@@ -140,6 +141,18 @@ namespace ECGroup.Areas.Mms.Controllers
                 payeeList = payeeservice.GetDynamicListWithPaging(ps, "CustID");
             }
             return payeeList;
+        }
+
+        public dynamic GetCustPN(RequestWrapper query)
+        {
+            ParamSP ps = new ParamSP().Name(CustomerService.strSP);
+            ParamSPData psd = ps.GetData();
+            psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
+            psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "10" : query["rows"].ToString());
+            ps.Parameter("ActionType", "getCustPNListByCustCode");
+            ps.Parameter("CustCode", query["CustCode"].ToString());
+            var ColleteeList = payeeservice.GetDynamicListWithPaging(ps);
+            return ColleteeList;
         }
 
         /// <summary>
