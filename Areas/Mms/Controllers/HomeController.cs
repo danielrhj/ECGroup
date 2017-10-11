@@ -288,6 +288,9 @@ namespace ECGroup.Areas.Mms.Controllers
                 if (LookupType == "LookupSuppPNForRFQ"||LookupType == "LookupCustPNForSaleQuote" || LookupType == "LookupCustPNForSaleOrder")
                 { ps.Parameter("CustPN", CustPN); }
 
+                if (LookupType == "LookupSuppPNForRFQ")
+                {ps.Parameter("SupplierCode", Proxy); }
+
                 if (LookupType == "LookupSuppPNForReceiving")
                 { ps.Parameter("BuyNoFlag", BuyNoFlag); ps.Parameter("SupplierCode", Proxy); }
 
