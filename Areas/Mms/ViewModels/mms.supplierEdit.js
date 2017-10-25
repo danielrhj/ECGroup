@@ -126,7 +126,7 @@ mms.supplierEdit = function (data) {
             data: ko.toJSON(post),
             success: function (d) {
                 com.message('success', self.resx.editSuccess);
-                if (post.form.SuppID() == '0')
+                if (post.form.SuppID == '0')
                     self.pageData.form.SuppCode(d.form.SuppCode);
                 self.pageData.form.SuppID(d.form.SuppID);
             }
@@ -286,13 +286,23 @@ mms.supplierEdit = function (data) {
         this.addRowClick = function () {
             var row = $.extend(true, {}, tab.defaults);
             row[tab.rowId] = 0;
-            row[tab.relationId] = self.pageData.form.idField;
+            row[tab.relationId] = self.pageData.form.SuppCode();
+            row.SupplierCode = self.pageData.form.SuppCode();
+            row.SuppAbbr = self.pageData.form.SuppAbbr();
             edit.addnew(row);
         };
         this.removeRowClick = function () {
             edit.deleterow();
         };
-    };
+
+        this.OnAfterCreateEditor = function (editors, row) {
+            com.readOnlyHandler('input')(editors["SupplierCode"].target, true);
+            com.readOnlyHandler('input')(editors["SuppAbbr"].target, true);
+            com.readOnlyHandler('input')(editors["CDesc"].target, true);
+            com.readOnlyHandler('input')(editors["CSpec"].target, true);
+            com.readOnlyHandler('input')(editors["TypeName"].target, true);
+        };
+    };    
 
     this.fnIsNew = function () { return data.dataSource.pageData.SuppID == 0; };
     this.init();
@@ -313,6 +323,25 @@ mms.supplierEdit = function (data) {
 };
 
 
-    //var updateCombox = function (newValue, oldValue) {
-    //    var kk = newValue;
-    //};
+var updatePNInfo = function (d) {
+    var pnid = d.value;
+    var row = $('#gridlist').datagrid('getSelections')[0];  //第一步:取得選中行,也就是編輯行
+    var rowIndex = $('#gridlist').datagrid('getRowIndex', row);//第二步:根據選中行取得行索引
+    var editors = $('#gridlist').datagrid('getEditors', rowIndex);
+
+    com.ajax({
+        url: '/api/mms/partno/getPNInfoByPNID', 
+        data: ko.toJSON({pnid:pnid}), 
+        success: function (info) {
+            if (info) {
+                $(editors[3].target).val(info.CDesc);
+                $(editors[4].target).val(info.CSpec);
+                $(editors[5].target).val(info.TypeName);
+            }
+        },
+        error: function (e) {
+            com.message('error', e.responseText);
+        }
+    });
+
+};

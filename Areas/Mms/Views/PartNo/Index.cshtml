@@ -10,7 +10,7 @@
     <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script>
     <script type="text/javascript">
         using(["numberspinner"], easyuifix.datagrid_editor_extend);
-        using(['validatebox','combobox']);
+        using(['validatebox','combobox','autocomplete']);
 
         var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
         var formatPartAttr = utils.fnValueToText(data.dataSource.TypeCodeList0);
@@ -44,9 +44,9 @@
     <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-edit"            title="编辑" data-bind="click:canShow('icon-edit')?null:editClick,linkbuttonDisable:canShow('icon-edit')" >编辑</a>
     <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
     <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"            title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"  >保存</a>
-@*    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_white_excel"  title="Excel導入" data-bind="click:canShow('icon-page_white_excel')?null:openUpload,linkbuttonDisable:canShow('icon-page_white_excel')"  >導入</a>*@
     <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
-    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-node_tree" data-bind="click:typeClick" title="管理料号">管理料号类别</a>
+    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-node_tree" data-bind="click:typeClick" title="管理料号">料号类别</a>
+    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-node_tree" data-bind="click:brandClick" title="管理品牌清单">品牌清单</a>
 </div>
 
 <div id="condition"  class="container_12"  style="position:relative;">   
@@ -67,7 +67,7 @@
         <th field="SuppPN"		sortable="true"	align="left"	width="250"  editor="{type:'validatebox',options:{required:true}}">制造商料号</th> 
         <th field="CDesc"		sortable="true"	align="left"	width="150"  editor="{type:'validatebox',options:{required:true}}" >品名</th> 
         <th field="CSpec"		sortable="true"	align="left"	width="250"  editor="{type:'validatebox',options:{required:true}}">规格</th> 
-        <th field="Brand"		sortable="true"	align="center"	width="80"  editor="text">品牌</th> 
+        <th field="Brand"		sortable="true"	align="center"	width="80"  editor="{type:'autocomplete',options:{required:true,url:'/api/mms/materialtype/getBrandList'}}">品牌</th> 
         <th field="TypeCode"		sortable="true"	align="center"	width="50" formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.TypeCodeList0,required: true}}">类别</th>                
         <th field="LeadTime"		sortable="true"	align="center"	width="80"  editor="{type:'numberbox',options:{required: false,min:0,max:99}}">LeadTime(D)</th> 
                    
@@ -90,6 +90,27 @@
             <th field="AutoID"      hidden="true" editor="text">AutoID</th>
             <th field="TypeCode"    sortable="true" align="left"  title="自动生成"  width="100" editor="text">TypeCode</th>
             <th field="TypeName"     sortable="true" align="left"    width="100" editor="{type:'validatebox',options:{required:true}}"  >TypeName   </th>  
+           
+        </thead>
+       
+    </table>
+    
+    <div style="text-align:center;margin:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" data-bind="click:confirmClick" href="javascript:void(0)"  >确定</a>  
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" data-bind="click:cancelClick" href="javascript:void(0)">取消</a> 
+    </div>
+</script> 
+
+<script type="text/html" id="brand-template">
+    <style type="text/css">
+        .datagrid-wrap{border-width:0 0 1px 0;}
+        .datagrid-toolbar{background-color:#E0ECFF !important}
+    </style>
+    <table data-bind="datagrid:grid" >
+        <thead>
+            <th field="AutoID"      hidden="true" editor="text">AutoID</th>
+            <th field="Brand"    sortable="true" align="left"  title="品牌"  width="120" editor="{type:'validatebox',options:{required:true}}">品牌</th>
+            <th field="Remark"     sortable="true" align="left"    width="150" editor="text"  >Remark   </th>  
            
         </thead>
        

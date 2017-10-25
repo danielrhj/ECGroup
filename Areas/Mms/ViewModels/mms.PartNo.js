@@ -179,6 +179,62 @@ mms.PartNo = function (data) {
             }
         });
     };
+
+    this.brandClick = function () {
+        com.dialog({
+            title: "&nbsp;品牌清单",
+            iconCls: 'icon-node_tree',
+            width: 516,
+            height: 410,
+            html: "#brand-template",
+            viewModel: function (w) {
+                var that = this;
+                this.grid = {
+                    width: 500,
+                    height: 340,
+                    pagination: true,
+                    pageSize: 10,
+                    url: "/api/mms/materialtype/getBrand",
+                    queryParams: { Brand: '' }
+                };
+                this.gridEdit = new com.editGridViewModel(this.grid);
+                this.grid.OnAfterCreateEditor = function (editors, row) {
+                    com.readOnlyHandler('input')(editors["AutoID"].target, true);
+                    if (row.AutoID != '0')
+                    { com.readOnlyHandler('input')(editors["Brand"].target, true); }
+                };
+                this.grid.onClickRow = that.gridEdit.ended;
+                this.grid.onDblClickRow = that.gridEdit.begin;
+                this.grid.toolbar = [
+                    {
+                        text: '新增', iconCls: 'icon-add1', handler: function () {
+                            var row = { AutoID: '0', Brand: '', Remark: '' };
+                            that.gridEdit.addnew(row);
+                        }
+                    }, '-',
+                    { text: '编辑', iconCls: 'icon-edit', handler: that.gridEdit.begin }, '-',
+                    { text: '删除', iconCls: 'icon-cross', handler: that.gridEdit.deleterow }
+                ];
+                this.confirmClick = function () {
+                    if (that.gridEdit.isChangedAndValid()) {
+                        var list = that.gridEdit.getChanges(['AutoID', 'Brand', 'Remark']);
+                        com.ajax({
+                            url: '/api/mms/materialtype/editBrand/',
+                            data: ko.toJSON({ list: list }),
+                            success: function (d) {                                
+                                //that.grid.queryParams({ TypeName: '' })
+                                //self.tree.$element().tree('reload');
+                                com.message('success', '保存成功！');
+                            }
+                        });
+                    }
+                };
+                this.cancelClick = function () {
+                    w.dialog('close');
+                };
+            }
+        });
+    };
 };
 
 mms.Relate = function (data) {

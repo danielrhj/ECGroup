@@ -29,6 +29,18 @@ namespace ECGroup.Models
             { resultA.Insert(0, new { value = "", text = "全部" }); }
             return resultA; 
         }
+
+        internal static List<dynamic> getBrandList(bool showBlank)
+        {
+            ParamSP ps = new ParamSP().Name(strSP);
+            ParamSPData psd = ps.GetData();
+            ps.Parameter("ActionType", "GetBrandListForAC");
+            List<dynamic> resultA = new MaterialTypeService().GetDynamicList(ps);
+
+            if (showBlank)
+            { resultA.Insert(0, new { value = "", text = "全部" }); }
+            return resultA;
+        }
     }
 
     public class MaterialType : ModelBase

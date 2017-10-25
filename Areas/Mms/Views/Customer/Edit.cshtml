@@ -26,36 +26,64 @@
 </div>
 
 <div id="master" class="container_12" style="width:auto;padding-left:0px;padding-top:0px;padding-bottom:10px;background-color:#E0ECFF;" title="客户明細資料">
-    <div class="grid_12" style="padding-left:200px;height:30px;font-size:x-large">客户明細資料</div>
+    <div class="grid_12" style="padding-left:200px;height:30px;font-size:x-large">客户明細資料<label id="txtCustID" hidden="hidden" data-bind="text:pageData.form.CustID"></label></div>
     <div class="clear"></div>
     <div class="grid_6 val" style="width:auto;padding-left:0px;padding-top:10px;padding-bottom:20px;">
         <table >
         <tr>
             <td style="width:100px">客户編碼</td><td><input type="text" data-bind="value:pageData.form.CustCode,readOnly:true" title="系统自动生成,不可修改" class="easyui-textbox" /> </td>
-            <td  style="width:50px;padding-left:5px">简称</td><td><input type="text" data-bind="value:pageData.form.CustAbbr" class="easyui-textbox" style="width:222px;"  /></td>
-        </tr>       
-        <tr><td >客戶全稱</td><td colspan="3"><input type="text" id="txtFullName" data-bind="value:pageData.form.CustName" class="easyui-textbox" style="width:431px;"/></td></tr>
-        <tr><td >公司地址</td><td colspan="3"><textarea data-bind="value:pageData.form.CustAdd" class="easyui-textbox" style="width:429px;height:30px"></textarea></td></tr>
+            <td  style="width:50px;padding-left:5px">简称</td><td><input type="text" data-bind="value:pageData.form.CustAbbr" class="easyui-textbox" style="width:198px;"  /></td>
+            <td>联系人</td><td><input type="text" data-bind="value:pageData.form.Contact" class="easyui-textbox" /></td>
+            <td style="width:50px;padding-left:5px">Tel</td><td><input type="text" data-bind="value:pageData.form.Tel" class="easyui-textbox" style="width:222px;" /></td>
 
-        <tr><td>联系人</td><td><input type="text" data-bind="value:pageData.form.Contact" class="easyui-textbox" /></td>
-            <td style="width:50px;padding-left:5px">Tel</td><td><input type="text" data-bind="value:pageData.form.Tel" class="easyui-textbox" style="width:222px;" /></td></tr>
-        <tr><td>手机</td><td><input type="text" data-bind="value:pageData.form.CellNo" class="easyui-textbox"  /></td>
-            <td style="width:50px;padding-left:5px">Email</td><td><input id="txtLegalType" type="text" data-bind="value:pageData.form.Email"  class="easyui-textbox" style="width:222px;"  /></td></tr>
-               
-        <tr> <td>SWIFICode</td><td><input type="text" data-bind="value:pageData.form.SWIFICode" class="easyui-textbox" id="txtCostCode"  /></td>
-            <td style="width:50px;padding-left:5px">开户名</td><td><input type="text" data-bind="value:pageData.form.AccountName" class="easyui-textbox" style="width:222px;"  /></td>
+        </tr>       
+        <tr>
+            <td >客戶全稱</td><td colspan="3"><input type="text" id="txtFullName" data-bind="value:pageData.form.CustName" class="easyui-textbox" style="width:429px;"/></td>
+            <td>手机</td><td><input type="text" data-bind="value:pageData.form.CellNo" class="easyui-textbox"  /></td>
+            <td style="width:50px;padding-left:5px">Email</td><td><input id="txtLegalType" type="text" data-bind="value:pageData.form.Email"  class="easyui-textbox" style="width:222px;"  /></td>
         </tr>
         <tr>
-            <td >银行账号</td><td><input type="text" data-bind="value:pageData.form.AccountNo" class="easyui-textbox" /></td>
-            <td >Currency</td><td><input id="txtPayTerm" type="text" data-bind="value:pageData.form.Currency"  class="easyui-textbox"  style="width:222px;"  /></td>
-        </tr>  
-        
-        <tr><td >银行名称</td><td colspan="3"><textarea id="txtBankName" data-bind="value:pageData.form.BankName" class="easyui-textbox" style="width:429px;"></textarea></td></tr>
-        <tr><td >结算方式</td><td ><input type="text" id="txtPayTerms" data-bind="value:pageData.form.PayTerms" class="easyui-textbox" style="width:100px;"/></td>
-            <td style="width:50px;padding-left:5px">客户ID</td><td ><input type="text" id="txtCustID" data-bind="value:pageData.form.CustID,readOnly:true" title="系统自动生成,不可修改" class="easyui-textbox" style="width:221px;"/></td>
+            <td>公司地址</td><td colspan="3"><textarea data-bind="value:pageData.form.CustAdd" class="easyui-textbox" style="width:427px;height:30px"></textarea></td>
+            <td>银行名称</td><td colspan="3"><textarea id="txtBankName" data-bind="value:pageData.form.BankName" class="easyui-textbox" style="width:429px;"></textarea></td>
         </tr>
+        <tr> <td>SWIFICode</td><td><input type="text" data-bind="value:pageData.form.SWIFICode" class="easyui-textbox" id="txtCostCode"  /></td>
+            <td style="width:50px;padding-left:5px">开户名</td><td><input type="text" data-bind="value:pageData.form.AccountName" class="easyui-textbox" style="width:198px;"  /></td>
+            <td >银行账号</td><td><input type="text" data-bind="value:pageData.form.AccountNo" class="easyui-textbox" /></td>
+            <td >Currency</td><td><input id="txtPayTerm" type="text" data-bind="value:pageData.form.Currency"  class="easyui-textbox"  style="width:55px;"  />
+                结算方式<input type="text" id="txtPayTerms" data-bind="value:pageData.form.PayTerms" class="easyui-textbox" style="width:105px;"/></td>
+                            
+        </tr>  
 
-        @*CustID,CustAbbr,CustCode,CustName,CustAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName*@       
+        @*CustID,CustAbbr,CustCode,CustName,CustAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName*@   
     </table>  
    </div>
+
+    <div class="clear"></div>
+    <div title="tab1 料号明细" class="easyui-panel" iconCls="icon-list" collapsible="true" >
+        <div id="gridtb0">
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:grid0.addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:grid0.onClickRow,linkbuttonDisable:canShow('icon-edit')">编辑</a>
+            <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:grid0.removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
+        </div>  
+
+        <table id="gridlist" data-bind="datagrid:grid0" style="width:510px;">
+            <thead>
+                <tr> 
+                    <th field="AutoID"  hidden="true">AutoID</th>
+                    <th field="SuppCode" editor="text" >供应商代码</th>
+                    <th field="CustAbbr" editor="text" >客户简称</th>
+                    <th field="CustCode" editor="text" >客户代码</th>
+                    <th field="PNID" sortable="true" align="left" width="250" formatter="formatPartNoAttr"  editor="{type:'combobox',options:{data:data.dataSource.SuppPNList0,required: true,onSelect:updatePNInfo}}">制造商料号</th>
+                   
+                    <th field="SuppCode" editor="text" >供应商代码</th>
+                    <th field="SuppPN" sortable="true"	align="left" editor="text"	width="100" >制造商料号Real</th>      
+                     
+                    <th field="CDesc" sortable="true"	align="left" editor="text"	width="100" >品名</th>                   
+                    <th field="CSpec" sortable="true"	align="left" editor="text"	width="400" >规格</th>                                       
+                    <th field="TypeName" sortable="true"	align="left" editor="text"	width="60" >物料类别</th>
+                </tr>
+            </thead>
+        </table>      
+        @*AutoID,PNID,SuppPN,CustPN,CustCode,CustAbbr,SuppCode           *@   
+    </div>
 </div>

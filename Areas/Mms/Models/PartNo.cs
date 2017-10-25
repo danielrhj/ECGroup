@@ -79,6 +79,17 @@ namespace ECGroup.Models
             myExcel = null;
             return "/FJLBS/TempFiles/" + filename;
         }
+
+        internal static dynamic getPNInfoByPNID(string pnid)
+        {
+            ParamSP ps = new ParamSP().Name(strSP);
+            ParamSPData psd = ps.GetData();
+            ps.Parameter("ActionType", "getPNInfoByPNID");
+            ps.Parameter("PNID", pnid);
+            dynamic resultA = new SupplierService().GetDynamic(ps);
+
+            return resultA;
+        }
     }
     public class PartNo:ModelBase
     {

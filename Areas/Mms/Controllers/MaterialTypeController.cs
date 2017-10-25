@@ -76,6 +76,18 @@ namespace ECGroup.Areas.Mms.Controllers
             return BusInessTypeList;
         }
 
+        public dynamic getBrand(RequestWrapper query)
+        {
+            ParamSP ps = new ParamSP().Name(MaterialTypeService.strSP);
+            ParamSPData psd = ps.GetData();
+            psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
+            psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "20" : query["rows"].ToString());
+            ps.Parameter("ActionType", "GetBrandList");
+            ps.Parameter("Brand", query["Brand"].ToString());
+            var BusInessTypeList = mService.GetDynamicListWithPaging(ps);
+            return BusInessTypeList;
+        }
+
         [System.Web.Http.HttpPost]
         public dynamic Edit(dynamic data)
         {
@@ -121,14 +133,53 @@ namespace ECGroup.Areas.Mms.Controllers
             bool bk = mService.StoredProcedureNoneQuery(ps);
         }
 
+        [System.Web.Http.HttpPost]
+        public dynamic editBrand(dynamic data)
+        {
+            JObject gridData = JObject.Parse(data["list"].ToString());
+            bool gridChange = (bool)gridData.GetValue("_changed");
+
+            ParamSP ps = new ParamSP().Name(MaterialTypeService.strSP);
+            if (gridChange)
+            {
+                ps.Parameter("ActionType", "SaveBrand");
+
+                foreach (var item in gridData)
+                {
+                    string itemKey = item.Key;//deleted,updated,inserted
+                    if (item.Value.HasValues)
+                    {
+                        ps.Parameter("ActionItem", itemKey);
+                        JArray ActionData = item.Value as JArray;
+                        foreach (var itemDetail in ActionData)
+                        {
+                            JObject dr = itemDetail as JObject;
+
+                            ps.Parameter("AutoID", itemDetail["AutoID"].ToString());
+                            ps.Parameter("Brand", itemDetail["Brand"].ToString().Trim());
+                            ps.Parameter("Remarks", itemDetail["Remark"].ToString().Trim());
+
+                            mService.StoredProcedureNoneQuery(ps);
+                        }
+                    }
+                }
+            }
+            return "OK";
+        }
+
         public List<dynamic> getTypeCodeList(string q)    
         {
             var RoleList = MaterialTypeService.getTypeCodeList(false);
             return RoleList;
         }
-        
 
-         public string GetH()
+        public List<dynamic> getBrandList(string q)
+        {
+            var RoleList = MaterialTypeService.getBrandList(false);
+            return RoleList;
+        }
+
+        public string GetH()
         {
             ParamSP ps = new ParamSP().Name(MaterialTypeService.strSP);
             ParamSPData psd = ps.GetData();

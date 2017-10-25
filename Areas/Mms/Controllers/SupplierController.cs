@@ -90,6 +90,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 },
                 dataSource = new
                 {
+                    SuppPNList0 = SupplierService.getSuppPNListForCombo(false),
                     pageData = new SupplierApiController().GetPageData(id),
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()
                 },
@@ -116,6 +117,15 @@ namespace ECGroup.Areas.Mms.Controllers
                     primaryKeys = new string[] { "SuppID" },
                     idField = id
                     // CustID,CustAbbr,CustCode,CustName,CustAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName
+                },
+                tabs = new object[]{
+                    new{
+                      type = "grid",
+                      rowId = "AutoID",
+                      relationId = "SupplierCode",
+                      defaults = new {AutoID = "0",SupplierCode = id,PNID = "",SuppAbbr = "",SuppPN="",CDesc = "",CSpec = "",TypeName = ""},
+                      postFields = new string[] { "AutoID","SupplierCode","PNID","SuppAbbr"}
+                    }
                 }
             };
             return View(model);
@@ -172,7 +182,8 @@ namespace ECGroup.Areas.Mms.Controllers
                 var payeeListNew = supplierService.GetDynamicListForDataSet(ps);
                 var result = new
                 {
-                    form = payeeListNew[0][0]
+                    form = payeeListNew[0][0],
+                    tab0 = payeeListNew[1]
                 };
                 return result;
             }
@@ -197,7 +208,8 @@ namespace ECGroup.Areas.Mms.Controllers
                         BankName = "",
                         PayTerms = "",
                         SuppID = "0"
-                    })
+                    }),
+                    tab0 = new List<dynamic>()
                 };
 
                 return result;
@@ -221,9 +233,11 @@ namespace ECGroup.Areas.Mms.Controllers
         {
              JObject formData = JObject.Parse(data["form"].ToString());
             bool formChange = (bool)formData.GetValue("_changed");
+            JObject TabData = JObject.Parse(data["tabs"][0].ToString());
+            bool tabChange = (bool)TabData.GetValue("_changed");
 
             string SuppID = formData["SuppID"].ToString();
-            ParamSP ps = new ParamSP().Name(CustomerService.strSP);
+            ParamSP ps = new ParamSP().Name(SupplierService.strSP);
             //更新單頭
             if (formChange)
             {
@@ -245,6 +259,42 @@ namespace ECGroup.Areas.Mms.Controllers
                 else
                 { SuppID = supplierService.StoredProcedureScalar(ps); }
             }
+
+            //更新單身表格           
+            if (tabChange)
+            {
+                foreach (var item in TabData)
+                {
+                    string itemKey = item.Key;//deleted,updated,inserted
+                    if (item.Value.HasValues)
+                    {
+                        ParamSP ps1 = new ParamSP().Name(PartNoService.strSP);
+                        ps1.Parameter("ActionType", "SavePartnoProxyBySuppCode");
+                        ps1.Parameter("ActionItem", itemKey);
+
+                        JArray ActionData = item.Value as JArray; //注意這個數組的每個元素對應表格的一行編輯的記錄
+                        foreach (var itemDetail in ActionData)
+                        {
+                            JObject dr = itemDetail as JObject;
+
+                            foreach (var drField in dr)
+                            {
+                                ps1.Parameter(drField.Key, drField.Value.ToString());
+                            }
+
+                            try
+                            {
+                                supplierService.StoredProcedureNoneQuery(ps1);
+                            }
+                            catch (Exception ex)
+                            {
+                                ZScript.ShowMessage("保存明細：" + ex.Message);
+                            }
+                        }
+                    }
+                }
+            }
+
             return GetPageData(SuppID);
         }
 
@@ -318,6 +368,12 @@ namespace ECGroup.Areas.Mms.Controllers
         {
             var RoleList = SupplierService.getSupplierAbbr(q);
             return RoleList;
+        }
+
+        public List<dynamic> getSuppPNListForCombo()
+        {
+            var suppPNlist = SupplierService.getSuppPNListForCombo(false);
+            return suppPNlist;
         }
 
         [System.Web.Http.HttpPost]

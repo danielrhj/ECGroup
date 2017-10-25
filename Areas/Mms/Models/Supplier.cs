@@ -58,6 +58,18 @@ namespace ECGroup.Models
             return resultA;
         }
 
+        public static List<dynamic> getSuppPNListForCombo(bool showBlank)
+        {
+            ParamSP ps = new ParamSP().Name(strSP);
+            ParamSPData psd = ps.GetData();
+            ps.Parameter("ActionType", "getSuppPNListForCombo");
+            List<dynamic> resultA = new MaterialTypeService().GetDynamicList(ps);
+
+            if (showBlank)
+            { resultA.Insert(0, new { value = "", text = "全部" }); }
+            return resultA;
+        }
+
         internal static string ExportExcel(ParamSP ps)
         {
             //SuppID,SuppAbbr,SuppCode,SuppName,SuppAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName 

@@ -265,6 +265,14 @@ namespace ECGroup.Areas.Mms.Controllers
         }
 
         [System.Web.Http.HttpPost]
+        public dynamic getPNInfoByPNID(dynamic data)
+        {
+            string pnid=data["pnid"].ToString();
+            var pn = PartNoService.getPNInfoByPNID(pnid);
+            return pn;
+        }
+
+        [System.Web.Http.HttpPost]
         public dynamic GetcreateExcel(dynamic query)
         {
             ParamSP ps = new ParamSP().Name(PartNoService.strSP);
