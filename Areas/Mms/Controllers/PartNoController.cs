@@ -16,8 +16,10 @@ namespace ECGroup.Areas.Mms.Controllers
 {
     public class PartNoController : Controller
     {
+        string AA = "";
         public ActionResult Index()
         {
+            AA = "Test";
             var model = new
             {
                 dataSource = new
@@ -72,6 +74,7 @@ namespace ECGroup.Areas.Mms.Controllers
 
         public ActionResult EPN()
         {
+            string BB = AA;
             var model = new
             {
                 dataSource = new
@@ -271,6 +274,15 @@ namespace ECGroup.Areas.Mms.Controllers
             var pn = PartNoService.getPNInfoByPNID(pnid);
             return pn;
         }
+
+        [System.Web.Http.HttpPost]
+        public dynamic getPNListBySuppCode(dynamic data)
+        {
+            string suppcode = data["suppcode"].ToString();
+            var pn = PartNoService.getPNListBySuppCode(suppcode);
+            return pn;
+        }
+        
 
         [System.Web.Http.HttpPost]
         public dynamic GetcreateExcel(dynamic query)

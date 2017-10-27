@@ -139,6 +139,26 @@ namespace ECGroup.Models
         return "/FJLBS/TempFiles/" + filename;
      }
 
+     internal static string ExportExcelRelate(ParamSP ps)
+     {
+        DataTable dt = new CompanyService().StoredProcedureDS(ps).Tables[0];
+        //dt.Columns.Remove("CustID");
+        //dt.Columns["CustCode"].ColumnName = "客户代码"; dt.Columns["CustAbbr"].ColumnName = "客户简称"; dt.Columns["CustName"].ColumnName = "全称";
+        //dt.Columns["CustAdd"].ColumnName = "地址"; dt.Columns["Contact"].ColumnName = "联系人";
+        //dt.Columns["Tel"].ColumnName = "电话"; dt.Columns["CellNo"].ColumnName = "手机";
+        //dt.Columns["AccountNo"].ColumnName = "银行账号"; dt.Columns["AccountName"].ColumnName = "账号持有人";
+        //dt.Columns["Currency"].ColumnName = "结算币别"; dt.Columns["BankName"].ColumnName = "开户行"; dt.Columns["PayTerms"].ColumnName = "结算条件";
+
+        EPPlusNew myExcel = new EPPlusNew("");
+
+        string filename = "CustomerPNRelate.xlsx";
+        string path = Zephyr.Utils.ZHttp.RootPhysicalPath + @"FJLBS\TempFiles\" + filename;
+
+        myExcel.ExportExcel(dt, path);
+        myExcel = null;
+        return "/FJLBS/TempFiles/" + filename;
+     }   
+
     }
     public class Customer : ModelBase
     {

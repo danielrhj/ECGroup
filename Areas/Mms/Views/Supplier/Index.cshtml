@@ -3,15 +3,12 @@
     ViewBag.Title = "供應商代碼信息";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section head{
-    <link href="~/Content/js/jquery-easyui-1.3.2/themes/default/easyui.css" rel="stylesheet" />
-}
 
 @section scripts{
 
     <script src="~/Areas/Mms/ViewModels/mms.Supplier.js"></script>    
-    <script type="text/javascript" src="~/Content/js/jquery-easyui-1.3.2/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="~/Content/js/core/datagrid-detailview.js"></script>
+@*    <script type="text/javascript" src="~/Content/js/jquery-easyui-1.3.2/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/core/datagrid-detailview.js"></script>*@
 
     <script type="text/javascript">
         using(['validatebox','combobox']);
@@ -22,7 +19,7 @@
             return KK;           
         }
 
-        var viewModel = mms.Supplier;
+        var viewModel = mms.Supplier.list;
         ko.bindingViewModel(new viewModel(data));
 
     </script>
@@ -58,13 +55,13 @@
         <th field="Tel" sortable="true" align="left" width="100" >Tel</th>
         <th field="CellNo" sortable="true" align="left" width="100">手机</th>
         <th field="Email" sortable="true" align="left" width="100" >Email</th>
-        <th field="SWIFICode" sortable="true" align="left" width="80">SWIFICode</th>
+@*        <th field="SWIFICode" sortable="true" align="left" width="80">SWIFICode</th>
         <th field="AccountNo" sortable="true" align="left" width="85">银行账号</th>
         <th field="AccountName" sortable="true" align="left" width="80">开户名</th>
         <th field="BankName" sortable="true" align="left" width="80">银行名称</th>
-        <th field="Currency" sortable="true" align="left" width="60">Currency</th>
+        <th field="Currency" sortable="true" align="left" width="60">Currency</th>*@
         <th field="PayTerms" sortable="true" align="left" width="80">结算条件</th>
-        
+        <th field="RelateCount" sortable="true" align="center" width="80"  formatter="formatteropenURL">已关联</th>
         @*SuppID,SuppAbbr,SuppCode,SuppName,SuppAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName*@   
     </thead>
       

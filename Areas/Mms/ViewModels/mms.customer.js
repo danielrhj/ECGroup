@@ -3,10 +3,11 @@
 * 程序名: mms.payee.js
 **/
 var mms = mms || {};
+mms.customer = mms.customer || {};
 var urls = "";
 var user = $.cookie('UserCode');
 
-mms.customer = function (data) {
+mms.customer.list = function (data) {
     var self = this;
     this.urls = data.urls; urls = data.urls;
     this.resx = data.resx;
@@ -17,47 +18,15 @@ mms.customer = function (data) {
     this.setting = data.setting;
     delete this.form.__ko_mapping__;
 
-    this.grid = {
-        view: detailview,
+    this.grid = {        
         size: { w: 4, h: 94 },
         url: self.urls.query,
         queryParams: ko.observable(),
         pagination: true,pageSize:10,
-        singleSelect:false,rownumbers:false,
+        singleSelect:false,
         onLoadSuccess: function (data) {   
             localStorage.removeItem('keyPayee');
             localStorage.setItem('keyPayee', JSON.stringify(data.keyRows));
-        },
-        detailFormatter: function (index, row) {            
-            return "<div><table id='ddv-"+index+"'></table></div>";//注意2           
-        },
-        onExpandRow: function (index, row) {    //注意3              
-            $('#ddv-' + index).datagrid({
-                title: '&nbsp;' + row.CustAbbr + ' 客户料號明細',
-                url: self.urls.queryCustPN,
-                method:'GET',
-                queryParams: { CustCode: row.CustCode },
-                pagination: true, pagesize: 10, rownumbers: true,
-                height: 'auto',               
-                columns: [[
-                    { field: 'CustAbbr', title: '客戶', width: 80 },
-                    { field: 'CustPN', title: '料号', width: 250 },
-                    { field: 'CDesc', title: '名称', width: 100 },
-                    { field: 'CSpec', title: '规格', width: 250 },
-                    { field: 'TypeName', title: '分类', width: 50 }
-                ]],
-                onResize: function () {
-                    self.grid.datagrid('fixDetailRowHeight', index);
-                },
-                onLoadSuccess: function () {
-                    var kk = '';
-                    setTimeout(function () {
-                        self.grid.datagrid('fixDetailRowHeight', index);
-                    }, 0);
-                }
-            });
-            
-            self.grid.datagrid('fixDetailRowHeight', index);
         }
     };
 
@@ -167,6 +136,74 @@ mms.customer = function (data) {
         var flag=false;        
        
         for(var k=0;k<buttons.length;k++) {
+            if (buttons[k].ButtonIcon == item) {
+                flag = true; break;
+            }
+        };
+        return flag;
+    };
+};
+
+mms.customer.relate = function (data) {
+    var self = this;
+    this.urls = data.urls; urls = data.urls;
+    this.resx = data.resx;
+    this.idField = data.idField;
+    this.dataSource = data.dataSource;
+    this.form = ko.mapping.fromJS(data.form);
+    this.form.action = 'ListCustPNRelate';
+    this.defaultRow = data.defaultRow;
+    this.setting = data.setting;
+    delete this.form.__ko_mapping__;
+
+    this.grid = {
+        //size: { w: 4, h: 94 },
+        url: self.urls.query,
+        queryParams: ko.observable(),
+        pagination: true, pageSize: 10,
+        singleSelect: false
+    };
+
+    this.grid.queryParams(self.form);
+
+    this.searchClick = function () {
+        var param = ko.toJS(this.form); com.setFirstPageWhenSearchGrid(self.grid);
+        this.grid.queryParams(param);
+    };
+    this.clearClick = function () {
+        $.each(self.form, function () { if (this != self.form.action) this(''); });
+        this.searchClick();
+    };
+    this.refreshClick = function () {
+        window.location.reload();
+    };   
+    
+    this.downloadClick = function (vm, event) {
+        com.ajax({
+            data: ko.toJSON(self.form),
+            url: self.urls.excel,
+            success: function (w) {
+                if (w.Msg.length > 0) {
+                    com.message('warning', w.Msg);
+                }
+                else {
+                    com.message('success', '客户料号关联清单生成OK！');
+                    if (w.url)
+                    { com.openFile(w.url); }
+                }
+            }
+        });
+    };
+
+    //this.openUpload = function () {
+    //    $('#idfile').window("open");
+    //};
+
+    this.canShow = function (item) {
+        var buttons = self.dataSource.buttonsList;
+        var flag = false;
+
+        for (var k = 0; k < buttons.length; k++) {
             if (buttons[k].ButtonIcon == item) {
                 flag = true; break;
             }

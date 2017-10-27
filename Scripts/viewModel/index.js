@@ -214,12 +214,12 @@ wrapper.initMenu = function (d) {
 
     //switch (wrapper.settings.navigation) {
     //    case "tree":
-            //wrapper.menuTree(menus);
+            wrapper.menuTree(menus);
             //break;
     //    case "menubutton":
     //        wrapper.menuButton(menus);
     //        break;    //    case "accordion":
-            wrapper.menuAccordion(menus);
+            //wrapper.menuAccordion(menus);
     //        break;
     //    default:
     //        wrapper.menuAccordion(menus);

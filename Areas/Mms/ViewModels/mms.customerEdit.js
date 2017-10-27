@@ -90,8 +90,14 @@ mms.customerEdit = function (data) {
             success: function (d) {
                 data.dataSource.pageData = d;
                 ko.mapping.fromJS(d, self.pageData);
+                self.grid0.datagrid('options').queryParams = { action: 'EditCustPNRelate', CustCode: self.pageData.form.CustCode() };   //不能写self.grid0.queryParams={};
+                self.grid0.datagrid('reload');
             }
         });
+    };
+
+    this.refreshClick = function () {
+        window.location.reload();
     };
   
     //撤销
@@ -126,7 +132,7 @@ mms.customerEdit = function (data) {
             data: ko.toJSON(post),
             success: function (d) {
                 com.message('success', self.resx.editSuccess);
-                if (post.form.CustID() == '0')
+                if (post.form.CustID == '0')
                     self.pageData.form.CustCode(d.form.CustCode);
                     self.pageData.form.CustID(d.form.CustID);
             }
@@ -165,47 +171,6 @@ mms.customerEdit = function (data) {
         if (!formValid)
         { return '验证不通过，数据未保存！'; }
             // LEGAL_ENTITY,ERP_CODE,LEGAL_FULL,IS_RELATED_COMPANY,CURRENCY,PayerType,SystemType
-        
-        //else {
-        //    var myform = self.pageData.form;
-        //    //var dsIR = self.dataSource.ISRelatedList;            
-
-        //    //console.log(self.dataSource.ISRelatedList); //alert(myform.CURRENCY());
-        //    if (!myform.LEGAL_ENTITY())
-        //    { return 'ideas編碼不能為空！'; }
-        //    else if (!myform.ERP_CODE())
-        //    { return '付款法人不能為空！'; }           
-        //    else if (!myform.CURRENCY())
-        //    {                
-        //        return '付款幣種不能為空！';
-        //    }
-
-        //    else if (myform.PayerType()!= '內部客戶' && myform.PayerType() != '外部客戶' && myform.PayerType() != '準時達法人') {
-        //        return '請選擇正確的客戶類型!';
-        //    }
-        //    else if (myform.PayerType() == '內部客戶' && (!myform.LEGAL_CODE() || !myform.COSTCODE() || !myform.CUSTOMER_CODE() || !myform.LEGAL_TYPE())) {
-        //        return '內部客戶必須填寫法人檔、費用代碼、客戶代碼、中文簡稱!';
-        //    }
-        //    else if (myform.PayerType() == '外部客戶' && (!myform.CUSTOMER_CODE())) {
-        //        return '外部客戶必須填寫客戶代碼!';
-        //    }
-        //    else if (myform.PayerType()== '準時達法人' && (!myform.VendorCode))
-        //    { return '準時達法人必須填寫-Jusda收款代碼!'; }
-        //    else if (myform.PayerType()== '準時達法人' && (!myform.LEGAL_TYPE))
-        //    { return '準時達法人必須填寫中文簡稱!'; }
-            
-        //    else if (myform.SystemType().toUpperCase() != 'TIPTOP' && myform.SystemType().toUpperCase() != 'SAP')
-        //    { return '系統類型只能選TIPTOP/SAP！'; }
-        //    else
-        //    {                
-        //        var msg = com.myValid(self.dataSource.ISRelatedList, myform.IS_RELATED_COMPANY(), { required: true, msgTip: '內部客戶' });
-        //        if (msg)
-        //        { return msg; }
-        //        else {
-        //            return '';
-        //        }
-        //    }
-        //}
 
         for (var i in self.tabs) {
             var tab = self.tabs[i], tabData;
@@ -217,37 +182,6 @@ mms.customerEdit = function (data) {
         }
         return '';
     };
-
-
-    //审核
-    //this.auditClick = function () {
-    //    var changes = self.fnIsPageChanged();
-    //    if (changes._changed) {
-    //        com.message('warning', '数据有修改，请保存后再审核！');
-    //        return;
-    //    }
-
-    //    com.auditDialogForEditVM(self.pageData.form, function (d) {
-    //        com.ajax({
-    //            type: 'POST',
-    //            url: self.urls.audit + self.pageData.scrollKeys.current(),
-    //            data: JSON.stringify(d),
-    //            success: function () {
-    //                com.message('success', d.status == "passed" ? self.resx.auditPassed : self.resx.auditReject);
-    //                ko.mapping.fromJS(self.pageData.form, {}, data.dataSource.pageData.form);
-    //            },
-    //            error: function (e) {
-    //                com.message('error', e.responseText);
-    //                ko.mapping.fromJS(data.dataSource.pageData.form, {}, self.pageData.form);
-    //            }
-    //        });
-    //    });
-    //};
-
-    //打印
-    //this.printClick = function () {
-    //    com.openTab('打印报表', '/report?area=mms&rpt=' + self.urls.report + '&BillNo=' + self.form.data.BillNo(), 'icon-printer_color');
-    //};
 
     //初始化tabs
     this.init = function () {
@@ -275,10 +209,10 @@ mms.customerEdit = function (data) {
 
     //取得grid参数对象
     this.fnEditGrid = function (tab, grid, edit, i) {
-        this.size = { w: 6, h: 177 };
-        this.pagination = false;
-        this.remoteSort = false;
-        this.data = self.pageData["tab" + i];//注意此时才给grid绑定数据
+        //this.size = { w: 1, h:100 };
+        this.pagination = true; this.pageSize = 10;
+        this.remoteSort = false; this.url = self.urls.queryCustPN; this.queryParams = {action:'EditCustPNRelate', CustCode: self.pageData.form.CustCode() };
+        //this.data = self.pageData["tab" + i];//注意此时才给grid绑定数据
         this.onClickRow = function () {
             edit.begin();
         };
@@ -286,18 +220,31 @@ mms.customerEdit = function (data) {
         this.addRowClick = function () {
             var row = $.extend(true, {}, tab.defaults);
             row[tab.rowId] = 0;
-            row[tab.relationId] = self.pageData.form.idField;
+            row[tab.relationId] = self.pageData.form.CustCode();
+            row.CustCode = self.pageData.form.CustCode();
+            row.CustAbbr = self.pageData.form.CustAbbr();
             edit.addnew(row);
         };
         this.removeRowClick = function () {
             edit.deleterow();
         };
+
+        this.OnAfterCreateEditor = function (editors, row) {
+            com.readOnlyHandler('input')(editors["CustCode"].target, true);
+            com.readOnlyHandler('input')(editors["CustAbbr"].target, true);
+            com.readOnlyHandler('input')(editors["CDesc"].target, true);
+            com.readOnlyHandler('input')(editors["CSpec"].target, true);
+            com.readOnlyHandler('input')(editors["TypeName"].target, true);
+
+            //當SuppCode有值時，需要重新綁定PNID
+            var SuppCode = row.SuppCode;
+            if (SuppCode) { updatePNList(SuppCode); }
+
+        };
     };
 
     this.fnIsNew = function () { return data.dataSource.pageData.CustID == 0; };
     this.init();
-    //this.fnIsAudit = function () { return self.pageData.form["ApproveState"]() == "passed"; };
-    //this.readonly = ko.computed(function () { return self.pageData.form.PayerType() == "準時達法人" ? false : true; });
 
     this.canShow = function (item) {
         var buttons = self.dataSource.buttonsList;
@@ -313,6 +260,48 @@ mms.customerEdit = function (data) {
 };
 
 
-    //var updateCombox = function (newValue, oldValue) {
-    //    var kk = newValue;
-    //};
+var updatePNInfo = function (d) {
+    var pnid = d.value;
+    var row = $('#gridlist').datagrid('getSelections')[0];  
+    var rowIndex = $('#gridlist').datagrid('getRowIndex', row);
+    var editors = $('#gridlist').datagrid('getEditors', rowIndex);
+
+    com.ajax({
+        url: self.data.urls.getPNInfo,
+        data: ko.toJSON({ pnid: pnid }),
+        success: function (info) {
+            if (info) {
+                $(editors[0].target).val(info.SuppPN);
+                $(editors[6].target).val(info.CDesc);
+                $(editors[7].target).val(info.CSpec);
+                $(editors[8].target).val(info.TypeName);
+            }
+        },
+        error: function (e) {
+            com.message('error', e.responseText);
+        }
+    });
+};
+
+var updatePNList = function (d) {
+    var suppCode = d.value || d;
+    
+    com.ajax({
+        url: self.data.urls.getPNList,
+        data: ko.toJSON({ suppcode: suppCode }),
+        success: function (d) {
+            if (d) {
+                var row = $('#gridlist').datagrid('getSelected');
+                var rowIndex = $('#gridlist').datagrid('getRowIndex', row);
+                var editor = $('#gridlist').datagrid('getEditor', { index: rowIndex, field: 'PNID' });                                       
+                $(editor.target).combobox('loadData', d);
+            }
+            else {
+                $(editor.target).combobox('setValue', "");
+            }
+        },
+        error: function (e) {
+            com.message('error', e.responseText);
+        }
+    });
+}

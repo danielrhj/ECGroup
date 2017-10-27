@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewBag.Title = "客戶料号关联清单";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts{
+    <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
+    <script src="~/Areas/Mms/ViewModels/mms.customer.js"></script>    
+    <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script>
+    <script type="text/javascript">
+        //using(["numberspinner"], easyuifix.datagrid_editor_extend);
+        using(['validatebox','combobox']);
+
+        var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));        
+        var formatSupplierAttr = utils.fnValueToText(data.dataSource.SuppCodeList1);        
+
+        var viewModel = mms.customer.relate;
+        ko.bindingViewModel(new viewModel(data));
+
+        //--
+
+    </script>
+}
+
+<div class="z-toolbar">
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>   
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
+</div>
+
+<div id="condition"  class="container_12"  style="position:relative;">   
+    <table style="width:900px;margin-left:5px">
+        <tr>
+        <td>客户料号:</td><td><input type="text"  data-bind="value:form.CustPN" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/partno/getCustPNList'" /></td>            
+        <td>制造商料号:</td><td><input type="text" data-bind="value:form.SuppPN" class="z-txt easyui-autocomplete" data-options="url:'/api/mms/partno/getSuppPNList'"  /></td>
+        <td>客户</td><td><input type="text"  data-bind="datasource:dataSource.CustCodeList1 ,comboboxValue:form.CustCode" data-options="showblank:true" class="z-txt easyui-combobox" style="width:120px" /></td>
+        <td>代理商</td><td><input type="text"  data-bind="datasource:dataSource.SuppCodeList1 ,comboboxValue:form.SuppCode" data-options="showblank:true" class="z-txt easyui-combobox" style="width:120px" /></td>
+        <td><a id="a_search" href="#" class="button button-blue"  data-bind="click:searchClick">查询</a> </td>               
+        <td><a id="a_reset" href="#" class="button button-blue" data-bind="click:clearClick">清空</a></td>
+        @*SuppPN,CustCode,CustPN,SuppCode*@
+     </tr></table>  
+</div>
+
+ <table id="gridlist" data-bind="datagrid:grid" style="height:315px">
+    <thead>
+        <tr> 
+            <th field="AutoID"  hidden="true">AutoID</th>                    
+            <th field="PNID" hidden="true" >制造商料号</th>   
+            <th field="CustCode" width="60"  >客户代码</th>
+            <th field="CustAbbr" width="80"  >客户简称</th>
+            <th field="CustPN" sortable="true"	>客户料号</th> 
+            <th field="SuppPN"  >制造商料号</th>  
+            <th field="SuppCode" width="90" formatter="formatSupplierAttr" >供应商</th>        @**@                                 
+            <th field="CDesc" sortable="true"	align="left" 	width="100" >品名</th>                   
+            <th field="CSpec" sortable="true"	align="left"	width="400" >规格</th>                                       
+            <th field="TypeName" sortable="true"	align="left" width="60" >物料类别</th>
+        </tr>
+    </thead>
+</table>      

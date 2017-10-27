@@ -74,6 +74,44 @@ namespace ECGroup.Areas.Mms.Controllers
             return View(model);
         }
 
+        public ActionResult relate()
+        {
+            var model = new
+            {
+                dataSource = new
+                {
+                    buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew(),
+                    BrandList = MaterialTypeService.getBrandListCombo(true),
+                    SuppCodeList1 = SupplierService.getSupplierCodeList("")
+                },
+                urls = new
+                {
+                    query = "/api/mms/supplier/GetSuppPN/",
+                    //add = "/api/mms/customer/GetH",
+                    //edit = "/mms/customer/Edit/",
+                    //remove = "/api/mms/customer/GetDelete/",
+                    excel = "/api/mms/supplier/GetcreateExcelRelate/"
+
+
+                },
+                idField = "AutoID",
+                resx = MmsHelper.GetIndexResx("SuppCode"),
+                form = new
+                {
+                    SuppPN = "",
+                    Brand = "",
+                    SuppCode = ""
+                },
+                defaultRow = new
+                {
+                },
+                setting = new
+                {
+                }
+            };
+            return View(model);
+        }
+
         public ActionResult Edit(string id = "")
         {
 
@@ -82,7 +120,8 @@ namespace ECGroup.Areas.Mms.Controllers
                 urls = new
                 {
                     edit = "/api/mms/supplier/Edit/",
-                    getdata = "/api/mms/supplier/GetPageData/"
+                    getdata = "/api/mms/supplier/GetPageData/",
+                    query = "/api/mms/supplier/GetSuppPN/"
                 },
                 resx = new
                 {
@@ -161,12 +200,20 @@ namespace ECGroup.Areas.Mms.Controllers
 
         public dynamic GetSuppPN(RequestWrapper query)
         {
+            string action = query["action"].ToString(); //action=getSuppPNListBySuppCode
             ParamSP ps = new ParamSP().Name(SupplierService.strSP);
             ParamSPData psd = ps.GetData();
             psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
             psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "10" : query["rows"].ToString());
-            ps.Parameter("ActionType", "getSuppPNListBySuppCode");
+            ps.Parameter("ActionType", action);
             ps.Parameter("SuppCode", query["SuppCode"].ToString());
+
+            if (action == "ListSuppPNRelate")
+            {
+                ps.Parameter("SuppPN", query["SuppPN"].ToString());
+                ps.Parameter("Brand", query["Brand"].ToString());
+                ps.Parameter("ActionType", "getSuppPNListRelate");
+            }
             var ColleteeList = supplierService.GetDynamicListWithPaging(ps);
             return ColleteeList;
         }
@@ -183,7 +230,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 var result = new
                 {
                     form = payeeListNew[0][0],
-                    tab0 = payeeListNew[1]
+                    //tab0 = payeeListNew[1]
                 };
                 return result;
             }
@@ -209,7 +256,7 @@ namespace ECGroup.Areas.Mms.Controllers
                         PayTerms = "",
                         SuppID = "0"
                     }),
-                    tab0 = new List<dynamic>()
+                    //tab0 = new List<dynamic>()
                 };
 
                 return result;
@@ -395,5 +442,26 @@ namespace ECGroup.Areas.Mms.Controllers
             }
         }
 
+        [System.Web.Http.HttpPost]
+        public dynamic GetcreateExcelRelate(dynamic query)
+        {
+            //SuppPN,CustCode,CustPN,SuppCode
+            ParamSP ps = new ParamSP().Name(PartNoService.strSP);
+            ps.Parameter("ActionType", "getSuppPNListExcelRelate");
+            ps.Parameter("SuppCode", query["SuppCode"].ToString().Trim());
+            ps.Parameter("SuppPN", query["SuppPN"].ToString().Trim());
+            ps.Parameter("Brand", query["Brand"].ToString().Trim());
+
+            try
+            {
+                string fileurl = SupplierService.ExportExcelRelate(ps);
+                return new { success = true, Msg = "", url = fileurl };
+            }
+            catch (Exception ex)
+            {
+                string AA = ex.Message;
+                return new { success = false, Msg = ex.Message, url = "" };
+            }
+        }
     }
 }

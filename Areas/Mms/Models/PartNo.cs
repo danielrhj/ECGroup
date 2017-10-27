@@ -90,6 +90,17 @@ namespace ECGroup.Models
 
             return resultA;
         }
+
+        internal static List<dynamic> getPNListBySuppCode(string suppcode)
+        {
+            ParamSP ps = new ParamSP().Name(strSP);
+            ParamSPData psd = ps.GetData();
+            ps.Parameter("ActionType", "getPNListBySuppCode");
+            ps.Parameter("SupplierCode", suppcode);
+            dynamic resultA = new SupplierService().GetDynamicList(ps);
+
+            return resultA;
+        }
     }
     public class PartNo:ModelBase
     {

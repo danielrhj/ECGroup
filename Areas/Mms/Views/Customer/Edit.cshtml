@@ -7,8 +7,10 @@
 <script src="~/Areas/Mms/ViewModels/mms.com.js"></script>
 <script src="~/Areas/Mms/ViewModels/mms.customerEdit.js"></script>
     <script type="text/javascript">
+        using(['messager','combobox']);
         var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); 
-        //using(['messager','combobox']);
+        var formatPartNoAttr = utils.fnValueToText(data.dataSource.SuppPNList0);
+        var formatSupplierAttr = utils.fnValueToText(data.dataSource.suppCodeList);
         var viewModel = mms.customerEdit;             
         ko.bindingViewModel(new viewModel(data));   
 
@@ -17,18 +19,20 @@
 
 <div class="z-toolbar">
     <a id="a_save" href="#" plain="true" class="easyui-linkbutton" icon="icon-save" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')" title="保存">保存</a>
+    <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-arrow_refresh"   title="刷新" data-bind="click:canShow('icon-arrow_refresh')?null:refreshClick,linkbuttonDisable:canShow('icon-arrow_refresh')">刷新</a>
     <div class="datagrid-btn-separator"></div>
     <a id="a_first" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_first" data-bind="click:firstEnable()?firstClick:null,linkbuttonEnable:firstEnable" title="第一条"></a> 
     <a id="a_previous" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_previous" data-bind="click:previousEnable()?previousClick:null,linkbuttonEnable:previousEnable" title="上一条"></a> 
     <a id="a_next" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_next" data-bind="click:nextEnable()?nextClick:null,linkbuttonEnable:nextEnable" title="下一条"></a> 
     <a id="a_last" href="#" plain="true" class="easyui-linkbutton" icon="icon-resultset_last" data-bind="click:lastEnable()?lastClick:null,linkbuttonEnable:lastEnable" title="最后一条"></a> 
-
+    <div class="datagrid-btn-separator"></div>
+    <div class="grid_12" style="padding-left:200px;font-size:medium;color:blue">客户明細資料(<label data-bind="text:pageData.form.CustCode"></label>)</div>
 </div>
 
 <div id="master" class="container_12" style="width:auto;padding-left:0px;padding-top:0px;padding-bottom:10px;background-color:#E0ECFF;" title="客户明細資料">
-    <div class="grid_12" style="padding-left:200px;height:30px;font-size:x-large">客户明細資料<label id="txtCustID" hidden="hidden" data-bind="text:pageData.form.CustID"></label></div>
-    <div class="clear"></div>
-    <div class="grid_6 val" style="width:auto;padding-left:0px;padding-top:10px;padding-bottom:20px;">
+    @**@
+    <div class="clear"><label id="txtCustID" hidden="hidden" data-bind="text:pageData.form.CustID"></label></div>
+    <div class="grid_6 val" style="width:auto;padding-left:0px;padding-top:10px;padding-bottom:5px;">
         <table >
         <tr>
             <td style="width:100px">客户編碼</td><td><input type="text" data-bind="value:pageData.form.CustCode,readOnly:true" title="系统自动生成,不可修改" class="easyui-textbox" /> </td>
@@ -57,27 +61,24 @@
         @*CustID,CustAbbr,CustCode,CustName,CustAdd,Contact,Tel,CellNo,Email,SWIFICode,AccountName,AccountNo,Currency,PayTerms,BankName*@   
     </table>  
    </div>
-
     <div class="clear"></div>
-    <div title="tab1 料号明细" class="easyui-panel" iconCls="icon-list" collapsible="true" >
+    <div title="tab1 料号明细" class="easyui-panel" style="height:370px" iconCls="icon-list" collapsible="true" >
         <div id="gridtb0">
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:grid0.addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:grid0.onClickRow,linkbuttonDisable:canShow('icon-edit')">编辑</a>
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:grid0.removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
         </div>  
 
-        <table id="gridlist" data-bind="datagrid:grid0" style="width:510px;">
+        <table id="gridlist" data-bind="datagrid:grid0" style="height:340px">
             <thead>
                 <tr> 
                     <th field="AutoID"  hidden="true">AutoID</th>
-                    <th field="SuppCode" editor="text" >供应商代码</th>
-                    <th field="CustAbbr" editor="text" >客户简称</th>
-                    <th field="CustCode" editor="text" >客户代码</th>
-                    <th field="PNID" sortable="true" align="left" width="250" formatter="formatPartNoAttr"  editor="{type:'combobox',options:{data:data.dataSource.SuppPNList0,required: true,onSelect:updatePNInfo}}">制造商料号</th>
-                   
-                    <th field="SuppCode" editor="text" >供应商代码</th>
-                    <th field="SuppPN" sortable="true"	align="left" editor="text"	width="100" >制造商料号Real</th>      
-                     
+                    <th field="SuppPN"  editor="text"  hidden="true" >制造商料号Real</th>      
+                    <th field="CustCode" width="60"  editor="text" >客户代码</th>
+                    <th field="CustAbbr" width="80"  editor="text" >客户简称</th>
+                    <th field="CustPN" sortable="true"	align="left" editor="{type:'validatebox',options:{required:true}}" width="150" >客户料号</th> 
+                    <th field="SuppCode" width="150"  formatter="formatSupplierAttr"  editor="{type:'combobox',options:{data:data.dataSource.suppCodeList,required: true,onSelect:updatePNList}}">供应商代码</th>                    
+                    <th field="PNID" align="left" width="250" formatter="formatPartNoAttr"  editor="{type:'combobox',options:{data:data.dataSource.SuppPNList0,required: true,onSelect:updatePNInfo}}">制造商料号</th>                                        
                     <th field="CDesc" sortable="true"	align="left" editor="text"	width="100" >品名</th>                   
                     <th field="CSpec" sortable="true"	align="left" editor="text"	width="400" >规格</th>                                       
                     <th field="TypeName" sortable="true"	align="left" editor="text"	width="60" >物料类别</th>

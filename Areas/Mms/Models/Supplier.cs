@@ -37,7 +37,7 @@ namespace ECGroup.Models
             ps.Parameter("ActionType", "getSupplierCodeList");
             ps.Parameter("data", q);
             List<dynamic> resultA = new SupplierService().GetDynamicList(ps);
-
+            if(q==""){resultA.Insert(0, new { value = "", text = "全部" }); }
             return resultA;
         }
 
@@ -85,6 +85,19 @@ namespace ECGroup.Models
             EPPlusNew myExcel = new EPPlusNew("");
 
             string filename = "Supplier.xlsx";
+            string path = Zephyr.Utils.ZHttp.RootPhysicalPath + @"FJLBS\TempFiles\" + filename;
+
+            myExcel.ExportExcel(dt, path);
+            myExcel = null;
+            return "/FJLBS/TempFiles/" + filename;
+        }
+
+        internal static string ExportExcelRelate(ParamSP ps)
+        {
+            DataTable dt = new CompanyService().StoredProcedureDS(ps).Tables[0];
+            EPPlusNew myExcel = new EPPlusNew("");
+
+            string filename = "SupplierPNRelate.xlsx";
             string path = Zephyr.Utils.ZHttp.RootPhysicalPath + @"FJLBS\TempFiles\" + filename;
 
             myExcel.ExportExcel(dt, path);
