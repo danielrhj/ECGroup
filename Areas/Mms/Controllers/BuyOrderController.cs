@@ -91,7 +91,8 @@ namespace ECGroup.Areas.Mms.Controllers
                 {
                     pageData = new BuyOrderApiController().GetPageData(id),
                     PriceTypeList = new BuyOrderApiController().PriceTypeList(),
-                    //CFMFlagList = MmsHelper.GetYON(),
+                    TaxRateList = MaterialTypeService.getTaxRateListCombo(false),
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
                     CNCYList = MmsHelper.GetCurrencyType(),
                     BuyOrderStatusList=new BuyOrderApiController().getBuyOrderStatusList(),
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()    
@@ -244,7 +245,7 @@ namespace ECGroup.Areas.Mms.Controllers
                     form = new BuyOrder().Extend(new
                     {
                         Currency = "RMB",
-                        PriceType = "含税",
+                        TaxRate = "0",
                         CFMFlag = "N",
                         BuyStatus = "录入",
                         InputBy = User.Identity.Name,

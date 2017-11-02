@@ -270,6 +270,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 }
                 else { actionType = ""; }
 
+                string CustCode = request["CustCode"] == null ? "" : request["CustCode"].ToString();
                 string CustPN = request["CustPN"] == null ? "" : request["CustPN"].ToString();
                 string SuppPN = request["SuppPN"] == null ? "" : request["SuppPN"].ToString();
                 string CDesc = request["CDesc"] == null ? "" : request["CDesc"].ToString();
@@ -285,8 +286,11 @@ namespace ECGroup.Areas.Mms.Controllers
                 ps.Parameter("SuppPN", SuppPN);
                 ps.Parameter("CDesc", CDesc);
 
+                if (LookupType == "LookupSuppPNForBuyOrder")    //采购订单料号选择弹出时限制为单头的供应商已关联的料号
+                { ps.Parameter("SupplierCode", Proxy); }
+
                 if (LookupType == "LookupSuppPNForRFQ"||LookupType == "LookupCustPNForSaleQuote" || LookupType == "LookupCustPNForSaleOrder")
-                { ps.Parameter("CustPN", CustPN); }
+                { ps.Parameter("CustPN", CustPN); ps.Parameter("CustCode", CustCode); }
 
                 if (LookupType == "LookupSuppPNForRFQ")
                 {ps.Parameter("SupplierCode", Proxy); }
@@ -295,8 +299,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 { ps.Parameter("BuyNoFlag", BuyNoFlag); ps.Parameter("SupplierCode", Proxy); }
 
                 if (LookupType == "LookupCustPNForShiping")
-                {
-                    string CustCode = request["CustCode"] == null ? "" : request["CustCode"].ToString();
+                {                    
                     ps.Parameter("CustCode", CustCode);
                     ps.Parameter("CustPN", CustPN);
                     ps.Parameter("PO", PO);

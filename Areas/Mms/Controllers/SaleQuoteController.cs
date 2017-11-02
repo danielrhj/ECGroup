@@ -89,6 +89,8 @@ namespace ECGroup.Areas.Mms.Controllers
                 {
                     pageData = new SaleQuoteApiController().GetPageData(id),
                     PriceTypeList = new SaleQuoteApiController().PriceTypeList(),
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
+                    TaxRateList = MaterialTypeService.getTaxRateListCombo(false),
                     CFMFlagList = MmsHelper.GetYON(),
                     CNCYList = MmsHelper.GetCurrencyType(),
                     QuoteStatusList = new SaleQuoteApiController().getQuoteStatusList(),
@@ -106,8 +108,8 @@ namespace ECGroup.Areas.Mms.Controllers
                       type = "grid",
                       rowId = "SNO",
                       relationId = "QuoteID", //SNO,QuoteID,CustPN,SuppPN,CSpec,CDesc,Brand,ReplyPrice,Qty,Unit,Amount,VATFlag,SPQ,MOQ,LeadTime,Remarks
-                      defaults = new {SNO = "0",QuoteID = id,CustPN = "",SuppPN = "",CDesc = "",CSpec="",ReplyPrice = "0",Qty="0",Unit = "PC",Amount = "0",VATFlag="N",SPQ="0",MOQ="0",LeadTime="",Remarks=""},
-                      postFields = new string[] { "SNO","QuoteID","CustPN","SuppPN","CDesc","CSpec","ReplyPrice","Qty","Unit","VATFlag","SPQ","MOQ","LeadTime","Remarks"}
+                      defaults = new {SNO = "0",QuoteID = id,CustPN = "",SuppPN = "",CDesc = "",CSpec="",ReplyPrice = "0",ReplyPriceT = "0",Qty="0",Brand="",Unit = "PC",Amount = "0",TaxRate="0",SPQ="0",MOQ="0",LeadTime="",Remarks=""},
+                      postFields = new string[] { "SNO","QuoteID","CustPN","SuppPN","CDesc","CSpec","ReplyPrice","Brand","ReplyPriceT","Qty","Unit","TaxRate","SPQ","MOQ","LeadTime","Remarks"}
                     }
                 }
             };
@@ -127,9 +129,9 @@ namespace ECGroup.Areas.Mms.Controllers
             string sendDate1 = daterow1 != null ? daterow1[0].Trim() : "";
             string sendDate2 = sendDate1 == "" ? "" : (daterow1.Length > 1 ? daterow1[1].Trim() : "");
             ParamSP ps = new ParamSP().Name(SaleQuoteService.strSP);
-            ParamSPData psd = ps.GetData();
-            psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
-            psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "20" : query["rows"].ToString());
+            //ParamSPData psd = ps.GetData();
+            //psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
+            //psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "20" : query["rows"].ToString());
             ps.Parameter("ActionType", "getlist");
             ps.Parameter("QuoteNo", query["QuoteNo"].ToString());
             ps.Parameter("CustPN", query["CustPN"].ToString()); ps.Parameter("SuppPN", query["SuppPN"].ToString());
@@ -138,7 +140,7 @@ namespace ECGroup.Areas.Mms.Controllers
             ps.Parameter("BeginDate", sendDate1);
             ps.Parameter("EndDate", sendDate2);    // QuoteNo,CustPN,CustAbbr,QuoteStatus,BeginDate,EndDate  
 
-            var ColleteeList = SQService.GetDynamicListWithPaging(ps, "QuoteID");
+            var ColleteeList = SQService.GetDynamicList(ps, "QuoteID");  ///SQService.GetDynamicListWithPaging(ps, "QuoteID");
             
             return ColleteeList;
         }

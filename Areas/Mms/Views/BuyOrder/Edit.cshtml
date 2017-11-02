@@ -13,7 +13,7 @@
     using(["numberspinner"], easyuifix.datagrid_editor_extend); 
     using(['datagrid','messager','validatebox','numberbox','combobox','datebox']);
     var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
-    
+    var formatUnitAttr = utils.fnValueToText(data.dataSource.UnitList);
     //var viewModel = function(data){ 
     //    var self = this;
     //    mms.ARInvoice.apply(self,arguments);
@@ -63,7 +63,7 @@
         </tr>
 
         <tr>
-            <td>是否含税</td><td><input type="text" data-bind="datasource:dataSource.PriceTypeList,comboboxValue:pageData.form.PriceType" class="z-txt easyui-combobox "  /></td>
+            <td>税率</td><td><input type="text" data-bind="datasource:dataSource.TaxRateList,comboboxValue:pageData.form.TaxRate" class="z-txt easyui-combobox "  /></td>
             <td>订单状态</td><td><input type="text" data-bind="datasource:dataSource.BuyOrderStatusList,comboboxValue:pageData.form.BuyStatus,readOnly:true" class="z-txt easyui-combobox "  style="width:75px" /></td>            
             <td>录入人</td><td ><input type="text" data-bind="value:pageData.form.InputBy,readOnly:true" class="z-txt" style="width:50px;"/>
                 <input type="text" data-bind="value:pageData.form.InputDT,readOnly:true" class="z-txt" style="width:60px;color:blue;"/></td>
@@ -73,14 +73,14 @@
     </table>    
 </div>
 
-    <div title="tab1" style="height:650px;width:auto;overflow:hidden;">
+    <div title="tab1" style="height:370px;width:auto;overflow:hidden;">
         <div id="gridtb">
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>
             @*<a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:grid0.onClickRow,linkbuttonDisable:canShow('icon-edit')">编辑</a>*@
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
         </div>  
 
-       <table id="gridlist" data-bind="datagrid:grid" style="height:620px;width:auto">
+       <table id="gridlist" data-bind="datagrid:grid" style="height:340px;width:auto">
             <thead>
                 <tr> 
                     <th field="SNO" hidden="true" ></th>
@@ -92,7 +92,7 @@
                     <th field="Brand"		sortable="true"	align="left" width="80" editor="text" >品牌</th>                   
                     <th field="Qty"		sortable="true"	align="right" formatter="com.formatMoney2" width="100"  editor="{type:'numberbox',options:{precision:2,required:true}}" >Qty</th>
                     <th field="BuyPrice"		sortable="true"	align="right" formatter="com.formatMoney" editor="{type:'numberbox',options:{precision:4,required:true}}"	width="60" >单价</th> 
-                    <th field="Unit"		sortable="true"	align="left" width="60"  editor="text">Unit</th>
+                    <th field="Unit"		sortable="true"	align="left" width="60"  formatter="formatUnitAttr" editor="{type:'combobox',options:{data:data.dataSource.UnitList}}" >Unit</th>
                     <th field="Amount"		sortable="true"	align="right"	width="120" formatter="com.formatMoney2" >金額</th>
                     <th field="ReqDate"		sortable="true"	align="left" width="100" editor="{type:'datebox'}" formatter="com.formatDate" >需求日期</th>     
                   

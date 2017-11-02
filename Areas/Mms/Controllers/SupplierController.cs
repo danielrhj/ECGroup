@@ -131,7 +131,8 @@ namespace ECGroup.Areas.Mms.Controllers
                 {
                     SuppPNList0 = SupplierService.getSuppPNListForCombo(false),
                     pageData = new SupplierApiController().GetPageData(id),
-                    buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
+                    buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew(),
                 },
                 form = new
                 {
@@ -162,8 +163,8 @@ namespace ECGroup.Areas.Mms.Controllers
                       type = "grid",
                       rowId = "AutoID",
                       relationId = "SupplierCode",
-                      defaults = new {AutoID = "0",SupplierCode = id,PNID = "",SuppAbbr = "",SuppPN="",CDesc = "",CSpec = "",TypeName = ""},
-                      postFields = new string[] { "AutoID","SupplierCode","PNID","SuppAbbr"}
+                      defaults = new {AutoID = "0",SupplierCode = id,PNID = "",SuppAbbr = "",SuppPN="",CDesc = "",CSpec = "",TypeName = "",MOQ="1",SPQ="1",SPQUnit="包",LeadTime="1"},
+                      postFields = new string[] { "AutoID","SupplierCode","PNID","SuppAbbr","MOQ","SPQ","SPQUnit","LeadTime"}
                     }
                 }
             };

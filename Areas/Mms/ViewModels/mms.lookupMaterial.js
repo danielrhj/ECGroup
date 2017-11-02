@@ -28,7 +28,8 @@
         var cols = [[
                 { title: '制造商料号', field: 'SuppPN', sortable: true, align: 'left', width: 200},
                 { title: '品名', field: 'CDesc', sortable: true, align: 'left', width: 100 },
-                { title: '規格', field: 'CSpec', sortable: true, align: 'left', width: 220},
+                { title: '規格', field: 'CSpec', sortable: true, align: 'left', width: 220 },
+                { title: '品牌', field: 'Brand', sortable: true, align: 'left', width: 80 },
                 { title: '采购单余量', field: 'RemainNum', sortable: true, align: 'right', width: 70 },
                 { title: '最新采购价', field: 'BuyPrice', sortable: true, align: 'right', width: 80 }
         ]];
@@ -39,6 +40,11 @@
                     { title: '客户料号', field: 'CustPN', sortable: true, align: 'left', width: 200 },
                     { title: '品名', field: 'CDesc', sortable: true, align: 'left', width: 100 },
                     { title: '規格', field: 'CSpec', sortable: true, align: 'left', width: 220 },
+                    { title: '品牌', field: 'Brand', sortable: true, align: 'left', width: 80 },
+                    { title: 'MOQ', field: 'MOQ', sortable: true, align: 'right', width: 60 },
+                    { title: 'SPQ', field: 'MinQty', sortable: true, align: 'right', width: 60 },
+                    { title: 'SPQ单位', field: 'MinQtyUnit', sortable: true, align: 'center', width: 60 },
+                    { title: 'LT(d)', field: 'LeadTime', sortable: true, align: 'center', width: 60 },
                     { title: '最新采购价', field: 'BuyPrice', sortable: true, align: 'right', width: 80 }
             ]];
             $("#CustPNTitle").attr('style', 'display:block'); $("#divCustPNValue").attr('style', 'display:block');
@@ -50,18 +56,23 @@
             cols[0].unshift({ title: '采购单号', field: 'BuyNo', sortable: true, align: 'left', width: 100 });
             cols[0].pop();
             cols[0].push({ title: '采购单价', field: 'BuyPrice', sortable: true, align: 'right', width: 60 });
-            $("#divHasBuyNo").attr('style', 'display:block');
+            cols[0].push({ title: '税率', field: 'TaxRate', sortable: true, align: 'right', width: 60 });
+            $("#divHasBuyNo").attr('style', 'display:block'); document.getElementById("divHasBuyNo").checked=true;
         }
 
         if (param.LookupType == 'LookupCustPNForSaleQuote' || param.LookupType == 'LookupCustPNForSaleOrder') {       //销售订单新增明细
             //cols[0].pop();  //删除数组最后一个元素并返回新的数组
             cols[0].unshift({ title: '客户料号', field: 'CustPN', sortable: true, align: 'left', width: 200 });
             $("#CustPNTitle").attr('style', 'display:block'); $("#divCustPNValue").attr('style', 'display:block');
+            $("#textTitle").html('品名');
             cols[0].pop();
             cols[0].pop();
 
             if (param.LookupType == 'LookupCustPNForSaleQuote')
             {
+                cols[0].push({ title: 'MOQ', field: 'MOQ', sortable: true, align: 'right', width: 60 });
+                cols[0].push({ title: 'SPQ', field: 'SPQ', sortable: true, align: 'right', width: 60 });
+                cols[0].push({ title: 'LT(d)', field: 'LeadTime', sortable: true, align: 'center', width: 60 });
                 cols[0].push({ title: '最新报价', field: 'ReplyPrice', sortable: true, align: 'right', width: 80 });
             }
             if (param.LookupType == 'LookupCustPNForSaleOrder') {
@@ -80,7 +91,9 @@
             { title: 'PO数量', field: 'OrderQty', sortable: true, align: 'right', width: 60 },
             { title: 'PO已出', field: 'ShipQty', sortable: true, align: 'right', width: 60 },
             { title: 'PO剩余', field: 'OrderRemain', sortable: true, align: 'right', width: 60 },
-            { title: '库存剩余', field: 'WHQty', sortable: true, align: 'right', width: 60 }];
+            { title: '库存剩余', field: 'WHQty', sortable: true, align: 'right', width: 60 },            
+            { title: '入库单价', field: 'RcvPrice', sortable: true, align: 'right', width: 80 },
+            { title: '入库税率', field: 'RcvTaxRate', sortable: true, align: 'right', width: 50 }];
 
             $("#CustPNTitle").attr('style', 'display:block'); $("#divCustPNValue").attr('style', 'display:block');
             $("#PO").attr('style', 'display:block'); $("#divPO").attr('style', 'display:block');
@@ -125,6 +138,10 @@
             pageSize: 10,
             columns: cols,
             onDblClickRow: function (index, row) {
+                if (row.RemainNum == 0 && param.LookupType == 'LookupSuppPNForReceiving') { com.message('warning', '采购单收货余量为0,不能继续收货!'); return; }
+
+                if (row.WHQty * row.OrderRemain == 0 && param.LookupType == 'LookupCustPNForShiping') { com.message('warning', '客户订单余量或库存为0,不能出货!'); return; }
+
                 for (var i in selected.rows) {
                     if (param.LookupType == 'LookupSuppPNForReceiving' && row.SuppPN == selected.rows[i].SuppPN && row.BuyNo == selected.rows[i].BuyNo) {
                         grid2.datagrid('selectRow', i);
@@ -184,7 +201,7 @@
                 PO: $('#CustPOValue').val(),
                 BuyNoFlag: $("#chkHasBuyNo")[0].checked?"Y":"N"
             });
-
+            com.setFirstPageWhenSearchGrid(grid1);
             grid1.datagrid('reload', queryParams);
         };
 

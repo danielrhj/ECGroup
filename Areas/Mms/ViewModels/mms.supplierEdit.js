@@ -97,7 +97,16 @@ mms.supplierEdit = function (data) {
     };
   
     this.refreshClick = function () {
-        window.location.reload();
+        com.ajax({
+            type: 'GET',
+            url: self.urls.getdata + self.currentKey,
+            success: function (d) {
+                data.dataSource.pageData = d;
+                ko.mapping.fromJS(d, self.pageData);
+                self.grid0.datagrid('options').queryParams = { action: 'getSuppPNListBySuppCode', SuppCode: self.pageData.form.SuppCode() };  
+                self.grid0.datagrid('reload');
+            }
+        });
     };
 
     //保存

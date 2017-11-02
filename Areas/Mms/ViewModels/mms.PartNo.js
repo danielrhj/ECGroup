@@ -127,7 +127,7 @@ mms.PartNo = function (data) {
     this.typeClick = function () {
         com.dialog({
             title: "&nbsp;料号类别",
-            iconCls: 'icon-node_tree',
+            iconCls: 'icon-report_add',
             width: 516,
             height: 410,
             html: "#type-template",
@@ -183,7 +183,7 @@ mms.PartNo = function (data) {
     this.brandClick = function () {
         com.dialog({
             title: "&nbsp;品牌清单",
-            iconCls: 'icon-node_tree',
+            iconCls: 'icon-pictures',
             width: 516,
             height: 410,
             html: "#brand-template",
@@ -224,6 +224,112 @@ mms.PartNo = function (data) {
                             success: function (d) {                                
                                 //that.grid.queryParams({ TypeName: '' })
                                 //self.tree.$element().tree('reload');
+                                com.message('success', '保存成功！');
+                            }
+                        });
+                    }
+                };
+                this.cancelClick = function () {
+                    w.dialog('close');
+                };
+            }
+        });
+    };
+
+    this.unitClick = function () {
+        com.dialog({
+            title: "&nbsp;数量单位维护",
+            iconCls: 'icon-vector',
+            width: 516,
+            height: 410,
+            html: "#unit-template",
+            viewModel: function (w) {
+                var that = this;
+                this.grid = {
+                    width: 500,
+                    height: 340,
+                    pagination: true,
+                    pageSize: 10,
+                    url: "/api/mms/materialtype/getUnit",
+                    queryParams: { Unit: '' }
+                };
+                this.gridEdit = new com.editGridViewModel(this.grid);
+                this.grid.OnAfterCreateEditor = function (editors, row) {
+                    com.readOnlyHandler('input')(editors["AutoID"].target, true);
+                    if (row.AutoID != '0')
+                    { com.readOnlyHandler('input')(editors["Unit"].target, true); }
+                };
+                this.grid.onClickRow = that.gridEdit.ended;
+                this.grid.onDblClickRow = that.gridEdit.begin;
+                this.grid.toolbar = [
+                    {
+                        text: '新增', iconCls: 'icon-add1', handler: function () {
+                            var row = { AutoID: '0', Brand: '', Remark: '' };
+                            that.gridEdit.addnew(row);
+                        }
+                    }, '-',
+                    { text: '编辑', iconCls: 'icon-edit', handler: that.gridEdit.begin }, '-',
+                    { text: '删除', iconCls: 'icon-cross', handler: that.gridEdit.deleterow }
+                ];
+                this.confirmClick = function () {
+                    if (that.gridEdit.isChangedAndValid()) {
+                        var list = that.gridEdit.getChanges(['AutoID', 'Unit', 'Chiname']);
+                        com.ajax({
+                            url: '/api/mms/materialtype/editUnit/',
+                            data: ko.toJSON({ list: list }),
+                            success: function (d) {
+                                com.message('success', '保存成功！');
+                            }
+                        });
+                    }
+                };
+                this.cancelClick = function () {
+                    w.dialog('close');
+                };
+            }
+        });
+    };
+
+    this.taxrateClick = function () {
+        com.dialog({
+            title: "&nbsp;税率维护",
+            iconCls: 'icon-calendar_edit',
+            width: 516,
+            height: 410,
+            html: "#taxrate-template",
+            viewModel: function (w) {
+                var that = this;
+                this.grid = {
+                    width: 500,
+                    height: 340,
+                    pagination: true,
+                    pageSize: 10,
+                    url: "/api/mms/materialtype/getTaxRate",
+                    queryParams: {}
+                };
+                this.gridEdit = new com.editGridViewModel(this.grid);
+                this.grid.OnAfterCreateEditor = function (editors, row) {
+                    com.readOnlyHandler('input')(editors["AutoID"].target, true);                   
+                };
+                this.grid.onClickRow = that.gridEdit.ended;
+                this.grid.onDblClickRow = that.gridEdit.begin;
+                this.grid.toolbar = [
+                    {
+                        text: '新增', iconCls: 'icon-add1', handler: function () {
+                            var row = { AutoID: '0', Brand: '', Remark: '' };
+                            that.gridEdit.addnew(row);
+                        }
+                    }, '-',
+                    { text: '编辑', iconCls: 'icon-edit', handler: that.gridEdit.begin }, '-',
+                    { text: '删除', iconCls: 'icon-cross', handler: that.gridEdit.deleterow }
+                ];
+                this.confirmClick = function () {
+                    if (that.gridEdit.isChangedAndValid()) {
+                        var list = that.gridEdit.getChanges(['AutoID', 'TaxRate', 'Remark']);
+                        com.ajax({
+                            url: '/api/mms/materialtype/editTaxRate/',
+                            data: ko.toJSON({ list: list }),
+                            success: function (d) {
                                 com.message('success', '保存成功！');
                             }
                         });

@@ -17,7 +17,7 @@ mms.Shiping.Search = function (data) {
     delete this.form.__ko_mapping__;
 
     this.grid = {
-        size: { w: 4, h: 94 },
+        //size: { w: 4, h: 94 },
         url: self.urls.query,
         queryParams: ko.observable(),
         singleSelect: true, autoRowHeight: false,
@@ -330,7 +330,15 @@ mms.Shiping.Edit = function (data) {
     };
 
     this.refreshClick = function () {
-        //window.location.reload();
+        com.ajax({
+            type: 'GET',
+            url: self.urls.getdata + self.currentKey,
+            success: function (d) {
+                data.dataSource.pageData = d;
+                ko.mapping.fromJS(d, self.pageData);
+                self.grid.queryParams({ ShipID: self.currentKey });
+            }
+        });
     };
     
     this.grid = {
@@ -569,6 +577,8 @@ mms.Shiping.Edit = function (data) {
                 flag = true; break;
             }
         };
+
+        if (item == 'icon-upload') { return false; }
         return (flag == false) ? self.readonly() : flag;;
     };
 };

@@ -14,7 +14,7 @@
         ko.bindingViewModel(new viewModel(data));        
 
         var formatterURL = function (value,row) {
-            var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.CustID+'\')" >'+value+'</a>';
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.CustID+'\',\''+row.CustCode+'\')" >'+value+'</a>';
             return KK;
         }
 

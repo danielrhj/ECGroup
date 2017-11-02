@@ -36,7 +36,7 @@ namespace ECGroup.Models
         {
             ParamSP ps = new ParamSP().Name(strSP);
             ParamSPData psd = ps.GetData();
-            ps.Parameter("ActionType", "getIncotermList");
+            ps.Parameter("ActionType", "GetIncotermListForCombo");
             List<dynamic> resultA = new SaleOrderService().GetDynamicList(ps);
 
             return resultA;
@@ -61,8 +61,8 @@ namespace ECGroup.Models
             DataTable dt = new SaleOrderService().StoredProcedureDS(ps).Tables[0];
             dt.Columns.Remove("POID");
 
-            double[] titleWidth = { 12, 12, 12, 6, 15, 20, 15, 20, 12, 8, 8, 10, 10, 12,12,10,12,10 };
-            string[] title = "客户订单号,报价日期,客户,项次,客户料号,制造商料号,品名,规格,交期,数量,单位,单价,含税,总金额,付款条件,币别,订单状态,确认".Split(',');
+            double[] titleWidth = { 12, 12, 12, 6, 15, 20, 15, 20, 12, 8, 8, 10, 10, 12,12,10,12 };
+            string[] title = "客户订单号,报价日期,客户,项次,客户料号,制造商料号,品名,规格,交期,数量,单位,单价,税率,总金额,付款条件,币别,订单状态".Split(',');
 
             IList<string> BuyOrderList = new List<string>();
 
@@ -120,14 +120,13 @@ namespace ECGroup.Models
                         grid.Offset(0, 9).Value = decimal.Parse(drDetail[i]["Qty"].ToString()); grid.Offset(0, 9).Style.Numberformat.Format = "#,##0";
                         grid.Offset(0, 10).Value = drDetail[i]["Unit"].ToString();
                         grid.Offset(0, 11).Value = decimal.Parse(drDetail[i]["UnitPrice"].ToString()); grid.Offset(0, 11).Style.Numberformat.Format = "#,##0.00";
-                        grid.Offset(0, 12).Value = drDetail[i]["TaxFlag"].ToString();
+                        grid.Offset(0, 12).Value = drDetail[i]["TaxRate"].ToString();
                         grid.Offset(0, 13).Formula = grid.Offset(0, 9).Address + "*" + grid.Offset(0, 11).Address; grid.Offset(0, 13).Style.Numberformat.Format = "#,##0.00";
                         grid.Offset(0, 14).Value = drDetail[i]["Incoterms"].ToString();
                         grid.Offset(0, 15).Value = drDetail[i]["Currency"].ToString();
                         grid.Offset(0, 16).Value = drDetail[i]["POStatus"].ToString();
-                        grid.Offset(0, 17).Value = drDetail[i]["CFMFlag"].ToString();
 
-                        for (int k = 3; k <= 17; k++)
+                        for (int k = 3; k <= 16; k++)
                         {
                             grid.Offset(0, k).Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                         }

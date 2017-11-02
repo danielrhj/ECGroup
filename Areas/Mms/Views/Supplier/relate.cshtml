@@ -48,9 +48,13 @@
             <th field="SuppPN" 	width="200" >供应商料号</th>                        
             <th field="CDesc" sortable="true"	align="left" 	width="100" >品名</th>                   
             <th field="CSpec" sortable="true"	align="left"	width="300" >规格</th>                                       
-            <th field="Brand" sortable="true"	align="left"	width="80" >品牌</th>                                     
+            <th field="Brand" sortable="true"	align="left"	width="80" >品牌</th>    
+            <th field="MOQ"	sortable="true"	align="right" formatter="com.formatMoney2" width="60" >MOQ</th>
+            <th field="SPQ"		sortable="true"	align="right" formatter="com.formatMoney2" width="60" >SPQ</th>
+            <th field="SPQUnit" sortable="true"	align="center" width="50">SPQ单位</th> 
+            <th field="LeadTime" sortable="true"	align="center" editor="text"	width="50" >LT(d)</th>                                             
             <th field="TypeName" sortable="true"	align="left" width="60" >物料类别</th>
-            @*AutoID,SupplierCode,SuppAbbr,SuppPN,CDesc,CSpec,Brand,TypeName*@
+            @*AutoID,SupplierCode,SuppAbbr,SuppPN,CDesc,CSpec,Brand,TypeName,MOQ,SPQ,SPQUnit,LeadTime*@
         </tr>
     </thead>
 </table>      

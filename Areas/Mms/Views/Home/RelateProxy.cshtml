@@ -32,8 +32,10 @@
             <th field="SuppPN"    sortable="true" align="left"    width="250" >制造商料号</th> 
             <th field="CDesc"    sortable="true" align="left"    width="150" >名称</th>        
             <th field="SupplierCode"    sortable="true" align="left" width="100" formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.SupplierCodeList,required: true}}">代理商编码</th>    
-            <th field="OrderUnit"		sortable="true"	align="center"	width="80"  editor="{type:'validatebox',options:{required:true}}">OrderUnit</th>        
+            <th field="OrderUnit"		sortable="true"	align="center"	width="80"  editor="{type:'validatebox',options:{required:true}}">MOQ单位</th>        
             <th field="MOQ"		sortable="true"	align="center"	width="50"  editor="{type:'numberbox',options:{required: false,min:1}}">MOQ</th>  
+            <th field="MinQty"		sortable="true"	align="center"	width="50"  editor="{type:'numberbox',options:{required: false,min:1}}">SPQ</th>  
+            <th field="MinQtyUnit"		sortable="true"	align="center"	width="80"  editor="{type:'validatebox',options:{required:true}}">SPQ单位</th>
             <th field="LeadTime"		sortable="true"	align="center"	width="80" editor="{type:'numberbox',options:{required: false,min:1,max:99}}">LeadTime</th>  
            @*AutoID,PNID,SuppAbbr,SupplierCode,OrderUnit,MOQ,LeadTime*@
         </thead>

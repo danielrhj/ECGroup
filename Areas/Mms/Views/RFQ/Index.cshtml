@@ -10,7 +10,8 @@
         <script src="~/Scripts/Plugins/AjaxFileUploader/ajaxfileupload.js"></script> 
    
         <script type="text/javascript">
-            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+            var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));            
+            var formatUnitAttr = utils.fnValueToText(data.dataSource.UnitList);
 
             var formatterURL = function (value,row) {
                 if(isNaN(value))
@@ -66,7 +67,7 @@
              </table> 
         </div>
 
-       <table  id="gridlist"  data-bind="treegrid:grid">
+       <table  id="gridlist"  data-bind="treegrid:grid" style="height:337px;overflow-x:scroll;">
             <thead>  
                 <tr>                      
                     <th field="RFQID"   hidden="true"   >RFQID</th>  
@@ -76,12 +77,12 @@
                     <th field="Qty"            sortable="true" align="right"  width="50" >数量</th>  
                     <th field="RFQPriceT"            sortable="true" align="right"  width="70" formatter="formatterPrice" >含税价</th>  
                     <th field="RFQPrice"            sortable="true" align="right"  width="70" formatter="formatterPrice" >不含税价</th>  
-                    <th field="TaxRate"            sortable="true" align="right"    width="60" >税率</th>                    
-                    <th field="MinQty"            sortable="true" align="right"  width="50" >MinQty</th>  
-                    <th field="MinQtyUnit"		sortable="true"	align="right" width="60"  >MinQtyUnit</th>
-                    <th field="MinUnit"            sortable="true" align="center"  width="50" >MinUnit</th>  
-                    <th field="MOQ"		sortable="true"	align="right" width="60" >MOQ</th>
-                    <th field="LeadTime"		sortable="true"	align="right" width="60"  editor="text" >LeadTime</th>
+                    <th field="TaxRate"            sortable="true" align="right"    width="60" >税率</th>         
+                    <th field="MOQ"		sortable="true"	align="right" width="60" >MOQ</th>           
+                    <th field="MinQty"            sortable="true" align="right"  width="50" >SPQ</th>  
+                    <th field="MinQtyUnit"		sortable="true"	align="right" width="60" formatter="formatUnitAttr" >SPQUnit</th>
+                    @*<th field="MinUnit"            sortable="true" align="center"  width="50" >MinUnit</th>*@  
+                    <th field="LeadTime"		sortable="true"	align="right" width="60"  editor="text" >LT(d)</th>
                     <th field="Remarks"       sortable="true" align="left"    width="100"  >备注</th>                       
                     <th field="SuppAbbr"            sortable="true" align="left"    width="50"   >代理商 </th>   
                     <th field="Currency"            sortable="true" align="center"  width="50" >幣別</th>   

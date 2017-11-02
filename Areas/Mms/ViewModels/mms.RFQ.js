@@ -19,7 +19,7 @@ mms.RFQ.Search = function (data) {
     this.grid = {
         idField: '_id',
         treeField: 'RFQNo',
-        size: { w: 4, h: 94 },
+        //size: { w: 4, h: 94 },
         url: self.urls.query,
         queryParams: ko.observable(),
         singleSelect:false,
@@ -46,13 +46,7 @@ mms.RFQ.Search = function (data) {
     };
 
     this.grid.queryParams(self.form); //這一句是確保在頁面首次加載查詢表格時使用默認條件，不寫這一句也會查詢，但會出現request找不到參數的錯誤
-
-    //this.gridEdit = new com.editGridViewModel(this.grid);
-    //this.grid.onDblClickRow = this.gridEdit.begin;
-    //this.grid.onClickRow = this.gridEdit.ended;
-    //this.grid.OnAfterCreateEditor = function (editors, row) {
-    //    if (!row._isnew) com.readOnlyHandler('input')(editors.LEGAL_ENTITY.target, true);
-    //};
+    
     this.searchClick = function () {
         //com.setFirstPageWhenSearchGrid(self.grid);
         var param = ko.toJS(this.form);
@@ -265,7 +259,14 @@ mms.RFQ.Edit = function (data) {
     };
 
     this.refreshClick = function () {
-        window.location.reload();
+        com.ajax({
+            type: 'GET',
+            url: self.urls.getdata + self.currentKey,
+            success: function (d) {
+                data.dataSource.pageData = d;
+                ko.mapping.fromJS(d, self.pageData); self.grid.queryParams({ RFQID: self.currentKey });
+            }
+        });
     };
     
     this.grid = {
@@ -325,11 +326,11 @@ mms.RFQ.Edit = function (data) {
             return;
         }
 
-        //检查inserted和updated的无效值:BuyPrice>0,Qty>0,Unit!=''
+        //检查inserted和updated的无效值:BuyPrice>0,Qty>0,Unit!='' || item.Unit == ''和单位
         var flag = true;
         $.each(post.tabs[0].inserted.concat(post.tabs[0].updated), function (i, item) {
-            if (item.BuyPrice == 0 || item.Qty == 0 || item.Unit == '') {
-                com.message('error', '采购单价,数量和单位无效！');
+            if (item.BuyPrice == 0 || item.Qty == 0) {
+                com.message('error', '采购单价,数量无效！');
                 flag = false;
                 return false;
             }
@@ -337,7 +338,7 @@ mms.RFQ.Edit = function (data) {
 
         if(!flag){return;}
       
-        if (post.form._changed) {   //為了使用SP，当单头資料有改動時要將所有欄位資料發送到後台處理            
+        if (post.form._changed) {           
             post.form = self.pageData.form; post.form._changed = true;
         }
 

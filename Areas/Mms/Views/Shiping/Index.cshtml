@@ -19,15 +19,9 @@
                 return KK;
             }
 
-            //var formatterContact = function (value,row) {
-            //    if(value.length>60){
-            //        var KK='<label title="'+value+'" width="100">'+value+'</label>';                
-            //        return KK;
-            //    }
-            //    else
-            //    {   var KK='<label width="100">'+value+'</label>';                
-            //        return KK;}
-            //}
+            var formatTaxRate = function (value,row) {             
+                return value>0?value:'不含税';
+            };
 
             var formatterUpload=function (value,row) {    
                 var linkA='',title='';
@@ -73,7 +67,7 @@
              </table> 
         </div>
 
-       <table  id="gridlist"  data-bind="datagrid:grid">
+       <table  id="gridlist"  data-bind="datagrid:grid" style="height:337px;overflow-x:scroll;">
             <thead>  
                 <tr>  
                     <th field="ck" checkbox="true"  editor="{type: 'checkbox',options: {on: true,off: false}}"></th> 
@@ -90,6 +84,7 @@
                     <th field="UnitPrice"            sortable="true" align="right"   formatter="com.formatMoney2"   width="70" >单价</th>                       
                     <th field="Currency"            sortable="true" align="center"  width="50" >幣別</th>    
                     <th field="Amount"            sortable="true" align="right"   formatter="com.formatMoney2"   width="70" >總金額</th>   
+                    <th field="TaxRate"		sortable="true"	align="left" width="60"  formatter="formatTaxRate">税率</th>
                     <th field="Incoterms"            sortable="true" align="center"    width="60" >付款條件</th>   
                     <th field="ShipStatus"  sortable="true" align="left"    width="60" >出库狀態</th>  
                     <th field="BLNo"            sortable="true" align="left"    width="80"   >运单号码 </th>  

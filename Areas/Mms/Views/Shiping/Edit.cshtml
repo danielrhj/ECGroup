@@ -13,6 +13,9 @@
     using(['datagrid','messager','validatebox','numberbox','combobox']);
     var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));       
 
+    var formatUnitAttr = utils.fnValueToText(data.dataSource.UnitList);
+    var formatTaxRate = utils.fnValueToText(data.dataSource.TaxRateList);
+
     var formatterPrice = function (value,row) {
         if(row.SNO==-1)
         {return '';}
@@ -77,14 +80,14 @@
     </table>    
 </div>
 
-    <div title="tab1" style="height:650px;width:auto;overflow:hidden;">
+    <div title="tab1" style="height:370px;width:auto;overflow:hidden;">
         <div id="gridtb">
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>
             @*<a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:grid0.onClickRow,linkbuttonDisable:canShow('icon-edit')">编辑</a>*@
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
         </div>  
 
-       <table id="gridlist" data-bind="datagrid:grid" style="height:620px;width:auto">
+       <table id="gridlist" data-bind="datagrid:grid" style="height:330px;width:auto;overflow-x:scroll;">
             <thead>
                 <tr> 
                     <th field="SNO"  hidden="true" editor="text"  ></th>
@@ -96,7 +99,8 @@
                     <th field="CSpec"		sortable="true"	align="left" width="200" editor="text"  >规格</th> 
                     <th field="Qty"		sortable="true"	align="right" formatter="com.formatMoney2" width="70"  editor="{type:'numberbox',options:{precision:2,required:true}}" >Qty</th>
                    <th field="UnitPrice"		sortable="true"	align="right" formatter="formatterPrice" editor="{type:'numberbox',options:{precision:4,required:true}}"	width="60" >单价</th> 
-                    <th field="Unit"		sortable="true"	align="left" width="50"  editor="text"	editor="{type:'validatebox',options:{required:true}}" >Unit</th>
+                    <th field="Unit"		sortable="true"	align="left" width="50" formatter="formatUnitAttr" editor="{type:'combobox',options:{data:data.dataSource.UnitList}}">Unit</th>
+                    <th field="TaxRate"		sortable="true"	align="left" width="60"  formatter="formatTaxRate" editor="{type:'combobox',options:{data:data.dataSource.TaxRateList}}" >税率</th>
                     <th field="Amount"		sortable="true"	align="right"	width="70" formatter="com.formatMoney2" >金額</th>
                 </tr>
                @*SNO, ShipID, PO, CustPN, SuppPN, CDesc, EDesc, CSpec, ShipDate, Qty, Unit, UnitPrice, Currency*@

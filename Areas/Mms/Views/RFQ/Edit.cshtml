@@ -13,7 +13,8 @@
     using(["numberspinner"], easyuifix.datagrid_editor_extend); 
     using(['datagrid','messager','validatebox','numberbox','combobox']);
     var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); 
-
+    var formatUnitAttr = utils.fnValueToText(data.dataSource.UnitList);
+    var formatTaxRate = utils.fnValueToText(data.dataSource.TaxRateList);
     var viewModel=mms.RFQ.Edit;
     ko.bindingViewModel(new viewModel(data));
     
@@ -63,30 +64,30 @@
     </table>    
 </div>
 
-    <div title="tab1" style="height:650px;width:auto;overflow:hidden;">
+    <div title="tab1" style="height:370px;width:auto;overflow:hidden;">
         <div id="gridtb">
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-add" data-bind="click:canShow('icon-add')?null:addRowClick,linkbuttonDisable:canShow('icon-add')">新增</a>
             @*<a href="#" class="easyui-linkbutton" plain="true" icon="icon-edit" data-bind="click:canShow('icon-edit')?null:grid0.onClickRow,linkbuttonDisable:canShow('icon-edit')">编辑</a>*@
             <a href="#" class="easyui-linkbutton" plain="true" icon="icon-cross" data-bind="click:canShow('icon-cross')?null:removeRowClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
         </div>  
 
-       <table id="gridlist" data-bind="datagrid:grid" style="height:620px;width:auto">
+       <table id="gridlist" data-bind="datagrid:grid" style="height:340px;width:auto;overflow-x:scroll;">
             <thead>
                 <tr> 
                     <th field="SNO" hidden="true" ></th>
                     <th field="RFQID" hidden="true" editor="text" ></th>
                     <th field="SuppPN"		sortable="true"	align="left" width="150" editor="{type:'validatebox',options:{required:true}}" >制造商料号</th>
                     <th field="CDesc"		sortable="true"	align="left" width="100" editor="{type:'validatebox',options:{required:true}}" >品名</th>          
-                    <th field="Brand"		sortable="true"	align="left"	width="100" editor="text" >Brand</th>   
-                    <th field="Qty"		sortable="true"	align="right" formatter="com.formatMoney2" width="80"  editor="{type:'numberbox',options:{precision:2,required:true}}" >Qty</th>
+                    <th field="Brand"		sortable="true"	align="left"	width="80" editor="text" >Brand</th>   
+                    <th field="Qty"		sortable="true"	align="right" formatter="com.formatMoney2" width="70"  editor="{type:'numberbox',options:{precision:2,required:true}}" >报价数量</th>
                     <th field="RFQPriceT"		sortable="true"	align="right" formatter="com.formatMoney" editor="{type:'numberbox',options:{precision:4,min:0,required:true}}"	width="60" >含税价</th> 
+                    <th field="TaxRate"		sortable="true"	align="right" formatter="formatTaxRate"" editor="{type:'combobox',options:{data:data.dataSource.TaxRateList,required: true}}"	width="60" >税率</th> 
                     <th field="RFQPrice"		sortable="true"	align="right" formatter="com.formatMoney" editor="{type:'numberbox',options:{precision:4,min:0,required:true}}"	width="60" >不含税价</th> 
-                    <th field="TaxRate"		sortable="true"	align="right" formatter="com.formatMoney" editor="{type:'numberbox',options:{precision:0,min:0,required:true}}"	width="60" >税率</th> 
-                    <th field="MinQty"		sortable="true"	align="right" formatter="com.formatMoney2" width="60"  editor="{type:'numberbox',options:{precision:0,min:0,required:true}}" >MinQty</th>
                     <th field="MOQ"		sortable="true"	align="right" formatter="com.formatMoney2" width="60"  editor="{type:'numberbox',options:{precision:0,min:0,required:true}}" >MOQ</th>
-                    <th field="MinQtyUnit"		sortable="true"	align="left" width="60"  editor="text"	editor="{type:'validatebox',options:{required:true}}" >MinQtyUnit</th>
-                     <th field="MinUnit"		sortable="true"	align="left" width="60"  editor="text"	editor="{type:'validatebox',options:{required:true}}" >MinUnit</th>   
-                    <th field="LeadTime"		sortable="true"	align="right" width="60"  editor="text" >LeadTime</th>
+                    <th field="MinQty"		sortable="true"	align="right" formatter="com.formatMoney2" width="60"  editor="{type:'numberbox',options:{precision:0,min:0,required:true}}" >SPQ</th>
+                    <th field="MinQtyUnit"		sortable="true"	align="left" width="60" formatter="formatUnitAttr" editor="{type:'combobox',options:{data:data.dataSource.UnitList,required: true}}" >SPQ单位</th>
+                     @*<th field="MinUnit"		sortable="true"	align="left" width="60"  editor="text"	editor="{type:'validatebox',options:{required:true}}" >MinUnit</th>*@   
+                    <th field="LeadTime"		sortable="true"	align="right" width="60"  editor="text" >LT(d)</th>
                     <th field="Remarks"		sortable="true"	align="right" width="60"  editor="text" >Remarks</th>
                 </tr>
                @*SNO, RFQID,  SuppPN,  CDesc, Brand, RFQPriceT, RFQPrice, LeadTime,MinQty, MinUnit, MinQtyUnit, MOQ, Remarks, TaxRate  *@

@@ -55,6 +55,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 dataSource = new
                 {
                     RFQStatusList = RFQService.getRFQStatusList(),
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()
                 },
                 idField = "RFQID"
@@ -88,6 +89,8 @@ namespace ECGroup.Areas.Mms.Controllers
                 {
                     pageData = new RFQApiController().GetPageData(id),
                     CNCYList = MmsHelper.GetCurrencyType(),
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
+                    TaxRateList = MaterialTypeService.getTaxRateListCombo(false),
                     RFQStatusList = new RFQApiController().getQuoteStatusList(),
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()    
                 },

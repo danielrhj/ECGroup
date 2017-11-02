@@ -183,15 +183,15 @@ mms.com.selectMaterial = function (vm, param) {
     var comapreArray = [];
 
     if (param.LookupType == 'LookupSuppPNForRFQ')
-    { comapreArray = ['SuppPN','Qty']; iframeWidth = 1000; }
+    { comapreArray = ['SuppPN','Qty']; iframeWidth = 1100; }
     else if (param.LookupType == 'LookupSuppPNForBuyOrder')
     { comapreArray = ['SuppPN']; iframeWidth = 810; }
     else if (param.LookupType == 'LookupSuppPNForReceiving')
-    { comapreArray = ['BuyNo', 'SuppPN']; iframeWidth = 830; }
+    { comapreArray = ['BuyNo', 'SuppPN']; iframeWidth = 1050; }
 else if (param.LookupType == 'LookupCustPNForSaleQuote'||param.LookupType == 'LookupCustPNForSaleOrder')
-    { comapreArray = ['CustPN','Qty']; iframeWidth = 870; }
+    { comapreArray = ['CustPN','Qty']; iframeWidth =1030; }
     else if (param.LookupType == 'LookupCustPNForShiping')
-    { comapreArray = ['CustPN', 'PO']; iframeWidth = 1150; } //出货时比较订单号码和客户料号
+    { comapreArray = ['CustPN', 'PO']; iframeWidth = 1250; } //出货时比较订单号码和客户料号
     else
     { comapreArray = ['MaterialCode', 'SrcBillType', 'SrcBillNo']; }
 

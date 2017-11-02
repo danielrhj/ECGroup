@@ -32,6 +32,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 dataSource = new
                 {                   
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()
+                    
                 },
                 resx = new
                 {
@@ -84,6 +85,29 @@ namespace ECGroup.Areas.Mms.Controllers
             psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "20" : query["rows"].ToString());
             ps.Parameter("ActionType", "GetBrandList");
             ps.Parameter("Brand", query["Brand"].ToString());
+            var BusInessTypeList = mService.GetDynamicListWithPaging(ps);
+            return BusInessTypeList;
+        }
+
+        public dynamic getUnit(RequestWrapper query)
+        {
+            ParamSP ps = new ParamSP().Name(MaterialTypeService.strSP);
+            ParamSPData psd = ps.GetData();
+            psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
+            psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "20" : query["rows"].ToString());
+            ps.Parameter("ActionType", "GetUnitList");
+            ps.Parameter("Unit", query["Unit"].ToString());
+            var BusInessTypeList = mService.GetDynamicListWithPaging(ps);
+            return BusInessTypeList;
+        }
+
+        public dynamic getTaxRate(RequestWrapper query)
+        {
+            ParamSP ps = new ParamSP().Name(MaterialTypeService.strSP);
+            ParamSPData psd = ps.GetData();
+            psd.PagingCurrentPage = int.Parse(query["page"] == null ? "1" : query["page"].ToString());
+            psd.PagingItemsPerPage = int.Parse(query["rows"] == null ? "20" : query["rows"].ToString());
+            ps.Parameter("ActionType", "GetTaxRateList");
             var BusInessTypeList = mService.GetDynamicListWithPaging(ps);
             return BusInessTypeList;
         }
@@ -167,9 +191,83 @@ namespace ECGroup.Areas.Mms.Controllers
             return "OK";
         }
 
+        [System.Web.Http.HttpPost]
+        public dynamic editUnit(dynamic data)
+        {
+            JObject gridData = JObject.Parse(data["list"].ToString());
+            bool gridChange = (bool)gridData.GetValue("_changed");
+
+            ParamSP ps = new ParamSP().Name(MaterialTypeService.strSP);
+            if (gridChange)
+            {
+                ps.Parameter("ActionType", "SaveUnit");
+
+                foreach (var item in gridData)
+                {
+                    string itemKey = item.Key;//deleted,updated,inserted
+                    if (item.Value.HasValues)
+                    {
+                        ps.Parameter("ActionItem", itemKey);
+                        JArray ActionData = item.Value as JArray;
+                        foreach (var itemDetail in ActionData)
+                        {
+                            JObject dr = itemDetail as JObject;
+
+                            ps.Parameter("AutoID", itemDetail["AutoID"].ToString());
+                            ps.Parameter("Unit", itemDetail["Unit"].ToString().Trim());
+                            ps.Parameter("Chiname", itemDetail["Chiname"].ToString().Trim());
+
+                            mService.StoredProcedureNoneQuery(ps);
+                        }
+                    }
+                }
+            }
+            return "OK";
+        }
+
+        [System.Web.Http.HttpPost]
+        public dynamic editTaxRate(dynamic data)
+        {
+            JObject gridData = JObject.Parse(data["list"].ToString());
+            bool gridChange = (bool)gridData.GetValue("_changed");
+
+            ParamSP ps = new ParamSP().Name(MaterialTypeService.strSP);
+            if (gridChange)
+            {
+                ps.Parameter("ActionType", "SaveTaxRate");
+
+                foreach (var item in gridData)
+                {
+                    string itemKey = item.Key;//deleted,updated,inserted
+                    if (item.Value.HasValues)
+                    {
+                        ps.Parameter("ActionItem", itemKey);
+                        JArray ActionData = item.Value as JArray;
+                        foreach (var itemDetail in ActionData)
+                        {
+                            JObject dr = itemDetail as JObject;
+
+                            ps.Parameter("AutoID", itemDetail["AutoID"].ToString());
+                            ps.Parameter("TaxRate", itemDetail["TaxRate"].ToString().Trim());
+                            ps.Parameter("Remarks", itemDetail["Remark"].ToString().Trim());
+
+                            mService.StoredProcedureNoneQuery(ps);
+                        }
+                    }
+                }
+            }
+            return "OK";
+        }
+
         public List<dynamic> getTypeCodeList(string q)    
         {
             var RoleList = MaterialTypeService.getTypeCodeList(false);
+            return RoleList;
+        }
+
+        public List<dynamic> getUnitListForCombo(bool showBlank)
+        {
+            var RoleList = MaterialTypeService.getUnitListCombo(showBlank);
             return RoleList;
         }
 

@@ -58,7 +58,7 @@ namespace ECGroup.Areas.Mms.Controllers
                     Brand = "",
                     TypeCode = "M001",
                     HotSale="N",
-                    LeadTime = "1",
+                    LeadTime = "",
                     ProxyCount = "0",
                     CustPNCount = "0",
                     Attach = "0"

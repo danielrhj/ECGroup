@@ -86,6 +86,8 @@ namespace ECGroup.Areas.Mms.Controllers
                     pageData = new ReceivingApiController().GetPageData(id),
                     PriceTypeList = new ReceivingApiController().PriceTypeList(),
                     CNCYList = MmsHelper.GetCurrencyType(),
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
+                    TaxRateList = MaterialTypeService.getTaxRateListCombo(false),
                     ReceivingStatusList = new ReceivingApiController().getReceivingStatus(),
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()    
                 },
@@ -101,8 +103,8 @@ namespace ECGroup.Areas.Mms.Controllers
                       type = "grid",
                       rowId = "SNO",
                       relationId = "RcvID", //SNO, RcvID, SuppPN, CDesc, CSpec, Brand, RcvPrice, Qty, Unit, Amount, PayNo, InvoiceNo, BuyCost,OtherCost
-                      defaults = new {SNO = "0",RcvID = id,BuyNo="",SuppPN = "",CDesc = "",CSpec="",Brand="",RcvPrice = "0",Qty="0",Unit = "PC",Amount = "0"},
-                      postFields = new string[] { "SNO","RcvID","BuyNo","Brand","SuppPN","CDesc","CSpec","RcvPrice","Qty","Unit"}
+                      defaults = new {SNO = "0",RcvID = id,BuyNo="",SuppPN = "",CDesc = "",CSpec="",Brand="",RcvPrice = "0",TaxRate="0",Qty="0",Unit = "PC",Amount = "0"},
+                      postFields = new string[] { "SNO","RcvID","BuyNo","Brand","SuppPN","CDesc","CSpec","RcvPrice","TaxRate","Qty","Unit"}
                     }
                 }
             };

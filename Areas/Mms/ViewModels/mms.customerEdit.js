@@ -97,7 +97,16 @@ mms.customerEdit = function (data) {
     };
 
     this.refreshClick = function () {
-        window.location.reload();
+        com.ajax({
+            type: 'GET',
+            url: self.urls.getdata + self.currentKey,
+            success: function (d) {
+                data.dataSource.pageData = d;
+                ko.mapping.fromJS(d, self.pageData);
+                self.grid0.datagrid('options').queryParams = { action: 'EditCustPNRelate', CustCode: self.pageData.form.CustCode() }; 
+                self.grid0.datagrid('reload');
+            }
+        });
     };
   
     //撤销

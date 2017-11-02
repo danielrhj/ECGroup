@@ -15,7 +15,7 @@
         var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
 
         var formatteropenURL = function (value,row) {           
-            var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.SuppID+'\')" >'+value+'</a>';
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.SuppID+'\',\''+row.SuppCode+'\')" >'+value+'</a>';
             return KK;           
         }
 

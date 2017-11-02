@@ -117,7 +117,8 @@ namespace ECGroup.Areas.Mms.Controllers
                 {
                     pageData = new SaleOrderApiController().GetPageData(id),
                     IncotermList = SaleOrderService.GetIncotermList(),
-                    CFMFlagList = MmsHelper.GetYON(),
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
+                    TaxRateList = MaterialTypeService.getTaxRateListCombo(false),
                     CNCYList = MmsHelper.GetCurrencyType(),
                     SaleOrderStatusList = SaleOrderService.getSaleOrderStatusList(),
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()    
@@ -125,7 +126,7 @@ namespace ECGroup.Areas.Mms.Controllers
                 form = new
                 {
                     //POID,PO,Customer,PODate,Incoterms,CustCode,Consignee,Address,Contact,Destination,Country,POStatus,Currency,InputBy,InputDT,CFMFlag
-                    defaults = new SaleOrder().Extend(new { POID = id, PODate = DateTime.Today.ToString("yyyy-MM-dd"), Amount = "0",Country="CHINA", Currency = "RMB", CFMFlag = "N", POStatus = "录入", InputBy = User.Identity.Name, InputDT = "" }),
+                    defaults = new SaleOrder().Extend(new { POID = id, PODate = DateTime.Today.ToString("yyyy-MM-dd"), Amount = "0",Country="CHINA", Currency = "RMB", TaxRate = "0", POStatus = "录入", InputBy = User.Identity.Name, InputDT = "" }),
                     primaryKeys = new string[] { "POID" },
                     idField = id
                 },
@@ -134,8 +135,8 @@ namespace ECGroup.Areas.Mms.Controllers
                       type = "grid",
                       rowId = "POLineNo",
                       relationId = "POID", //POID,POLineNo,CustPN,SuppPN,CDesc,CSpec,ReqDate,Qty,Unit,UnitPrice,UnitPriceT,Currency,Amount
-                      defaults = new {POLineNo = "0",POID = id,CustPN = "",SuppPN = "",CDesc = "",CSpec="",ReqDate=DateTime.Today.ToString("yyyy-MM-dd"),UnitPrice = "0",Qty="0",Unit = "PC",UnitPriceT="0",Amount = "0"},
-                      postFields = new string[] { "POLineNo","POID","CustPN","SuppPN","CDesc","CSpec","ReqDate","UnitPrice","UnitPriceT","Qty","Unit"}
+                      defaults = new {POLineNo = "0",POID = id,CustPN = "",SuppPN = "",CDesc = "",CSpec="",Brand="",ReqDate=DateTime.Today.ToString("yyyy-MM-dd"),UnitPrice = "0",Qty="0",Unit = "PC",Amount = "0"},
+                      postFields = new string[] { "POLineNo","POID","CustPN","SuppPN","CDesc","CSpec","Brand","ReqDate","UnitPrice","Qty","Unit"}
                     }
                 }
             };

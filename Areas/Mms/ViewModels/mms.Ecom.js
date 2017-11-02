@@ -17,7 +17,7 @@ mms.Ecom.Search = function (data) {
     delete this.form.__ko_mapping__;
 
     this.grid = {
-        size: { w: 4, h: 94 },
+        //size: { w: 4, h: 94 },
         url: self.urls.query,
         queryParams: ko.observable(),
         singleSelect:false,
@@ -237,7 +237,15 @@ mms.Ecom.Edit = function (data) {
     };
 
     this.refreshClick = function () {
-        window.location.reload();
+        com.ajax({
+            type: 'GET',
+            url: self.urls.getdata + self.currentKey,
+            success: function (d) {
+                data.dataSource.pageData = d;
+                ko.mapping.fromJS(d, self.pageData);
+                self.grid.queryParams({ EcomID: self.currentKey });
+            }
+        });
     };
     
     this.grid = {

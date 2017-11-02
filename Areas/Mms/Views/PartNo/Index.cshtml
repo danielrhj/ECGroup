@@ -15,13 +15,15 @@
         var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
         var formatPartAttr = utils.fnValueToText(data.dataSource.TypeCodeList0);
         com.formatSupplierCode = utils.fnValueToText(data.dataSource.SupplierCodeList);
-        var formatterProxy = function (value,row) {           
-            var KK='<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\''+row.PNID+'\',\''+row.SuppPN+'\',\''+row.CDesc+'\',\'Proxy\')" >'+value+'</a> ';
+        var formatterProxy = function (value,row) {  
+            var showMsg=value==1?row.SuppAbbr:value;
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\''+row.PNID+'\',\''+row.SuppPN+'\',\''+row.CDesc+'\',\'Proxy\')" >'+showMsg+'</a> ';
             return KK;           
         };
 
-        var formatterCustPN = function (value,row) {           
-            var KK='<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\''+row.PNID+'\',\''+row.SuppPN+'\',\''+row.CDesc+'\',\'CustPN\')" >'+value+'</a>';
+        var formatterCustPN = function (value,row) {  
+            var showMsg=value==1?row.CustPN:value;
+            var KK='<a href="#" plain="true" style="color:blue" onclick="openRelateInfo(\''+row.PNID+'\',\''+row.SuppPN+'\',\''+row.CDesc+'\',\'CustPN\')" >'+showMsg+'</a>';
             return KK;           
         };
 
@@ -45,8 +47,14 @@
     <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-cross"           title="删除" data-bind="click:canShow('icon-cross')?null:deleteClick,linkbuttonDisable:canShow('icon-cross')">删除</a>
     <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-save"            title="保存" data-bind="click:canShow('icon-save')?null:saveClick,linkbuttonDisable:canShow('icon-save')"  >保存</a>
     <a href="#" plain="true" class="easyui-linkbutton"  icon="icon-page_excel" data-bind="click:downloadClick">导出</a>
-    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-node_tree" data-bind="click:typeClick" title="管理料号">料号类别</a>
-    <a href="#" plain="true" class="easyui-linkbutton" icon="icon-node_tree" data-bind="click:brandClick" title="管理品牌清单">品牌清单</a>
+
+    <a id="a_data" href="#" class="easyui-splitbutton" data-options="menu:'#dropdown',iconCls:'icon-node_tree'">管理基本资料</a>
+    <div id="dropdown" style="width:100px; display:none;">  
+        <a href="#" plain="true" class="easyui-linkbutton" icon="icon-report_add" data-bind="click:typeClick" title="管理料号类别">料号类别</a>
+        <a href="#" plain="true" class="easyui-linkbutton" icon="icon-pictures" data-bind="click:brandClick" title="管理品牌清单">品牌清单</a>    
+        <a href="#" plain="true" class="easyui-linkbutton" icon="icon-vector" data-bind="click:unitClick" title="管理数量单位">数量单位</a>       
+        <a href="#" plain="true" class="easyui-linkbutton" icon="icon-calendar_edit" data-bind="click:taxrateClick" title="管理税率">税率</a>
+    </div>
 </div>
 
 <div id="condition"  class="container_12"  style="position:relative;">   
@@ -64,12 +72,12 @@
 
 <table  id="gridlist"  data-bind="datagrid:grid">
     <thead>          
-        <th field="SuppPN"		sortable="true"	align="left"	width="250"  editor="{type:'validatebox',options:{required:true}}">制造商料号</th> 
+        <th field="SuppPN"		sortable="true"	align="left"	width="250"  editor="{type:'autocomplete',options:{required:true,url:'/api/mms/partno/getSuppPNList'}}">制造商料号</th> 
         <th field="CDesc"		sortable="true"	align="left"	width="150"  editor="{type:'validatebox',options:{required:true}}" >品名</th> 
         <th field="CSpec"		sortable="true"	align="left"	width="250"  editor="{type:'validatebox',options:{required:true}}">规格</th> 
         <th field="Brand"		sortable="true"	align="center"	width="80"  editor="{type:'autocomplete',options:{required:true,url:'/api/mms/materialtype/getBrandList'}}">品牌</th> 
         <th field="TypeCode"		sortable="true"	align="center"	width="50" formatter="formatPartAttr" editor="{type:'combobox',options:{data:data.dataSource.TypeCodeList0,required: true}}">类别</th>                
-        <th field="LeadTime"		sortable="true"	align="center"	width="80"  editor="{type:'numberbox',options:{required: false,min:0,max:99}}">LeadTime(D)</th> 
+        <th field="LeadTime"		sortable="true"	align="center"	width="80" >LT(d)</th> 
                    
         <th field="ProxyCount"		sortable="true"	align="center"	width="80" formatter="formatterProxy">关联代理商</th>  
         <th field="CustPNCount"		sortable="true"	align="center"	width="80" formatter="formatterCustPN">关联客户料号</th>  
@@ -110,6 +118,49 @@
         <thead>
             <th field="AutoID"      hidden="true" editor="text">AutoID</th>
             <th field="Brand"    sortable="true" align="left"  title="品牌"  width="120" editor="{type:'validatebox',options:{required:true}}">品牌</th>
+            <th field="Remark"     sortable="true" align="left"    width="150" editor="text"  >Remark   </th>  
+           
+        </thead>
+       
+    </table>
+    
+    <div style="text-align:center;margin:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" data-bind="click:confirmClick" href="javascript:void(0)"  >确定</a>  
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" data-bind="click:cancelClick" href="javascript:void(0)">取消</a> 
+    </div>
+</script> 
+
+<script type="text/html" id="unit-template">
+    <style type="text/css">
+        .datagrid-wrap{border-width:0 0 1px 0;}
+        .datagrid-toolbar{background-color:#E0ECFF !important}
+    </style>
+    <table data-bind="datagrid:grid" >
+        <thead>
+            <th field="AutoID"      hidden="true" editor="text">AutoID</th>
+            <th field="Unit"    sortable="true" align="left"  width="100" editor="{type:'validatebox',options:{required:true}}">单位(英文)</th>
+            <th field="Chiname"     sortable="true" align="left"    width="80" editor="{type:'validatebox',options:{required:true}}">单位(中文)</th>  
+           
+        </thead>
+       
+    </table>
+    
+    <div style="text-align:center;margin:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" data-bind="click:confirmClick" href="javascript:void(0)"  >确定</a>  
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" data-bind="click:cancelClick" href="javascript:void(0)">取消</a> 
+    </div>
+</script> 
+
+
+<script type="text/html" id="taxrate-template">
+    <style type="text/css">
+        .datagrid-wrap{border-width:0 0 1px 0;}
+        .datagrid-toolbar{background-color:#E0ECFF !important}
+    </style>
+    <table data-bind="datagrid:grid" >
+        <thead>
+            <th field="AutoID"      hidden="true" editor="text">AutoID</th>
+            <th field="TaxRate"    sortable="true" align="left" width="120" editor="{type:'validatebox',options:{required:true}}">税率(%)</th>
             <th field="Remark"     sortable="true" align="left"    width="150" editor="text"  >Remark   </th>  
            
         </thead>

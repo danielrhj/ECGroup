@@ -89,6 +89,8 @@ namespace ECGroup.Areas.Mms.Controllers
                     pageData = new ShipingApiController().GetPageData(id),
                     IncotermList = ShipingService.GetIncotermList(),
                     CFMFlagList = MmsHelper.GetYON(),
+                    TaxRateList = MaterialTypeService.getTaxRateListCombo(false),
+                    UnitList = MaterialTypeService.getUnitListCombo(false),
                     CNCYList = MmsHelper.GetCurrencyType(),
                     ShipingStatusList = ShipingService.getShipingStatusList(),
                     buttonsList = new sys_menuService().GetCurrentUserMenuButtonsNew()    
@@ -105,8 +107,8 @@ namespace ECGroup.Areas.Mms.Controllers
                       type = "grid",
                       rowId = "SNO",
                       relationId = "ShipID", //SNO, ShipID, PO, CustPN, SuppPN, CDesc, EDesc, CSpec, Qty, Unit, UnitPrice
-                      defaults = new {SNO = "0",ShipID = id,CustPN = "",PO="",SuppPN = "",CDesc = "",CSpec="",UnitPrice = "0",Qty="0",Unit = "PC",Amount = "0"},
-                      postFields = new string[] { "SNO","ShipID","PO","CustPN","SuppPN","CDesc","CSpec","UnitPrice","Qty","Unit"}
+                      defaults = new {SNO = "0",ShipID = id,CustPN = "",PO="",SuppPN = "",CDesc = "",CSpec="",UnitPrice = "0",TaxRate="0",Qty="0",Unit = "PC",Amount = "0"},
+                      postFields = new string[] { "SNO","ShipID","PO","CustPN","SuppPN","CDesc","CSpec","UnitPrice","TaxRate","Qty","Unit"}
                     }
                 }
             };

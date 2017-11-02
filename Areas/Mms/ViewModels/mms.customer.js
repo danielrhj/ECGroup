@@ -212,6 +212,6 @@ mms.customer.relate = function (data) {
     };
 };
 
-var openURL = function (data) { 
-    com.openTab(data + '明細資料', urls.edit + data);
+var openURL = function (data,code) { 
+    com.openTab(code + '明細資料', urls.edit + data);
 }

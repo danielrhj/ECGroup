@@ -13,11 +13,14 @@
         <script type="text/javascript">
             var data = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
 
-            var formatterURL = function (value,row) {
-                
+            var formatterURL = function (value,row) {                
                 var KK='<a href="#" plain="true" style="color:blue" onclick="openURL(\''+row.POID+'\',\''+value+'\',\'SaleOrder\')">'+value+'</a>';                
                 return KK;
-            }           
+            }    
+            
+            var formatterTaxRate = function (value,row) {                         
+                    return value>0?value:'不含税';
+            }  
            
             var viewModel = mms.SaleOrder.Search;
             ko.bindingViewModel(new viewModel(data));
@@ -51,7 +54,8 @@
              </table> 
         </div>
 
-       <table  id="gridlist"  data-bind="datagrid:grid">
+        <div id="tt"  style="height:370px;width:100%;overflow:hidden;"> 
+       <table  id="gridlist"  data-bind="datagrid:grid" style="height:330px;overflow-x:scroll;" >
             <thead>  
                 <tr>  
                     <th field="ck" checkbox="true"  editor="{type: 'checkbox',options: {on: true,off: false}}"></th> 
@@ -68,12 +72,11 @@
                     <th field="Qty" sortable="true" align="right"   formatter="com.formatMoney2"   width="70" >数量</th>   
                     <th field="Unit"            sortable="true" align="left"    width="50"   >单位 </th>   
                     <th field="UnitPrice"            sortable="true" align="right"   formatter="com.formatMoney2"   width="70" >单价</th> 
-                    <th field="TaxFlag"            sortable="true" align="left"    width="50"   >含税 </th>  
+                    <th field="TaxRate"            sortable="true" align="center"    width="50" formatter="formatterTaxRate"  >税率</th>  
                     <th field="Amount"            sortable="true" align="right"   formatter="com.formatMoney2"   width="90" >總金額</th> 
                     <th field="Incoterms"            sortable="true" align="center"    width="60" >付款條件</th>        
                     <th field="Currency"            sortable="true" align="center"  width="50" >幣別</th>    
-                    <th field="POStatus"  sortable="true" align="left"    width="60" >訂单狀態</th>   
-                    <th field="CFMFlag"            sortable="true" align="center"    width="40" >确认</th>  
+                    <th field="POStatus"  sortable="true" align="left"    width="60" >訂单狀態</th>                       
 
                     @*POID,PO,Customer,PODate,Incoterms,Currency,POStatus,CFMFlag,POLineNo,CustPN,SuppPN,CDesc,CSpec,ReqDate,Qty,Unit,UnitPrice,TaxFlag,Amount
                     客户訂單號,报价日期,客户,项次,客户料号,制造商料号,品名,规格,交期,数量,单位,单价,含税,總金額,付款條件,幣別,訂单狀態,确认
@@ -81,4 +84,4 @@
                 </tr>                            
             </thead>      
         </table> 
- 
+ </div>

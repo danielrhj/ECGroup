@@ -17,13 +17,14 @@ mms.SaleQuote.Search = function (data) {
     delete this.form.__ko_mapping__;
 
     this.grid = {
-        size: { w: 4, h: 94 },
+        //view:scrollView,
+        //size: { w: 4, h: 94 },
         idField: '_id',
         treeField: 'QuoteNo',
         url: self.urls.query,
         queryParams: ko.observable(),
         singleSelect:false,
-        pagination: true, 
+        pagination: false,
         onLoadSuccess: function (row, data) {
             localStorage.removeItem('keyQuoteID');
             var keyid = [];//重整key
@@ -232,7 +233,14 @@ mms.SaleQuote.Edit = function (data) {
     };
 
     this.refreshClick = function () {
-        window.location.reload();
+        com.ajax({
+            type: 'GET',
+            url: self.urls.getdata + self.currentKey,
+            success: function (d) {
+                data.dataSource.pageData = d;
+                ko.mapping.fromJS(d, self.pageData); self.grid.queryParams({ QuoteID: self.currentKey });
+            }
+        });
     };
     
     this.grid = {
